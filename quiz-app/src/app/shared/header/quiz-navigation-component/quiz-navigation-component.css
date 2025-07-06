@@ -1,0 +1,80 @@
+.quiz-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #306085;
+  padding: 1.1rem 3rem;
+  font-family: Arial, sans-serif;
+  color: white;
+}
+.logo {
+  cursor: pointer;
+  width: 110px; 
+  display: inline-block;
+  margin-right: 2rem;
+}
+.logo img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+.nav-left, .nav-right {
+  display: flex;
+  list-style: none;
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
+  flex: 0 0 auto;
+}
+
+.nav-left li a,
+.nav-right li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.nav-left li a:hover,
+.nav-right li a:hover,
+.nav-left li a.active,
+.nav-right li a.active {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.nav-center {
+  position: relative;
+  width: 300px;
+  margin: 0 auto;
+}
+.nav-center input[type="text"] {
+  width: 100%;
+  padding: 8px 40px 8px 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.nav-center input[type="text"]:focus {
+  border-color: #306085;
+}
+
+.nav-center .search-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #306085;
+}
+.nav-center .search-btn:hover {
+  color: #204060;
+}

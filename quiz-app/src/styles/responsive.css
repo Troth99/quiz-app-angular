@@ -1,0 +1,9 @@
+@media (max-width: 768px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+}

@@ -1,0 +1,84 @@
+/*https://utopia.fyi/type/calculator?c=320,12,1.125,1280,16,1.2,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12*/
+@import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
+
+:root {
+    --fs-body: clamp(0.75em, 0.6667rem + 0.4167vw, 1rem);
+    --fs-heading-6: clamp(0.8438rem, 0.725rem + 0.5938vw, 1.2rem);
+    --fs-heading-5: clamp(0.9492rem, 0.7856rem + 0.818vw, 1.44rem);
+    --fs-heading-4: clamp(1.0679rem, 0.8478rem + 1.1002vw, 1.728rem);
+    --fs-heading-3: clamp(1.2014rem, 0.9106rem + 1.4537vw, 2.0736rem);
+    --fs-heading-2: clamp(1.3515rem, 0.9726rem + 1.8947vw, 2.4883rem);
+    --fs-heading-1: clamp(1.5805rem, 1.032rem + 2.4425vw, 2.986rem);
+
+}
+
+html {
+    font-family: "Lato", sans-serif;
+    font-size: var(--fs-body);
+    line-height: 1.4;
+}
+
+body,
+input,
+textarea,
+button,
+select,
+option {
+    font: inherit;
+}
+
+p {
+    padding-bottom: 1.4em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-top: 1em;
+    margin-bottom: 0.4em;
+    line-height: 1.1;
+}
+
+h1 {font-size: var(--fs-heading-1)}
+h2 {font-size: var(--fs-heading-2)}
+h3 {font-size: var(--fs-heading-3)}
+h4 {font-size: var(--fs-heading-4)}
+h5 {font-size: var(--fs-heading-5)}
+h6 {font-size: var(--fs-heading-6)}
+
+p,
+ul,
+ol {
+    padding-bottom: 1.5em;
+}
+
+ul,
+ol {
+    padding-left: 1.5em;
+}
+
+ul li,
+ol li {
+    padding-bottom: 0.3em;
+}
+
+blockquote {
+    margin-left: 3em;
+    border-left: 2px solid #ccc;
+    padding: 2em;
+}
+
+blockquote>p {
+    font-style: italic;
+}
+
+blockquote>p:nth-child(3) {
+    margin-left: 98%;
+}
+
+blockquote p:last-child {
+    padding: 0;
+}

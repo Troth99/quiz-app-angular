@@ -1,18 +1,15 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FirebaseApp } from '@angular/fire/app';
 import { RouterOutlet } from '@angular/router';
+import { QuizNavigationComponent } from "./shared/header/quiz-navigation-component/quiz-navigation-component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, QuizNavigationComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App implements OnInit{
+export class App{
   protected title = 'quiz-app';
-  private app = inject(FirebaseApp)
 
-  ngOnInit(): void {
-    console.log('firebase app name:', this.app.name)
-  }
 }
