@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "quiz-app-angular-fc9b8",
+    "quiz-app": "quiz-app-3471b"
+  },
+  "targets": {},
+  "etags": {}
+}
