@@ -1,9 +1,63 @@
-@media (max-width: 768px) {
-  .container {
-    padding: 0 0.5rem;
+@media (max-width: 600px) {
+  .quiz-nav {
+    flex-wrap: wrap;
+    padding: 0.5rem 1rem;
+  }
+  .logo {
+    display: none !important;
+  }
+  .nav-left,
+  .nav-right {
+    width: 100%;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .nav-left li a,
+  .nav-right li a {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.5rem;
+  }
+  .nav-center {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  .nav-center input[type="text"] {
+    font-size: 0.9rem;
+    padding: 6px 36px 6px 8px;
+  }
+  .quiz-footer {
+    flex-direction: column;
+    padding: 0.2em 0.5em !important;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+  }
+.footer-center {
+  display: flex;
+  align-items: center;
+  gap: 1rem !important; 
+  flex-wrap: wrap; 
+}
+  .footer-left,
+  .footer-center,
+  .footer-right {
+    width: 100%;
+    justify-content: center;
+    gap: 0.3rem;
+    margin: 0;
+    padding: 0;
+  }
+  .lang-box {
+    gap: 4px;
   }
 
-  h1 {
-    font-size: 1.75rem;
+  .lang-box img {
+    width: 24px;
+    height: 16px;
+  }
+
+  .lang-box select {
+    font-size: 12px;
+    padding: 2px 8px;
   }
 }

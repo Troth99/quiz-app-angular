@@ -14,9 +14,14 @@
   </div>
 
   <ul class="nav-right">
-    <li><a routerLink="/profile">PROFILE</a></li>
-    <li><a routerLink="/login" routerLinkActive="active">LOGIN</a></li>
-    <li><a routerLink="/register" routerLinkActive="active">REGISTER</a></li>
-    <li><a (click)="logout()">LOGOUT</a></li>
+    @if(isLoggedIn){
+      <li><a routerLink="/profile">PROFILE</a></li>
+      <li><a (click)="logout()">LOGOUT</a></li>
+      <!--като се цъкне на профил да се показва нова страница със настройки и информация за потребителя -->
+    }
+    @if(!isLoggedIn){
+      <li><a routerLink="/login" routerLinkActive="active">LOGIN</a></li>
+      <li><a routerLink="/register" routerLinkActive="active">REGISTER</a></li>
+    }
   </ul>
 </nav>

@@ -1,0 +1,23 @@
+<footer class="quiz-footer">
+  <div class="footer-left">
+    <span>&copy; 2025 Quiz App. All rights reserved</span>
+  </div>
+
+  <div class="footer-center">
+    <a routerLink="/terms">Terms of Service</a>
+    <a routerLink="/faq">FAQ</a>
+    <a href="mailto:support@quizdog.app?subject=Bug Report">Report a Bug</a>
+
+    <div class="lang-box">
+      <img [src]="flagUrl" alt="Flag icon" width="40" height="30" />
+      <select [(ngModel)]="selectedLang" (change)="changeLanguage(selectedLang)">
+        <option value="en">English</option>
+        <option value="bg">Български</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="footer-right">
+    <span>v1.0.0</span>
+  </div>
+</footer>

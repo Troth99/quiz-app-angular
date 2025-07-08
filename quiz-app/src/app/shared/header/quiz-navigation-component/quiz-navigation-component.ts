@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-quiz-navigation-component',
@@ -7,6 +7,9 @@ import { Component } from '@angular/core';
   styleUrl: './quiz-navigation-component.css'
 })
 export class QuizNavigationComponent {
+isLoggedIn = false;
+
+
 
   onSearch() {
 
