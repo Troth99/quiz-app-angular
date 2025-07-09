@@ -7,5 +7,14 @@ import { Component } from '@angular/core';
   styleUrl: './quiz-home-component.css'
 })
 export class QuizHomeComponent {
+  public counter = 0;
 
+  increaseNumber() {
+    this.counter++
+  
+  }
+
+  resetTimer(){
+    this.counter = 0
+  }
 }

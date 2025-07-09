@@ -8,8 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class QuizNavigationComponent {
 isLoggedIn = false;
+mobileMenuActive = false;
 
+toggleMobileMenu() {
+  this.mobileMenuActive = !this.mobileMenuActive
 
+}
 
   onSearch() {
 

@@ -6,9 +6,3 @@
   box-sizing: border-box;
 }
 
-html, body {
-  font-family: var(--font-family);
-  background-color: var(--background-color);
-  color: var(--text-color);
-  line-height: 1.5;
-}

@@ -5,7 +5,6 @@
   background: #306085;
   color: white;
   padding: 2rem 2rem;
-  font-family: Arial, sans-serif;
   flex-wrap: wrap;
   border-top: 2px solid #204060;
 }
@@ -27,7 +26,7 @@
   cursor: pointer;
 }
 .footer-center a:hover {
-  color: #cce7ff;
+  color: #82d7ec;
 }
 .lang-box {
   display: inline-flex;

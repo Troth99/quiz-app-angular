@@ -1,7 +1,10 @@
 <nav class="quiz-nav">
-  <div class="logo" style="cursor: pointer">
+  <div class="logo" >
     <img src="logo.png" alt="logo" />
   </div>
+
+ <button class="hamburger" id="openMenu" (click)="toggleMobileMenu()">&#9776;</button>
+
   <ul class="nav-left">
     <li><a routerLink="/">HOME</a></li>
     <li><a routerLink="/quiz">QUIZ</a></li>
@@ -25,3 +28,20 @@
     }
   </ul>
 </nav>
+
+<div class="mobile-menu-overlay" [class.active]="mobileMenuActive">
+  <ul class="mobile-menu">
+    <li><a routerLink="/">HOME</a></li>
+    <li><a routerLink="/quiz">QUIZ</a></li>
+    <li><a routerLink="/results">RESULTS</a></li>
+
+    @if(isLoggedIn){
+      <li><a routerLink="/profile">PROFILE</a></li>
+      <li><a (click)="logout()">LOGOUT</a></li>
+    }
+    @if(!isLoggedIn){
+      <li><a routerLink="/login">LOGIN</a></li>
+      <li><a routerLink="/register">REGISTER</a></li>
+    }
+  </ul>
+</div>
