@@ -1,0 +1,1 @@
+export * from "./quiz-home-component/quiz-home-component"

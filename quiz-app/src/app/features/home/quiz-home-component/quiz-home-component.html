@@ -1,7 +1,45 @@
-<p>quiz-home-component works!</p>
-
-<div class="wrapper">
-    <button (click)="increaseNumber()">Increase</button>
-    <div class="counter">{{counter}}</div>
+<div class="hero">
+  <img src="main1.jpg" alt="Hero Image" class="hero-image">
+  <div class="hero-text">
+    <h1>Quiz Time!</h1>
+    <p>Quizzes are a fun way to test your knowledge and learn something new. Let's dive in!</p>
+   <button mat-raised-button color="accent" class="big-btn" (click)="startQuizCategoryPage()">
+  <mat-icon>play_arrow</mat-icon>
+  Begin your challenge!
+</button>
+  </div>
 </div>
-<button (click)="resetTimer()">Reset</button>
+
+<section class="info-block">
+  <div class="info">
+    <img src="main2.jpg" alt="Study">
+    <div>
+      <h3>Boost Knowledge</h3>
+      <p>Quizzes help reinforce existing knowledge and introduce you to new facts. It’s a win-win!</p>
+    </div>
+  </div>
+
+  <div class="info alt">
+    <img src="main3.jpg" alt="Learning">
+    <div>
+      <h3>Fun Learning</h3>
+      <p>Learning doesn’t have to be boring! Quizzes make learning interactive and enjoyable.</p>
+    </div>
+  </div>
+
+  <div class="info">
+    <img src="main5.png" alt="Test Yourself">
+    <div>
+      <h3>Test Yourself</h3>
+      <p>See how much you know! Quizzes provide a great way to assess your understanding of different subjects.</p>
+    </div>
+  </div>
+</section>
+
+<div class="recap">
+  <div class="recap-text">
+    <h2>Quiz Recap</h2>
+    <p>Quizzes are beneficial for learning, testing knowledge, and having fun. So go ahead and quiz!</p>
+  </div>
+  <img src="main4.jpg" alt="Quiz Recap">
+</div>
