@@ -1,6 +1,6 @@
 <nav class="quiz-nav">
   <div class="logo" >
-    <img src="logo.png" alt="logo" />
+    <a routerLink="/"><img src="logo.png" alt="logo" /></a>
   </div>
 
  <button class="hamburger" id="openMenu" (click)="toggleMobileMenu()">&#9776;</button>
@@ -24,8 +24,8 @@
       <!--като се цъкне на профил да се показва нова страница със настройки и информация за потребителя -->
     }
     @if(!isLoggedIn){
-      <li><a routerLink="/login" routerLinkActive="active">LOGIN</a></li>
-      <li><a routerLink="/register" routerLinkActive="active">REGISTER</a></li>
+      <li><a routerLink="/login">LOGIN</a></li>
+      <li><a routerLink="/register">REGISTER</a></li>
     }
   </ul>
 </nav>

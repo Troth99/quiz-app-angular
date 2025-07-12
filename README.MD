@@ -8,7 +8,6 @@ A modern single-page application for creating, solving, and tracking quizzes. Bu
 
 - 🔐 **Authentication**  
   - User registration and login using **Firebase Auth**
-  - Session persistence with auto-login
   
 - 📝 **Quiz Functionality**  
   - Dynamic loading of quizzes from **Firestore**

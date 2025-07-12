@@ -9,9 +9,10 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAnalytics, getAnalytics } from '@angular/fire/analytics';
-import { environment } from '../enviroments/eviroment';
-
+import { environment } from '../enviroments/environment';
+import {provideFirestore, getFirestore} from '@angular/fire/firestore'
 export const appConfig: ApplicationConfig = {
+  
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -19,5 +20,7 @@ export const appConfig: ApplicationConfig = {
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideAnalytics(() => getAnalytics()),
     provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
+    
   ],
 };
