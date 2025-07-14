@@ -9,8 +9,8 @@ import { User } from "../../models/user/user.model";
     providedIn: 'root'
 })
 export class UserService {
-    private injector = inject(Injector);
-    constructor(private firestore: Firestore){
+    // private injector = inject(Injector);
+    constructor(private firestore: Firestore, private injector: Injector){
     }
 
     getUser(uid: string): Observable<User> {
