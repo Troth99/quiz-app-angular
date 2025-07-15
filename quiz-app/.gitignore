@@ -11,8 +11,7 @@
 npm-debug.log
 yarn-error.log
 
-# Secret config
-/enviorments/
+
 
 # IDEs and editors
 .idea/

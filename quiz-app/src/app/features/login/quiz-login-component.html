@@ -1,1 +1,77 @@
-<p>quiz-login-component works!</p>
+<div class="form-wrapper">
+  <div class="form-image"></div>
+
+  <div class="form-content">
+    <div class="form-header">
+      <h1>Login to the Quiz App</h1>
+      <p>Start answering questions and track your progress</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" novalidate>
+      <div class="input-group">
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="Email"
+          (focus)="emailFocused = true"
+          (blur)="emailFocused = false"
+          [class.invalid]="submitted && emailControl?.invalid"
+        />
+        <div
+          class="error"
+          [class.hidden]="!(submitted && emailControl?.invalid)"
+        >
+          @if(emailRequired){
+          <small>Email is required.</small>
+          } @else if(emailInvalid){
+          <small>Please enter a valid email.</small>
+          }
+        </div>
+      </div>
+
+      <div class="input-group password-group">
+        <input
+          [type]="passwordVisible ? 'text' : 'password'"
+          formControlName="password"
+          placeholder="Password"
+          [class.invalid]="submitted && passwordControl?.invalid"
+        />
+        <button
+          type="button"
+          class="toggle-password"
+          (click)="passwordVisible = !passwordVisible"
+          aria-label="Toggle password visibility"
+        >
+          <span *ngIf="!passwordVisible">👁️</span>
+          <span *ngIf="passwordVisible">🙈</span>
+        </button>
+        <div
+          class="error"
+          [class.hidden]="!(submitted && passwordControl?.invalid)"
+        >
+          @if(passwordRequired){
+          <small>Password is required.</small>
+          }
+        </div>
+      </div>
+
+      <div class="header-error" [class.visible]="loginError">
+        @if(loginError){
+        <small
+          ><app-error-message [message]="loginError"></app-error-message
+        ></small>
+        }
+      </div>
+
+      <button type="submit">
+        <span *ngIf="loading$ | async">Loading...</span>
+        <span *ngIf="!(loading$ | async)">Login</span>
+      </button>
+
+      <div class="register-prompt">
+        <span>You don’t have an account? </span>
+        <a routerLink="/auth/register">Register</a>
+      </div>
+    </form>
+  </div>
+</div>
