@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -11,7 +12,9 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class QuizHomeComponent {
 
+constructor(private router: Router){}
+
   startQuizCategoryPage(): void {
-    console.log('starting')
+    this.router.navigate(['/quiz/categories'])
   }
 }

@@ -1,0 +1,236 @@
+.notfound-container {
+  max-width: 960px;
+  margin: 50px auto;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  background: #f0f8ff; 
+  padding: 30px 40px;
+  border-radius: 15px;
+  box-shadow: 0 0 30px #99bbff66;
+  color: #003366;
+}
+
+.tv-wrapper {
+  position: relative;
+  width: 380px;
+  background: #cce4ff;
+  border-radius: 25px 25px 15px 15px;
+  box-shadow: 0 0 20px #3399ffaa;
+  padding: 30px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tv-screen {
+  position: relative;
+  width: 340px;
+  height: 200px;
+  background: #001f4d;
+  border-radius: 15px;
+  box-shadow:
+    inset 0 0 30px #007fff,
+    0 8px 8px #004080aa;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.screen-text {
+  font-family: 'Courier New', monospace;
+  font-size: 2.5rem;
+  color: #66b2ff;
+  text-shadow:
+    0 0 6px #3399ff,
+    0 0 10px #66b2ff,
+    0 0 20px #99ccff;
+  animation: flicker 3s infinite ease-in-out, glitch 2.5s infinite;
+  white-space: nowrap;
+  user-select: none;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  10%, 20%, 40%, 60%, 80% { opacity: 0.5; }
+  15%, 25%, 50%, 70%, 90% { opacity: 0.8; }
+}
+
+@keyframes glitch {
+  0% {
+    text-shadow: 2px 0 #3399ff, -2px 0 #66b2ff;
+    transform: translate(0);
+  }
+  20% {
+    text-shadow: 1px 0 #3399ff, -1px 0 #66b2ff;
+    transform: translate(-1px, 1px);
+  }
+  40% {
+    text-shadow: -1px 0 #3399ff, 1px 0 #66b2ff;
+    transform: translate(1px, -1px);
+  }
+  60% {
+    text-shadow: 2px 0 #3399ff, -2px 0 #66b2ff;
+    transform: translate(-1px, 0);
+  }
+  80% {
+    text-shadow: -2px 0 #3399ff, 2px 0 #66b2ff;
+    transform: translate(1px, 1px);
+  }
+  100% {
+    text-shadow: 2px 0 #3399ff, -2px 0 #66b2ff;
+    transform: translate(0);
+  }
+}
+
+.tv-stand {
+  margin-top: 10px;
+  width: 140px;
+  height: 20px;
+  background: linear-gradient(90deg, #3399ff 0%, #66b2ff 100%);
+  border-radius: 10px;
+  box-shadow: 0 2px 6px #3399ff88;
+}
+
+.notfound-content {
+  flex: 1;
+  max-width: 500px;
+}
+
+.notfound-content h1 {
+  font-size: 2.6rem;
+  margin-bottom: 15px;
+  color: #003366;
+}
+
+.notfound-content p {
+  font-size: 1.1rem;
+  margin-bottom: 18px;
+  line-height: 1.4;
+  color: #004080;
+}
+
+.notfound-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.btn-nav, .btn-back {
+  background: #cce4ff;
+  color: #004c99;
+  font-family: 'Courier New', monospace;
+  padding: 8px 14px; /* намалено */
+  font-size: 0.9rem; /* по-малък шрифт */
+  border: 2px solid #3399ff;
+  border-radius: 8px;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 0 6px #66aaff; /* по-малка сянка */
+  user-select: none;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.btn-nav:hover, .btn-back:hover {
+  background: #3399ff;
+  color: #e0f0ff;
+  box-shadow: 0 0 20px #3399ff, 0 0 50px #66aaff;
+}
+
+h1 {
+  
+  font-weight: 700;
+  font-size: 2.8rem;
+  color: #003366;
+  margin-bottom: 0.4em;
+  letter-spacing: 0.02em;
+}
+
+p {
+
+  font-weight: 400;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: #335577;
+  margin-bottom: 1em;
+  max-width: 450px;
+}
+
+@media (max-width: 768px) {
+  .notfound-container {
+    flex-direction: column;
+    max-width: 90%;
+    margin: 30px auto;
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .tv-wrapper {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .tv-screen {
+    width: 100%;
+    height: 150px;
+  }
+
+  .screen-text {
+    font-size: 2rem;
+  }
+
+  .notfound-content {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .notfound-content h1 {
+    font-size: 2rem;
+  }
+
+  .notfound-content p {
+    font-size: 1rem;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .notfound-nav {
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .btn-nav, .btn-back {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+  }
+
+  .tv-stand {
+    width: 100px;
+    height: 15px;
+    margin-top: 8px;
+  }
+}
+
+
+@media (max-width: 400px) {
+  #screen-text {
+    font-size: 1.5rem !important;
+  }
+
+  .btn-nav, .btn-back {
+    padding: 5px 8px;
+    font-size: 0.75rem;
+  }
+
+  .notfound-content h1 {
+    font-size: 1.6rem;
+  }
+
+  .notfound-content p {
+    font-size: 0.9rem;
+  }
+}

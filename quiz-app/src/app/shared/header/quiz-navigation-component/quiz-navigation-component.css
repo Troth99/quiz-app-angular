@@ -1,4 +1,5 @@
 .quiz-nav {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -8,7 +9,7 @@
 }
 .logo {
   cursor: pointer;
-  width: 110px; 
+  width: 110px;
   display: inline-block;
   margin-right: 2rem;
 }
@@ -17,7 +18,8 @@
   height: auto;
   display: block;
 }
-.nav-left, .nav-right {
+.nav-left,
+.nav-right {
   display: flex;
   list-style: none;
   gap: 1rem;
@@ -48,6 +50,7 @@
   position: relative;
   width: 300px;
   margin: 0 auto;
+
 }
 .nav-center input[type="text"] {
   width: 100%;
@@ -90,4 +93,3 @@
   z-index: 1001;
   color: white;
 }
-

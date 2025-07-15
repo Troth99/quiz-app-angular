@@ -7,25 +7,26 @@
 
   <ul class="nav-left">
     <li><a routerLink="/">HOME</a></li>
-    <li><a routerLink="/quiz">QUIZ</a></li>
-    <li><a routerLink="/results">RESULTS</a></li>
+    <li><a routerLink="/quiz/categories">QUIZ</a></li>
     <li><a routerLink="/leaderboard">LEADERBOARD</a></li>
   </ul>
-
+  
   <div class="nav-center">
     <input type="text" placeholder="Search..." (input)="onSearch()" />
     <button class="search-btn">🔍</button>
   </div>
-
+  
   <ul class="nav-right">
     @if(isLoggedIn){
+       <li><a routerLink="/create-test">CREATE QUIZ</a></li>
+      <li><a routerLink="/results">MY RESULTS</a></li>
       <li><a routerLink="/profile">PROFILE</a></li>
-      <li><a (click)="logout()">LOGOUT</a></li>
+      <!-- <li><a (click)="logout()">LOGOUT</a></li> -->
       <!--като се цъкне на профил да се показва нова страница със настройки и информация за потребителя -->
     }
     @if(!isLoggedIn){
-      <li><a routerLink="/login">LOGIN</a></li>
-      <li><a routerLink="/register">REGISTER</a></li>
+      <li><a routerLink="/auth/login">LOGIN</a></li>
+      <li><a routerLink="/auth/register">REGISTER</a></li>
     }
   </ul>
 </nav>
@@ -34,15 +35,17 @@
   <ul class="mobile-menu">
     <li><a routerLink="/">HOME</a></li>
     <li><a routerLink="/quiz">QUIZ</a></li>
-    <li><a routerLink="/results">RESULTS</a></li>
-
+    <li><a routerLink="/leaderboard">LEADERBOARD</a></li>
+    
     @if(isLoggedIn){
+      <li><a routerLink="/create-test">CREATE QUIZ</a></li>
+      <li><a routerLink="/results">MY RESULTS</a></li>
       <li><a routerLink="/profile">PROFILE</a></li>
       <li><a (click)="logout()">LOGOUT</a></li>
     }
     @if(!isLoggedIn){
-      <li><a routerLink="/login">LOGIN</a></li>
-      <li><a routerLink="/register">REGISTER</a></li>
+      <li><a routerLink="/auth/login">LOGIN</a></li>
+      <li><a routerLink="/auth/register">REGISTER</a></li>
     }
   </ul>
 </div>
