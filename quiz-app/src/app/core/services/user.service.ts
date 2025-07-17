@@ -1,7 +1,8 @@
 import { inject, Injectable, Injector, runInInjectionContext } from "@angular/core";
 import { collection, collectionData, doc, docData, Firestore } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
-import { User } from "../../models/user/user.model";
+import { User } from "../models";
+
 
 //runInInjectionContext = to be sure that we are fetching the data whithin injection context and not outside, to avoid more errors.
 

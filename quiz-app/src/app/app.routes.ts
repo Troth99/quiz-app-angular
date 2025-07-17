@@ -8,7 +8,8 @@ import {
 } from './features';
 
 import { AuthLayout, MainLayout } from './core/layouts';
-import { PageNotFoundComponent } from './core';
+import { AuthGuard, PageNotFoundComponent } from './core';
+import { GuestGuard } from './core/guards';
 
 export const routes: Routes = [
   {
@@ -16,8 +17,13 @@ export const routes: Routes = [
     component: MainLayout,
     children: [
         { path: '', component: QuizHomeComponent },
-        {path: "quiz/categories", component: QuizControlerComponent},
+        {path: "quiz/categories", 
+         loadComponent: () => import('./features/quiz/quiz-controler-component/quiz-controler-component').then(c => c.QuizControlerComponent)},
         {path: 'page-not-found', component: PageNotFoundComponent},
+        {path: 'profile',
+          loadComponent: () => import('./features/profile/profile').then(c => c.Profile ),
+          canActivate: [GuestGuard]
+        }
 
     ],
     
@@ -29,11 +35,12 @@ export const routes: Routes = [
     children: [
       {
         path: 'login',
-        component: QuizLoginComponent,
+        loadComponent: () => import('./features/login/quiz-login-component').then(c => c.QuizLoginComponent),
+        canActivate: [AuthGuard]
       },
       {
         path: 'register',
-        component: QuizRegisterComponent,
+       loadComponent: () => import('./features/register/quiz-register-component').then(c => c.QuizRegisterComponent)
       },
     ],
   },

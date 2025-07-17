@@ -1,5 +1,5 @@
-export * from "./services/authService/auth.service"
-export * from "./services/users/user.service"
+export * from "./services/auth.service"
+export * from "./services/user.service"
 
 export * from "./pages/page-not-found-component"
 

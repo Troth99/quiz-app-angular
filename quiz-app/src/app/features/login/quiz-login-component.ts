@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Inject, OnDestroy, OnInit } from '@angular/core';
 import {
   FormGroup,
   FormControl,
@@ -7,28 +7,31 @@ import {
 } from '@angular/forms';
 
 import { Observable, Subscription } from 'rxjs';
-import { AuthService, UserService } from '../../core';
+
 import { AuthResponseModel } from '../../core/models/user/authResponse.model';
-import { AsyncPipe, CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { ErrorMessage } from '../../shared';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../core/services';
 
 @Component({
   selector: 'app-quiz-login-component',
-  imports: [ReactiveFormsModule, AsyncPipe, CommonModule, ErrorMessage, RouterLink],
+  imports: [ReactiveFormsModule, CommonModule, ErrorMessage, RouterLink],
   templateUrl: './quiz-login-component.html',
   styleUrl: './quiz-login-component.css',
 })
 
 export class QuizLoginComponent implements OnDestroy {
-  loading$: Observable<boolean>;
+
+  private authService = inject(AuthService);
+  private router = inject(Router)
+
+  loading = this.authService.isLoading
   submitted = false;
   emailFocused = false;
   passwordVisible = false;
 
-  constructor(private authService: AuthService, private router: Router) {
-    this.loading$ = this.authService.isLoading$;
-  }
+ 
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),

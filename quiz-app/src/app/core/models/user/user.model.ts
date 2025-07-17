@@ -1,4 +1,5 @@
 import { QuizStats } from "../quizzes/quiz-stats.model";
+import { RecentQuiz } from "../quizzes/recentQuizes.model";
 
 export interface User {
     displayName: string;
@@ -7,4 +8,5 @@ export interface User {
     createdAt: Date | null;
     lastLogin: Date| null;
     quizStats: QuizStats;
+    recentQuizzes?: RecentQuiz[]
 }

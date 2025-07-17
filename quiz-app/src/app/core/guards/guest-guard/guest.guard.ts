@@ -5,15 +5,15 @@ import { AuthService } from '../../services/auth.service';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard implements CanActivate {
+export class GuestGuard implements CanActivate {
   constructor(private auth: AuthService, private router: Router) {}
 
   canActivate(): boolean| UrlTree {
-    if (this.auth.isLoggedIn()) {
-      alert('You are already logged in. Redirecting to your profile.');
-      return this.router.createUrlTree(['/profile'], { queryParams: { message: 'already-logged-in' } });
-
+    if(this.auth.isLoggedIn()) {
+        return true
+    }else {
+        alert('You must log in in order to see your profile');
+        return this.router.createUrlTree(['/auth/login'])
     }
-    return true;
   }
 }

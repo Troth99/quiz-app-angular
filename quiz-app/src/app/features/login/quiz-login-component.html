@@ -64,8 +64,8 @@
       </div>
 
       <button type="submit">
-        <span *ngIf="loading$ | async">Loading...</span>
-        <span *ngIf="!(loading$ | async)">Login</span>
+        <span *ngIf="loading()">Loading...</span>
+        <span *ngIf="!(loading())">Login</span>
       </button>
 
       <div class="register-prompt">
