@@ -20,6 +20,7 @@
   flex-direction: column;
   text-align: center;
   min-height: 80vh;
+  margin-bottom: 4rem;
 }
 
 .avatar-wrapper {
