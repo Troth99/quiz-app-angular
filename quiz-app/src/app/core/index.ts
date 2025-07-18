@@ -1,5 +1,7 @@
 export * from "./services/auth.service"
 export * from "./services/user.service"
+export * from './services/toast.service'
+
 
 export * from "./pages/page-not-found-component"
 

@@ -10,7 +10,6 @@ export class AuthGuard implements CanActivate {
 
   canActivate(): boolean| UrlTree {
     if (this.auth.isLoggedIn()) {
-      alert('You are already logged in. Redirecting to your profile.');
       return this.router.createUrlTree(['/profile'], { queryParams: { message: 'already-logged-in' } });
 
     }

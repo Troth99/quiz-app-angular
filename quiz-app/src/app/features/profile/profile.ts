@@ -1,76 +1,87 @@
-import { Component, effect, inject, signal } from '@angular/core';
-import { AuthService, User } from '../../core';
-import { Firestore, Timestamp, doc, docData } from '@angular/fire/firestore';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { AuthService, ToastService, User, UserService } from '../../core';
+import { Timestamp } from '@angular/fire/firestore';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { Subscription } from 'rxjs';
 
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, MatButtonModule],
+  imports: [CommonModule, MatButtonModule, MatSnackBarModule],
   templateUrl: './profile.html',
   styleUrl: './profile.css'
 })
-export class Profile {
+export class Profile implements OnInit, OnDestroy {
 
-showMoreOptions = false
+  showMoreOptions = false;
+  private subscription = new Subscription();
 
-private authService = inject(AuthService)
-private AngularFireStore = inject(Firestore)
-private router = inject(Router)
+  private authService = inject(AuthService);
+  private userService = inject(UserService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private toast = inject(ToastService);
 
-user = signal<User | null>(null);
-uid = this.authService.uid;
+  user = signal<User | null>(null);
+  uid = this.authService.uid;
 
-constructor(){
-  if(!this.uid) return 
+  ngOnInit(): void {
+    if (!this.uid) return;
 
-  const userDoc = doc(this.AngularFireStore, `users/${this.uid}`);
+    const userSub = this.userService.getUser(this.uid).subscribe(rawData => {
+      if (!rawData) return;
 
-  docData(userDoc).subscribe(rawData => {
-    if(!rawData) return;
+      const parsed: User = {
+        ...rawData,
+        createdAt: rawData['createdAt'] instanceof Timestamp ? rawData['createdAt'].toDate() : rawData['createdAt'],
+        lastLogin: rawData['lastLogin'] instanceof Timestamp ? rawData['lastLogin'].toDate() : rawData['lastLogin'],
+      } as User;
 
-    const parsed: User = {
-      ...rawData,
-      createdAt: rawData['createdAt'] instanceof Timestamp ? rawData['createdAt'].toDate() : rawData['createdAt'],
-      lastLogin: rawData['lastLogin'] instanceof Timestamp ? rawData['lastLogin'].toDate() : rawData['lastLogin'],
-    } as User;
+      this.user.set(parsed);
+    });
 
-    this.user.set(parsed)
-  })
+    const routeSub = this.route.queryParamMap.subscribe(params => {
+      const message = params.get('message');
+      if (message === 'already-logged-in') {
+        this.toast.show('You are already logged in.');
+      }
+    });
 
-}
-toggleMoreOptions() {
-  this.showMoreOptions = !this.showMoreOptions;
-}
-closeMoreOptions() {
-  this.showMoreOptions = false;
-}
+    this.subscription.add(userSub);
+    this.subscription.add(routeSub);
+  }
 
-disableAccount() {
+  toggleMoreOptions() {
+    this.showMoreOptions = !this.showMoreOptions;
+  }
 
-  this.showMoreOptions = false;
-}
+  closeMoreOptions() {
+    this.showMoreOptions = false;
+  }
 
+  disableAccount() {
+    this.showMoreOptions = false;
+  }
 
-async changePassword(){
+  async changePassword() {}
 
-}
+  async changeAvatar() {
+    console.log('changing avatar');
+  }
 
-async changeAvatar(){
-  console.log('chaning avatar')
-}
+  async changeDisplayName() {}
 
-async changeDisplayName(){
+  async deleteAccount() {}
 
-}
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['']);
+  }
 
-async deleteAccount(){
-
-}
-logout(){
-  this.authService.logout()
-  this.router.navigate([''])
-}
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 }

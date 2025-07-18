@@ -1,29 +1,48 @@
-import { inject, Injectable, Injector, runInInjectionContext } from "@angular/core";
-import { collection, collectionData, doc, docData, Firestore } from "@angular/fire/firestore";
-import { Observable } from "rxjs";
-import { User } from "../models";
-
-
-//runInInjectionContext = to be sure that we are fetching the data whithin injection context and not outside, to avoid more errors.
+import { Injectable, Injector, runInInjectionContext } from '@angular/core';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  doc,
+  docData,
+  getDoc,
+  updateDoc,
+} from '@angular/fire/firestore';
+import { Observable, from, of, switchMap } from 'rxjs';
+import { User } from '../models';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
-    // private injector = inject(Injector);
-    constructor(private firestore: Firestore, private injector: Injector){
-    }
+  constructor(private firestore: Firestore, private injector: Injector) {}
 
-    getUser(uid: string): Observable<User> {
-        return runInInjectionContext(this.injector, ()=> {
-            const userDoc = doc(this.firestore, `users/${uid}`);
-            return docData(userDoc) as Observable<User>
+  getUser(uid: string): Observable<User> {
+    return runInInjectionContext(this.injector, () => {
+      const userDoc = doc(this.firestore, `users/${uid}`);
+      return docData(userDoc) as Observable<User>;
+    });
+  }
+
+  getAllUsers(): Observable<User[]> {
+    return runInInjectionContext(this.injector, () => {
+      const userRef = collection(this.firestore, 'users');
+      return collectionData(userRef, { idField: 'id' }) as Observable<User[]>;
+    });
+  }
+
+  updateLogin(uid: string): Observable<void | undefined> {
+    return runInInjectionContext(this.injector, () => {
+      const userDocRef = doc(this.firestore, 'users', uid);
+
+      return from(getDoc(userDocRef)).pipe(
+        switchMap((snapshot) => {
+          if (snapshot.exists()) {
+            return from(updateDoc(userDocRef, { lastLogin: new Date() }));
+          }
+          return of(undefined);
         })
-    }
-    getAllUsers(): Observable<User[]> {
-        return runInInjectionContext(this.injector, () => {
-            const userRef = collection(this.firestore, 'users');
-            return collectionData(userRef, {idField: 'id'}) as Observable<User[]>
-        })
-    }
+      );
+    });
+  }
 }

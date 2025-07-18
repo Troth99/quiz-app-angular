@@ -11,8 +11,9 @@ import { Observable, Subscription } from 'rxjs';
 import { AuthResponseModel } from '../../core/models/user/authResponse.model';
 import { CommonModule } from '@angular/common';
 import { ErrorMessage } from '../../shared';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services';
+import { ToastService } from '../../core';
 
 @Component({
   selector: 'app-quiz-login-component',
@@ -21,10 +22,14 @@ import { AuthService } from '../../core/services';
   styleUrl: './quiz-login-component.css',
 })
 
-export class QuizLoginComponent implements OnDestroy {
+export class QuizLoginComponent implements OnInit, OnDestroy {
 
   private authService = inject(AuthService);
-  private router = inject(Router)
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private toast = inject(ToastService);
+  private subscription = new Subscription();
+
 
   loading = this.authService.isLoading
   submitted = false;
@@ -39,8 +44,17 @@ export class QuizLoginComponent implements OnDestroy {
   });
 
   loginError: string | null = null;
-  private subscription = new Subscription();
 
+ngOnInit(): void {
+  const routeSub = this.route.queryParamMap.subscribe(params => {
+    const message = params.get('message')
+
+    if(message === 'login-required'){
+      this.toast.show('Please log in to access the profile.')
+    }
+  })
+  this.subscription.add(routeSub)
+}
   onLogin(): void {
     this.submitted = true;
     this.loginError = null;
@@ -49,8 +63,8 @@ export class QuizLoginComponent implements OnDestroy {
 
     const { email, password } = this.loginForm.value;
 
-    this.subscription.add(
-      this.authService.login(email!, password!).subscribe({
+  
+     const userSub = this.authService.login(email!, password!).subscribe({
         next: (_res: AuthResponseModel) => {
             this.router.navigate([''])
         },
@@ -76,9 +90,11 @@ export class QuizLoginComponent implements OnDestroy {
               this.loginError =
                 firebaseError.message || 'An unknown error occurred.';
           }
+
         },
-      })
-    );
+      });
+ 
+      this.subscription.add(userSub)
   }
 
   get emailControl() {
@@ -107,6 +123,6 @@ export class QuizLoginComponent implements OnDestroy {
 
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.subscription.unsubscribe()
   }
 }

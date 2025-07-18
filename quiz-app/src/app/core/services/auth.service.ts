@@ -9,6 +9,8 @@ import { AuthResponseModel } from '../models/user/authResponse.model';
 import { doc } from 'firebase/firestore';
 import { Firestore, getDoc, updateDoc } from '@angular/fire/firestore';
 import { Auth } from '@angular/fire/auth';
+import { UserService } from './user.service';
+
 
 @Injectable({
   providedIn: 'root',
@@ -17,9 +19,10 @@ export class AuthService {
   private auth = inject(Auth);
   private injector = inject(Injector)
 
+  private userService = inject(UserService)
   private currentUserUid = signal<string | null>(null);
   private loading = signal(false);
-  private firestore = inject(Firestore)
+
   readonly _isLoggedIn = signal(false)
 
   readonly isLoggedIn = this._isLoggedIn.asReadonly();
@@ -54,21 +57,13 @@ export class AuthService {
       this.currentUserUid.set(user.uid);
       this._isLoggedIn.set(true);
 
-      const userDocRef = doc(this.firestore, 'users', uid);
-
-      return from(
-        runInInjectionContext(this.injector, async () => {
-          const snapshot = await getDoc(userDocRef);
-          if (snapshot.exists()) {
-            await updateDoc(userDocRef, { lastLogin: new Date() });
-          }
-
-          return {
-            userId: cred.user.uid,
-            email: cred.user.email
-          };
-        })
-      );
+      
+    return from(this.userService.updateLogin(uid)).pipe(
+      map((): AuthResponseModel => ({
+        userId: cred.user.uid,
+        email: cred.user.email!
+      }))
+    )
     }),
     finalize(() => this.loading.set(false))
   );
