@@ -57,14 +57,20 @@ First, clone the repository to your local machine and install the required packa
 ```bash
 git clone https://github.com/your-username/quiz-app-angular.git
 cd quiz-app-angular
+``` 
+
+### 2. Install the required packages
+```bash 
 npm install
 npm install firebase @angular/fire
-``` 
-### 2. Run the development server
+npm install @angular/material @angular/cdk @angular/animations
+npm install @angular/material-icons
+```
+### 3. Run the development server
 
 ```bash
 ng serve
 ```
 
-### 3. Live Demo
-You can see the live version of the app here: https://your-deploy-link.firebaseapp.com
+### 4. Live Demo
+You can see the live version of the app here: https://quiz-app-3471b.web.app/
