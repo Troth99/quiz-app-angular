@@ -41,13 +41,30 @@ A modern single-page application for creating, solving, and tracking quizzes. Bu
 - [Angular 20](https://angular.dev/)
 - [Firebase](https://firebase.google.com/)
 - [AngularFire](https://github.com/angular/angularfire)
+- [Angular Material](https://material.angular.io/)
 - TypeScript, RxJS
 
 ---
 
 ## ▶️ Getting Started
 
-### 1. Clone the repo
+Follow these steps to clone the project, install dependencies, run it locally:
+
+### 1. Clone the repo and install dependencies
+
+First, clone the repository to your local machine and install the required packages:
+
 ```bash
 git clone https://github.com/your-username/quiz-app-angular.git
 cd quiz-app-angular
+npm install
+npm install firebase @angular/fire
+``` 
+### 2. Run the development server
+
+```bash
+ng serve
+```
+
+### 3. Live Demo
+You can see the live version of the app here: https://your-deploy-link.firebaseapp.com
