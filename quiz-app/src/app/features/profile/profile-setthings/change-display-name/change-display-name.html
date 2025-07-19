@@ -1,0 +1,48 @@
+@if(saving){
+  <div class="loading-overlay">
+    <app-loading></app-loading>
+  </div>
+}
+@if(!success && !saving){
+  <div class="change-name-container">
+    <h2>Change Display Name</h2>
+    <form [formGroup]="nameForm" (ngSubmit)="saveName()">
+      <input
+        type="text"
+        formControlName="displayName"
+        placeholder="Enter new display name"
+        [class.invalid]="
+          nameForm.controls['displayName'].invalid &&
+          (nameForm.controls['displayName'].touched || nameForm.controls['displayName'].dirty)
+        "
+        autofocus
+      />
+      @if(displayNameInvalid){
+      <div class="error">
+        @if(displayNameErrors?.['required']){
+        <small>Name is required</small>
+        } @if(displayNameErrors?.['minglenght']){
+        <small>Name must be at least 2 characters.</small>
+        }
+      </div>
+      }
+  
+      <button
+        type="submit"
+        [disabled]="saving || nameForm.invalid || !canChangeName"
+      >
+        {{ saving ? 'Saving...' : 'Save' }}
+      </button>
+  
+      @if(success){
+      <p class="success">Name updated successfully</p>
+      } @if(error){
+      <p class="error">{{error}}</p>
+      }
+    </form>
+  </div>
+}
+
+@if(success){
+ <app-succesfully-changed-name (close)="success = false"></app-succesfully-changed-name>
+}

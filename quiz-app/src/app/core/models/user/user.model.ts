@@ -1,3 +1,4 @@
+import { Timestamp } from "firebase/firestore";
 import { QuizStats } from "../quizzes/quiz-stats.model";
 import { RecentQuiz } from "../quizzes/recentQuizes.model";
 
@@ -9,4 +10,5 @@ export interface User {
     lastLogin: Date| null;
     quizStats: QuizStats;
     recentQuizzes?: RecentQuiz[]
+    lastDisplayNameChange? : Timestamp | Date   
 }

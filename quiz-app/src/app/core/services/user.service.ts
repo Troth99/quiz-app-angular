@@ -8,7 +8,7 @@ import {
   getDoc,
   updateDoc,
 } from '@angular/fire/firestore';
-import { Observable, from, of, switchMap } from 'rxjs';
+import { Observable, from, of, switchMap, throwError } from 'rxjs';
 import { User } from '../models';
 
 @Injectable({
@@ -31,18 +31,23 @@ export class UserService {
     });
   }
 
-  updateLogin(uid: string): Observable<void | undefined> {
-    return runInInjectionContext(this.injector, () => {
-      const userDocRef = doc(this.firestore, 'users', uid);
+updateLogin(uid: string): Observable<void | undefined> {
+  return runInInjectionContext(this.injector, () => {
+    const userDocRef = doc(this.firestore, 'users', uid);
 
-      return from(getDoc(userDocRef)).pipe(
-        switchMap((snapshot) => {
-          if (snapshot.exists()) {
+    return from(getDoc(userDocRef)).pipe(
+      switchMap((snapshot) => {
+        if (snapshot.exists()) {
+         
+          return runInInjectionContext(this.injector, () => {
             return from(updateDoc(userDocRef, { lastLogin: new Date() }));
-          }
-          return of(undefined);
-        })
-      );
-    });
-  }
+          });
+        }
+        return of(undefined);
+      })
+    );
+  });
+}
+
+
 }

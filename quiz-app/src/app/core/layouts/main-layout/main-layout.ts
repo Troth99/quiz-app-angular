@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import { QuizNavigationComponent } from '../../../shared/header';
-import { QuizFooterComponent } from '../../../shared/footer';
+
+import { QuizFooterComponent, QuizNavigationComponent } from '../../../shared';
+
 
 @Component({
   selector: 'app-main-layout',

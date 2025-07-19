@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 
 import { Observable, Subscription } from 'rxjs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AuthResponseModel } from '../../core/models/user/authResponse.model';
 import { CommonModule } from '@angular/common';
@@ -17,7 +18,7 @@ import { ToastService } from '../../core';
 
 @Component({
   selector: 'app-quiz-login-component',
-  imports: [ReactiveFormsModule, CommonModule, ErrorMessage, RouterLink],
+  imports: [ReactiveFormsModule, CommonModule, ErrorMessage, RouterLink, MatProgressSpinnerModule],
   templateUrl: './quiz-login-component.html',
   styleUrl: './quiz-login-component.css',
 })

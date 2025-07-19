@@ -1,1 +1,0 @@
-export * from "./quiz-footer-component/quiz-footer-component"

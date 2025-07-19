@@ -2,20 +2,23 @@ import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { AuthService, ToastService, User, UserService } from '../../core';
 import { Timestamp } from '@angular/fire/firestore';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
+import { Loading } from '../../shared';
+
 
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, MatButtonModule, MatSnackBarModule],
+  imports: [CommonModule, MatButtonModule, MatSnackBarModule, Loading],
   templateUrl: './profile.html',
   styleUrl: './profile.css'
 })
 export class Profile implements OnInit, OnDestroy {
 
+  showChangeName = false
   showMoreOptions = false;
   private subscription = new Subscription();
 
@@ -30,6 +33,7 @@ export class Profile implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (!this.uid) return;
+  
 
     const userSub = this.userService.getUser(this.uid).subscribe(rawData => {
       if (!rawData) return;
@@ -72,7 +76,9 @@ export class Profile implements OnInit, OnDestroy {
     console.log('changing avatar');
   }
 
-  async changeDisplayName() {}
+   changeDisplayName() {
+    this.router.navigate(['profile/change-display-name'])
+  }
 
   async deleteAccount() {}
 
