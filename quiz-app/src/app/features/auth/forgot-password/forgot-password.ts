@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+
 
 @Component({
   selector: 'app-forgot-password',
@@ -8,4 +10,5 @@ import { Component } from '@angular/core';
 })
 export class ForgotPassword {
 
+  changePasswordForm!: FormGroup;
 }

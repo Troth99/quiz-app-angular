@@ -44,6 +44,13 @@ export const routes: Routes = [
                 './features/profile/profile-setthings/change-display-name/change-display-name'
               ).then((c) => c.ChangeDisplayName),
           },
+          {
+            path: 'change-password',
+            loadComponent: () => 
+              import(
+                './features/auth/forgot-password/forgot-password'
+              ). then((c) => c.ForgotPassword)
+          }
         ],
       },
     ],

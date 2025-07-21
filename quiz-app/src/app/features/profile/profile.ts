@@ -70,7 +70,9 @@ export class Profile implements OnInit, OnDestroy {
     this.showMoreOptions = false;
   }
 
-  async changePassword() {}
+  async changePassword() {
+    this.router.navigate(['profile/change-password'])
+  }
 
   async changeAvatar() {
     console.log('changing avatar');
