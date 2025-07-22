@@ -48,8 +48,8 @@ export const routes: Routes = [
             path: 'change-password',
             loadComponent: () => 
               import(
-                './features/auth/forgot-password/forgot-password'
-              ). then((c) => c.ForgotPassword)
+                './features/auth/change-password/change-password'
+              ). then((c) => c.changePassword)
           }
         ],
       },

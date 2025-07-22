@@ -1,10 +1,15 @@
 @if (user()) {
   <div class="profile-card">
     <div class="avatar-wrapper">
-      <img [src]="user()?.photoUrl || 'assets/default-avatar.png'"
-           alt="User Avatar"
-           class="avatar"
-           (click)="changeAvatar()" />
+      <input type="file" #fileInput accept="image/*" (change)="changeAvatar($event)" hidden />
+      
+      <div class="avatar-wrapper" (click)="fileInput.click()" style="cursor: pointer;">
+        <img
+          [src]="user()?.photoUrl || 'default-profile.jpg'"
+          alt="User Avatar"
+          class="avatar"
+        />
+      </div>
     </div>
 
     <div class="details">
@@ -12,8 +17,12 @@
       <p class="email">{{ user()?.email }}</p>
 
       <div class="dates">
-        <div><strong>Member since:</strong> {{ user()?.createdAt | date:'longDate' }}</div>
-        <div><strong>Last login:</strong> {{ user()?.lastLogin | date:'short' }}</div>
+        <div>
+          <strong>Member since:</strong> {{ user()?.createdAt | date:'longDate' }}
+        </div>
+        <div>
+          <strong>Last login:</strong> {{ user()?.lastLogin | date:'short' }}
+        </div>
       </div>
 
       <div class="quiz-and-recent">
@@ -28,9 +37,9 @@
 
         <section class="recent-quizzes">
           <h2>Last Solved Quizzes</h2>
-          @if(user()?.recentQuizzes?.length){
+          @if (user()?.recentQuizzes?.length) {
             <ul>
-              @for(quiz of user()?.recentQuizzes; track quiz) {
+              @for (quiz of user()?.recentQuizzes; track quiz) {
                 <li>
                   <strong>{{ quiz.title }}</strong> — result: {{ quiz.score }}/{{ quiz.total }}
                   <span class="date">{{ quiz.date | date:'shortDate' }}</span>
@@ -48,11 +57,12 @@
       <button mat-raised-button (click)="changeDisplayName()">Change Name</button>
       <button mat-raised-button (click)="changePassword()">Change Password</button>
 
- 
       <div class="more-options-container">
-        <button class="more-options-button" mat-raised-button (click)="toggleMoreOptions()">More Options ▼</button>
-        @if(showMoreOptions){
+        <button class="more-options-button" mat-raised-button (click)="toggleMoreOptions()">
+          More Options ▼
+        </button>
 
+        @if (showMoreOptions) {
           <div class="more-options-menu">
             <button mat-raised-button (click)="disableAccount()">Disable Account</button>
             <button mat-raised-button (click)="deleteAccount()" class="danger">Delete Account</button>
@@ -68,4 +78,3 @@
     <app-loading></app-loading>
   </div>
 }
-

@@ -10,6 +10,7 @@ import {
   EmailAuthProvider,
   reauthenticateWithCredential,
   updatePassword,
+  User,
 } from '@angular/fire/auth';
 import {
   FormBuilder,
@@ -19,19 +20,23 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../core';
 
 @Component({
-  selector: 'app-forgot-password',
+  selector: 'app-change-password',
   standalone: true,
   imports: [ReactiveFormsModule],
-  templateUrl: './forgot-password.html',
-  styleUrl: './forgot-password.css',
+  templateUrl: './change-password.html',
+  styleUrl: './change-password.css',
 })
-export class ForgotPassword {
+export class changePassword {
   private fb = inject(FormBuilder);
   private injector = inject(EnvironmentInjector);
   private auth = inject(Auth);
   private route = inject(Router);
+  private authService = inject(AuthService);
+
+  user: User | null = null;
 
   changePasswordForm!: FormGroup;
   submitted = false;
@@ -52,11 +57,13 @@ export class ForgotPassword {
         confirmPassword: ['', [Validators.required]],
       },
       {
-        validators: [this.passwordsMatchValidator, this.newPasswordDiffersValidator],
+        validators: [
+          this.passwordsMatchValidator,
+          this.newPasswordDiffersValidator,
+        ],
       }
     );
   }
-
 
   private passwordsMatchValidator(group: AbstractControl) {
     const newPassword = group.get('newPassword')?.value;
@@ -68,14 +75,13 @@ export class ForgotPassword {
       const errors = group.get('confirmPassword')?.errors;
       if (errors && errors['mismatch']) {
         delete errors['mismatch'];
-        group.get('confirmPassword')?.setErrors(
-          Object.keys(errors).length ? errors : null
-        );
+        group
+          .get('confirmPassword')
+          ?.setErrors(Object.keys(errors).length ? errors : null);
       }
     }
   }
 
- 
   private newPasswordDiffersValidator(group: AbstractControl) {
     const current = group.get('currentPassword')?.value;
     const newPass = group.get('newPassword')?.value;
@@ -86,9 +92,9 @@ export class ForgotPassword {
       const errors = group.get('newPassword')?.errors;
       if (errors && errors['sameAsCurrent']) {
         delete errors['sameAsCurrent'];
-        group.get('newPassword')?.setErrors(
-          Object.keys(errors).length ? errors : null
-        );
+        group
+          .get('newPassword')
+          ?.setErrors(Object.keys(errors).length ? errors : null);
       }
     }
   }
@@ -101,21 +107,31 @@ export class ForgotPassword {
     if (this.changePasswordForm.invalid) return;
 
     const { currentPassword, newPassword } = this.changePasswordForm.value;
-
     this.loading = true;
 
     try {
       await runInInjectionContext(this.injector, async () => {
         const user = this.auth.currentUser;
-        if (!user || !user.email) throw new Error('User not authenticated');
+        if (!user || !user.email) {
+          await this.authService.logout();
+          this.route.navigate(['/auth/login']);
+          throw new Error('User not authenticated');
+        }
 
-        const credential = EmailAuthProvider.credential(user.email, currentPassword);
+        const credential = EmailAuthProvider.credential(
+          user.email,
+          currentPassword
+        );
         await reauthenticateWithCredential(user, credential);
       });
 
       await runInInjectionContext(this.injector, async () => {
         const user = this.auth.currentUser;
-        if (!user) throw new Error('User not authenticated');
+        if (!user) {
+          await this.authService.logout();
+          this.route.navigate(['/auth/login']);
+          throw new Error('User not authenticated');
+        }
         await updatePassword(user, newPassword);
       });
 
@@ -136,6 +152,8 @@ export class ForgotPassword {
             break;
           case 'auth/requires-recent-login':
             this.error = 'You should log in again, to change password.';
+            await this.authService.logout();
+            this.route.navigate(['/auth/login']);
             break;
           case 'auth/too-many-requests':
             this.error = 'Too many attempts, please wait before trying again.';
@@ -146,7 +164,7 @@ export class ForgotPassword {
       } else if (err instanceof Error) {
         this.error = err.message;
       } else {
-        this.error = 'Възникна неочаквана грешка.';
+        this.error = 'Unknown error occured.';
       }
     } finally {
       this.loading = false;

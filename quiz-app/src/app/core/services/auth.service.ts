@@ -82,7 +82,8 @@ export class AuthService {
     );
   }
 
-  logout() {
+  async logout() {
+    await this.auth.signOut();
     localStorage.removeItem('currentLoggedUser');
     localStorage.removeItem('user');
     this.currentUserUid.set(null);
@@ -107,9 +108,12 @@ export class AuthService {
     return updateProfile$.pipe(
       switchMap(() =>
         runInInjectionContext(this.injector, () =>
-          from(updateDoc(userDoc, { displayName: newName,
-            lastDisplayNameChange: serverTimestamp()
-           }))
+          from(
+            updateDoc(userDoc, {
+              displayName: newName,
+              lastDisplayNameChange: serverTimestamp(),
+            })
+          )
         )
       ),
       tap(() => {
@@ -126,4 +130,5 @@ export class AuthService {
   get uid(): string | null {
     return this.currentUserUid();
   }
+
 }

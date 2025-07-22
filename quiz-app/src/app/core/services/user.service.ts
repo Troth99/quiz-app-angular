@@ -15,6 +15,9 @@ import { User } from '../models';
   providedIn: 'root',
 })
 export class UserService {
+  updateUser(uid: string, arg1: { photoUrl: any; }) {
+    throw new Error('Method not implemented.');
+  }
   constructor(private firestore: Firestore, private injector: Injector) {}
 
   getUser(uid: string): Observable<User> {

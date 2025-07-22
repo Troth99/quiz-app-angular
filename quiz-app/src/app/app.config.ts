@@ -13,11 +13,14 @@ import { provideAnalytics, getAnalytics } from '@angular/fire/analytics';
 import { environment } from '../enviroments/enviroment';
 import {provideFirestore, getFirestore} from '@angular/fire/firestore'
 import { provideHttpClient } from '@angular/common/http';
+import { provideStorage } from '@angular/fire/storage';
+import { getStorage } from 'firebase/storage';
 
 
 export const appConfig: ApplicationConfig = {
   
   providers: [
+    provideStorage(() => getStorage()),
     provideHttpClient(),
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),

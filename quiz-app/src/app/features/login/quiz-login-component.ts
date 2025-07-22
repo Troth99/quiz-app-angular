@@ -18,26 +18,29 @@ import { ToastService } from '../../core';
 
 @Component({
   selector: 'app-quiz-login-component',
-  imports: [ReactiveFormsModule, CommonModule, ErrorMessage, RouterLink, MatProgressSpinnerModule],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    ErrorMessage,
+    RouterLink,
+    MatProgressSpinnerModule,
+  ],
   templateUrl: './quiz-login-component.html',
   styleUrl: './quiz-login-component.css',
 })
-
 export class QuizLoginComponent implements OnInit, OnDestroy {
-
   private authService = inject(AuthService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private toast = inject(ToastService);
   private subscription = new Subscription();
 
+  redirectUrl: string | null = null;
 
-  loading = this.authService.isLoading
+  loading = this.authService.isLoading;
   submitted = false;
   emailFocused = false;
   passwordVisible = false;
-
- 
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -46,16 +49,17 @@ export class QuizLoginComponent implements OnInit, OnDestroy {
 
   loginError: string | null = null;
 
-ngOnInit(): void {
-  const routeSub = this.route.queryParamMap.subscribe(params => {
-    const message = params.get('message')
+  ngOnInit(): void {
+    this.redirectUrl = this.route.snapshot.queryParamMap.get('redirectUrl');
+    const routeSub = this.route.queryParamMap.subscribe((params) => {
+      const message = params.get('message');
 
-    if(message === 'login-required'){
-      this.toast.show('Please log in to access the profile.')
-    }
-  })
-  this.subscription.add(routeSub)
-}
+      if (message === 'login-required') {
+        this.toast.show('Please log in to access the profile.');
+      }
+    });
+    this.subscription.add(routeSub);
+  }
   onLogin(): void {
     this.submitted = true;
     this.loginError = null;
@@ -64,38 +68,40 @@ ngOnInit(): void {
 
     const { email, password } = this.loginForm.value;
 
-  
-     const userSub = this.authService.login(email!, password!).subscribe({
-        next: (_res: AuthResponseModel) => {
-            this.router.navigate([''])
-        },
-        error: (err: unknown) => {
-          const firebaseError = err as { code?: string; message?: string };
-          switch (firebaseError.code) {
-            case 'auth/invalid-email':
-              this.loginError = 'The email address is invalid.';
-              break;
-            case 'auth/user-disabled':
-              this.loginError = 'This user account has been disabled.';
-              break;
-            case 'auth/user-not-found':
-              this.loginError = 'User not registered.';
-              break;
-            case 'auth/wrong-password':
-              this.loginError = 'Incorrect password.';
-              break;
-            case 'auth/invalid-credential':
-              this.loginError = 'Invalid login credentials.';
-              break;
-            default:
-              this.loginError =
-                firebaseError.message || 'An unknown error occurred.';
-          }
+    const userSub = this.authService.login(email!, password!).subscribe({
+      next: (_res: AuthResponseModel) => {
+        if (this.redirectUrl) {
+          this.router.navigateByUrl(this.redirectUrl);
+        } else {
+          this.router.navigate(['']);
+        }
+      },
+      error: (err: unknown) => {
+        const firebaseError = err as { code?: string; message?: string };
+        switch (firebaseError.code) {
+          case 'auth/invalid-email':
+            this.loginError = 'The email address is invalid.';
+            break;
+          case 'auth/user-disabled':
+            this.loginError = 'This user account has been disabled.';
+            break;
+          case 'auth/user-not-found':
+            this.loginError = 'User not registered.';
+            break;
+          case 'auth/wrong-password':
+            this.loginError = 'Incorrect password.';
+            break;
+          case 'auth/invalid-credential':
+            this.loginError = 'Invalid login credentials.';
+            break;
+          default:
+            this.loginError =
+              firebaseError.message || 'An unknown error occurred.';
+        }
+      },
+    });
 
-        },
-      });
- 
-      this.subscription.add(userSub)
+    this.subscription.add(userSub);
   }
 
   get emailControl() {
@@ -107,23 +113,28 @@ ngOnInit(): void {
   }
 
   get emailRequired(): boolean {
-    return !!this.emailControl?.errors?.['required'] &&
-      (this.emailControl.touched || this.submitted);
+    return (
+      !!this.emailControl?.errors?.['required'] &&
+      (this.emailControl.touched || this.submitted)
+    );
   }
 
   get emailInvalid(): boolean {
-    return !!this.emailControl?.errors?.['email'] &&
+    return (
+      !!this.emailControl?.errors?.['email'] &&
       (this.emailControl.touched || this.submitted) &&
-      !this.emailFocused; 
+      !this.emailFocused
+    );
   }
 
   get passwordRequired(): boolean {
-    return !!this.passwordControl?.errors?.['required'] &&
-      (this.passwordControl.touched || this.submitted);
+    return (
+      !!this.passwordControl?.errors?.['required'] &&
+      (this.passwordControl.touched || this.submitted)
+    );
   }
 
-
   ngOnDestroy(): void {
-    this.subscription.unsubscribe()
+    this.subscription.unsubscribe();
   }
 }
