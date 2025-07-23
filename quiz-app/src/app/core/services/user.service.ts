@@ -8,16 +8,23 @@ import {
   getDoc,
   updateDoc,
 } from '@angular/fire/firestore';
-import { Observable, from, of, switchMap, throwError } from 'rxjs';
+import { Observable, from, of, switchMap } from 'rxjs';
 import { User } from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  updateUser(uid: string, arg1: { photoUrl: any; }) {
-    throw new Error('Method not implemented.');
-  }
+
+
+
+  updateUser(uid: string, data: Partial<User>): Observable<void> {
+  return runInInjectionContext(this.injector, () => {
+    const userDocRef = doc(this.firestore, 'users', uid);
+    return from(updateDoc(userDocRef, data));
+  });
+}
+
   constructor(private firestore: Firestore, private injector: Injector) {}
 
   getUser(uid: string): Observable<User> {

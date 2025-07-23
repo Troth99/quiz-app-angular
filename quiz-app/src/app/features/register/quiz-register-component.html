@@ -1,1 +1,108 @@
-<p>quiz-register-component works!</p>
+<section class="register-container">
+  <div class="register-image">
+    <img src="register-form.webp" alt="Register Illustration" />
+  </div>
+
+  <div class="register-form-wrapper">
+    <h2>Join the Quiz App</h2>
+    <p>Compete, learn, and improve your skills. Create your account now.</p>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()" novalidate>
+      <div class="input-group">
+        <label for="displayName">Name</label>
+        <input
+          id="displayName"
+          formControlName="displayName"
+          type="text"
+          [class.invalid]="submitted && displayNameControl?.invalid"
+        />
+        @if (submitted && displayNameControl?.hasError('required')) {
+        <div class="error">Name is required.</div>
+        }
+      </div>
+
+      <div class="input-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          formControlName="email"
+          type="email"
+          [class.invalid]="submitted && emailControl?.invalid"
+        />
+        @if (submitted && emailControl?.hasError('required')) {
+        <div class="error">Email is required.</div>
+        } @if (submitted && emailControl?.hasError('email')) {
+        <div class="error">Invalid email format.</div>
+        }
+        @if (submitted && emailControl?.hasError('emailExists')) {
+            <div class="error">Email is already registered.</div>
+          }
+      </div>
+      <div class="input-group password-group">
+        <label for="password">Password</label>
+        <input
+          [type]="passwordVisible ? 'text' : 'password'"
+          id="password"
+          formControlName="password"
+          [class.invalid]="submitted && passwordControl?.invalid"
+        />
+        <button
+          type="button"
+          class="toggle-password"
+          (click)="passwordVisible = !passwordVisible"
+        >
+          @if(!passwordVisible){
+          <span>👁️</span>
+          }@else if (passwordVisible){
+          <span>🙈</span>
+          }
+        </button>
+        @if (submitted && passwordControl?.hasError('required')) {
+        <div class="error">Password is required.</div>
+        } @if (submitted && passwordControl?.hasError('minlength')) {
+        <div class="error">Password must be at least 5 characters.</div>
+        }
+      </div>
+
+      <div class="input-group password-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+          [type]="confirmPasswordVisible ? 'text' : 'password'"
+          id="confirmPassword"
+          formControlName="confirmPassword"
+          [class.invalid]="submitted && confirmPasswordControl?.invalid"
+        />
+        <button
+          type="button"
+          class="toggle-password"
+          (click)="confirmPasswordVisible = !confirmPasswordVisible"
+        >
+          @if(!confirmPasswordVisible){
+          <span>👁️</span>
+          }@else if (confirmPasswordVisible){
+          <span>🙈</span>
+          }
+        </button>
+
+        @if (submitted && confirmPasswordControl?.hasError('required')) {
+        <div class="error">Confirm password is required.</div>
+        } @if (submitted && registerForm.hasError('mismatch')) {
+        <div class="error">Passwords do not match.</div>
+        }
+      </div>
+
+      <button type="submit">
+        @if(loading){
+        <span>Loading...</span>
+        }@else if (!loading){
+        <span>Register</span>
+        }
+      </button>
+
+      <div class="register-prompt">
+        <span>Already have an account?</span>
+        <a routerLink="/auth/login">Login here</a>
+      </div>
+    </form>
+  </div>
+</section>

@@ -74,6 +74,7 @@ export const routes: Routes = [
           import('./features/register/quiz-register-component').then(
             (c) => c.QuizRegisterComponent
           ),
+          canActivate: [AuthGuard]
       },
     ],
   },

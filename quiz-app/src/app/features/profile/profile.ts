@@ -5,19 +5,17 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { Loading } from '../../shared';
 import { Auth } from '@angular/fire/auth';
-import { Dropbox } from 'dropbox';
 
 @Component({
   selector: 'app-profile',
   imports: [CommonModule, MatButtonModule, MatSnackBarModule, Loading],
   templateUrl: './profile.html',
-  styleUrl: './profile.css'
+  styleUrl: './profile.css',
 })
 export class Profile implements OnInit, OnDestroy {
-
   showChangeName = false;
   showMoreOptions = false;
   private subscription = new Subscription();
@@ -32,25 +30,29 @@ export class Profile implements OnInit, OnDestroy {
   user = signal<User | null>(null);
   uid = this.authService.uid;
 
-  // Инициализирай Dropbox с токен (замени с твоя токен)
-  private dbx = new Dropbox({ accessToken: 'ТУК_ДАЙ_СИ_ТОКЕНА_ОТ_ДРОПБОКС' });
-
   ngOnInit(): void {
+
     if (!this.uid) return;
 
-    const userSub = this.userService.getUser(this.uid).subscribe(rawData => {
+    const userSub = this.userService.getUser(this.uid).subscribe((rawData) => {
       if (!rawData) return;
 
       const parsed: User = {
         ...rawData,
-        createdAt: rawData['createdAt'] instanceof Timestamp ? rawData['createdAt'].toDate() : rawData['createdAt'],
-        lastLogin: rawData['lastLogin'] instanceof Timestamp ? rawData['lastLogin'].toDate() : rawData['lastLogin'],
+        createdAt:
+          rawData['createdAt'] instanceof Timestamp
+            ? rawData['createdAt'].toDate()
+            : rawData['createdAt'],
+        lastLogin:
+          rawData['lastLogin'] instanceof Timestamp
+            ? rawData['lastLogin'].toDate()
+            : rawData['lastLogin'],
       } as User;
 
       this.user.set(parsed);
     });
 
-    const routeSub = this.route.queryParamMap.subscribe(params => {
+    const routeSub = this.route.queryParamMap.subscribe((params) => {
       const message = params.get('message');
       if (message === 'already-logged-in') {
         this.toast.show('You are already logged in.');
@@ -78,39 +80,55 @@ export class Profile implements OnInit, OnDestroy {
   }
 
   async changeAvatar(event: Event) {
-    // const input = event.target as HTMLInputElement;
-    // if (!input.files?.length) return;
 
-    // const file = input.files[0];
+    if(!this.auth.currentUser){
+      await this.authService.logout();
+      this.router.navigate(['/auth/login']);
+      return
+    }
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
 
-    // try {
-    //   const response = await this.dbx.filesUpload({ path: '/' + file.name, contents: file });
-    //   const linkResponse = await this.dbx.sharingCreateSharedLinkWithSettings({ path: response.result.path_lower });
-    //   const url = linkResponse.result.url.replace('www.dropbox.com', 'dl.dropboxusercontent.com').replace('?dl=0', '');
+    if (!file) return;
 
-    //   if (!this.user()) return;
+    const formData = new FormData();
+    formData.append('image', file);
 
-    //   await this.updateUserProfilePhotoUrl(url);
+    const apiKey = '844b750f8696c887633d12684dff203e';
 
-    //   this.user.update(u => u ? { ...u, photoUrl: url } : u);
+    try {
+      const res = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+        method: 'POST',
+        body: formData,
+      });
 
-    // } catch (error) {
-    //   console.error('Error uploading avatar:', error);
-    //   this.toast.show('Error uploading avatar.');
-    // }
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error?.message || 'Upload failed');
+      }
+
+      const imageUrl = data.data.url;
+      await this.updateUserProfilePhotoUrl(imageUrl);
+    } catch (error) {
+      console.error('failed to updated the picture', (error as Error).message);
+    }
   }
 
-  async updateUserProfilePhotoUrl(url: string) {
-    // if (!this.user()) return;
-   
-    // try {
-    //   await this.userService.updateUser(this.user()!.uid, { photoUrl: url });
-    //   this.toast.show('Avatar updated successfully.');
-    // } catch (error) {
-    //   console.error('Error updating user profile photo URL:', error);
-    //   this.toast.show('Error updating avatar in profile.');
-    // }
+
+async updateUserProfilePhotoUrl(url: string) {
+  this.user.update((u) => (u ? { ...u, photoUrl: url } : u));
+
+  if (this.uid) {
+    try {
+      await firstValueFrom(this.userService.updateUser(this.uid, { photoUrl: url }));
+      this.toast.show('Profile picture was updated succesfully');
+    } catch (error) {
+      this.toast.show('There was error updated profile picture, please log in again.');
+      console.error(error);
+    }
   }
+}
 
   changeDisplayName() {
     this.router.navigate(['profile/change-display-name']);

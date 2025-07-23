@@ -29,7 +29,7 @@
   
       <button
         type="submit"
-        [disabled]="saving || nameForm.invalid || !canChangeName"
+        [disabled]="!(canChangeName$ | async) || saving"
       >
         {{ saving ? 'Saving...' : 'Save' }}
       </button>
