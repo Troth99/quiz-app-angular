@@ -14,9 +14,9 @@
           id="displayName"
           formControlName="displayName"
           type="text"
-          [class.invalid]="submitted && displayNameControl?.invalid"
+          [class.invalid]="submitted && form.displayName.invalid"
         />
-        @if (submitted && displayNameControl?.hasError('required')) {
+        @if (submitted && form.displayName.hasError('required')) {
         <div class="error">Name is required.</div>
         }
       </div>
@@ -27,14 +27,14 @@
           id="email"
           formControlName="email"
           type="email"
-          [class.invalid]="submitted && emailControl?.invalid"
+          [class.invalid]="submitted && form.email.invalid"
         />
-        @if (submitted && emailControl?.hasError('required')) {
+        @if (submitted && form.email.hasError('required')) {
         <div class="error">Email is required.</div>
-        } @if (submitted && emailControl?.hasError('email')) {
+        } @if (submitted && form.email.hasError('email')) {
         <div class="error">Invalid email format.</div>
         }
-        @if (submitted && emailControl?.hasError('emailExists')) {
+        @if (submitted && form.email.hasError('emailExists')) {
             <div class="error">Email is already registered.</div>
           }
       </div>
@@ -44,7 +44,7 @@
           [type]="passwordVisible ? 'text' : 'password'"
           id="password"
           formControlName="password"
-          [class.invalid]="submitted && passwordControl?.invalid"
+          [class.invalid]="submitted && form.password.invalid"
         />
         <button
           type="button"
@@ -57,10 +57,10 @@
           <span>🙈</span>
           }
         </button>
-        @if (submitted && passwordControl?.hasError('required')) {
+        @if (submitted && form.password.hasError('required')) {
         <div class="error">Password is required.</div>
-        } @if (submitted && passwordControl?.hasError('minlength')) {
-        <div class="error">Password must be at least 5 characters.</div>
+        } @if (submitted && form.password.hasError('minlength')) {
+        <div class="error">Password must be at least 6 characters.</div>
         }
       </div>
 
@@ -70,7 +70,7 @@
           [type]="confirmPasswordVisible ? 'text' : 'password'"
           id="confirmPassword"
           formControlName="confirmPassword"
-          [class.invalid]="submitted && confirmPasswordControl?.invalid"
+          [class.invalid]="submitted && form.confirmPassword.invalid"
         />
         <button
           type="button"
@@ -84,9 +84,9 @@
           }
         </button>
 
-        @if (submitted && confirmPasswordControl?.hasError('required')) {
+        @if (submitted && form.confirmPassword.hasError('required')) {
         <div class="error">Confirm password is required.</div>
-        } @if (submitted && registerForm.hasError('mismatch')) {
+        }@else if (submitted && registerForm.hasError('mismatch')) {
         <div class="error">Passwords do not match.</div>
         }
       </div>

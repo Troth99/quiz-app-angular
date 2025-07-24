@@ -32,6 +32,8 @@ export class ChangeDisplayName implements OnInit {
   authService = inject(AuthService);
   fb = inject(FormBuilder);
 
+  currentName: string | null = null;
+
   nameForm: FormGroup;
   saving = false;
   error: string | null = null;
@@ -47,8 +49,10 @@ export class ChangeDisplayName implements OnInit {
 
   ngOnInit() {
     const uid = this.authService.uid;
+
     if (uid) {
       this.userService.getUser(uid).subscribe((userDoc: User) => {
+        this.currentName = userDoc.displayName
         const lastChangeRaw = userDoc.lastDisplayNameChange;
 
         let lastChangeDate: Date | null = null;
@@ -91,6 +95,11 @@ export class ChangeDisplayName implements OnInit {
       if (!canChange) return;
 
       const newName = this.nameForm.value.displayName;
+
+      if(newName === this.currentName){
+        this.error = 'New name must be different than the current name.'
+        return
+      }
 
       this.saving = true;
       this.error = null;

@@ -17,15 +17,15 @@
           placeholder="Email"
           (focus)="emailFocused = true"
           (blur)="emailFocused = false"
-          [class.invalid]="submitted && emailControl?.invalid"
+          [class.invalid]="submitted && emailControl.invalid"
         />
         <div
           class="error"
-          [class.hidden]="!(submitted && emailControl?.invalid)"
+          [class.hidden]="!(submitted && emailControl.invalid)"
         >
-          @if(emailRequired){
+          @if(validators.emailRequired){
           <small>Email is required.</small>
-          } @else if(emailInvalid){
+          } @else if(validators.emailInvalid){
           <small>Please enter a valid email.</small>
           }
         </div>
@@ -36,7 +36,7 @@
           [type]="passwordVisible ? 'text' : 'password'"
           formControlName="password"
           placeholder="Password"
-          [class.invalid]="submitted && passwordControl?.invalid"
+          [class.invalid]="submitted && passwordControl.invalid"
         />
         <button
           type="button"
@@ -49,9 +49,9 @@
         </button>
         <div
           class="error"
-          [class.hidden]="!(submitted && passwordControl?.invalid)"
+          [class.hidden]="!(submitted && passwordControl.invalid)"
         >
-          @if(passwordRequired){
+          @if(validators.passwordRequired){
           <small>Password is required.</small>
           }
         </div>

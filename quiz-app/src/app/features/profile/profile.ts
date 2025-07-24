@@ -18,6 +18,7 @@ import { Auth } from '@angular/fire/auth';
 export class Profile implements OnInit, OnDestroy {
   showChangeName = false;
   showMoreOptions = false;
+
   private subscription = new Subscription();
 
   private authService = inject(AuthService);
@@ -30,6 +31,7 @@ export class Profile implements OnInit, OnDestroy {
   user = signal<User | null>(null);
   uid = this.authService.uid;
 
+  saving = false
   ngOnInit(): void {
 
     if (!this.uid) return;
@@ -134,9 +136,29 @@ async updateUserProfilePhotoUrl(url: string) {
     this.router.navigate(['profile/change-display-name']);
   }
 
-  async deleteAccount() {
-    // Имплементирай изтриване на акаунт
+async deleteAccount() {
+  if (!confirm('Are you sure you want to delete your account? This action is irreversible.')) return;
+
+  const password = prompt('Enter your password to confirm account deletion');
+  if (!password) {
+    this.toast.show('Password is required to delete account.');
+    return;
   }
+
+  this.saving = true;
+
+  try {
+    await this.authService.deleteUser(password);
+    await this.authService.logout();
+    this.router.navigate(['/']);
+  } catch (error) {
+    console.error(error);
+    this.toast.show('Failed to delete account. Please check your password and try again.');
+  } finally {
+    this.saving = false;
+  }
+}
+
 
   logout() {
     this.authService.logout();

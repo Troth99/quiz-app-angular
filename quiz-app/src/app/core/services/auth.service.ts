@@ -9,6 +9,7 @@ import {
   signInWithEmailAndPassword,
   UserCredential,
   updateProfile,
+  EmailAuthProvider,
 } from 'firebase/auth';
 import {
   from,
@@ -20,9 +21,19 @@ import {
   finalize,
 } from 'rxjs';
 import { AuthResponseModel } from '../models/user/authResponse.model';
-import { doc, serverTimestamp, setDoc, updateDoc } from '@angular/fire/firestore';
+import {
+  deleteDoc,
+  doc,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+} from '@angular/fire/firestore';
 import { Firestore } from '@angular/fire/firestore';
-import { Auth, createUserWithEmailAndPassword } from '@angular/fire/auth';
+import {
+  Auth,
+  createUserWithEmailAndPassword,
+  reauthenticateWithCredential,
+} from '@angular/fire/auth';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -49,62 +60,66 @@ export class AuthService {
       this._isLoggedIn.set(true);
     }
   }
- register(email: string, password: string, displayName: string): Observable<UserCredential> {
-  this.loading.set(true);
+  register(
+    email: string,
+    password: string,
+    displayName: string
+  ): Observable<UserCredential> {
+    this.loading.set(true);
 
-  return runInInjectionContext(this.injector, () =>
-    from(createUserWithEmailAndPassword(this.auth, email, password)).pipe(
-      switchMap(userCredential => {
-        const user = userCredential.user;
-        if (!user) return throwError(() => new Error('Registration failed'));
+    return runInInjectionContext(this.injector, () =>
+      from(createUserWithEmailAndPassword(this.auth, email, password)).pipe(
+        switchMap((userCredential) => {
+          const user = userCredential.user;
+          if (!user) return throwError(() => new Error('Registration failed'));
 
-        return runInInjectionContext(this.injector, () =>
-          from(updateProfile(user, { displayName }))
-        ).pipe(
-          switchMap(() => {
-            const userDoc = {
-              displayName,
-              createdQuizzies: [],
-              email: user.email || '',
-              photoUrl: '',
-              createdAt: serverTimestamp(),
-              lastLogin: serverTimestamp(),
-              quizStats: {
-                lastQuizDate: null,
-                quizzesTaken: '0',
-                timeSpent: '0',
-                totalScore: '0'
-              },
-              lastDisplayNameChange: null,
-              recentQuizzes: [],
-            };
+          return runInInjectionContext(this.injector, () =>
+            from(updateProfile(user, { displayName }))
+          ).pipe(
+            switchMap(() => {
+              const userDoc = {
+                displayName,
+                createdQuizzies: [],
+                email: user.email || '',
+                photoUrl: '',
+                createdAt: serverTimestamp(),
+                lastLogin: serverTimestamp(),
+                quizStats: {
+                  lastQuizDate: null,
+                  quizzesTaken: '0',
+                  timeSpent: '0',
+                  totalScore: '0',
+                },
+                lastDisplayNameChange: null,
+                recentQuizzes: [],
+              };
 
-            return runInInjectionContext(this.injector, () =>
-              from(setDoc(doc(this.firestore, 'users', user.uid), userDoc))
-            ).pipe(map(() => userCredential));
-          })
-        );
-      }),
-      tap(userCredential => {
-        this.currentUserUid.set(userCredential.user.uid);
-        this._isLoggedIn.set(true);
+              return runInInjectionContext(this.injector, () =>
+                from(setDoc(doc(this.firestore, 'users', user.uid), userDoc))
+              ).pipe(map(() => userCredential));
+            })
+          );
+        }),
+        tap((userCredential) => {
+          this.currentUserUid.set(userCredential.user.uid);
+          this._isLoggedIn.set(true);
 
-        const user = userCredential.user;
-        localStorage.setItem(
-          'currentLoggedUser',
-          JSON.stringify({
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-            photoUrl: user.photoURL,
-            lastLogin: new Date().toISOString(),
-          })
-        );
-      }),
-      finalize(() => this.loading.set(false))
-    )
-  );
-}
+          const user = userCredential.user;
+          localStorage.setItem(
+            'currentLoggedUser',
+            JSON.stringify({
+              uid: user.uid,
+              email: user.email,
+              displayName: user.displayName,
+              photoUrl: user.photoURL,
+              lastLogin: new Date().toISOString(),
+            })
+          );
+        }),
+        finalize(() => this.loading.set(false))
+      )
+    );
+  }
 
   login(email: string, password: string): Observable<AuthResponseModel> {
     this.loading.set(true);
@@ -183,8 +198,25 @@ export class AuthService {
       finalize(() => this.loading.set(false))
     );
   }
+
+  async deleteUser(password: string) {
+    const user = this.auth.currentUser;
+    if (!user || !user.email) throw new Error('No user logged in');
+
+    const credential = EmailAuthProvider.credential(user.email, password);
+
+    runInInjectionContext(this.injector, async () => {
+      await reauthenticateWithCredential(user, credential);
+    });
+
+    runInInjectionContext(this.injector, async () => {
+      const userDocRef = doc(this.firestore, 'users', user.uid);
+      await deleteDoc(userDocRef);
+      await user.delete();
+    });
+  }
+
   get uid(): string | null {
     return this.currentUserUid();
   }
-
 }
