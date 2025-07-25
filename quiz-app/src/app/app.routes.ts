@@ -24,6 +24,13 @@ export const routes: Routes = [
             './features/quiz/quiz-controler-component/quiz-controler-component'
           ).then((c) => c.QuizControlerComponent),
       },
+      {
+        path: 'quiz/create',
+        loadComponent: () =>
+          import(
+            './features/quiz-create/quiz-create'
+          ).then((c) => c.QuizCreate)
+      },
 
       { path: 'page-not-found', component: PageNotFoundComponent },
 

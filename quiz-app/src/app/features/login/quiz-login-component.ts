@@ -56,6 +56,7 @@ export class QuizLoginComponent implements OnInit, OnDestroy {
       }
     });
 
+     this.formGroup.reset()
     this.subscription.add(routeSub);
   }
 

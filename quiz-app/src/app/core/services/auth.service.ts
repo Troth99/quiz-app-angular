@@ -199,22 +199,22 @@ export class AuthService {
     );
   }
 
-  async deleteUser(password: string) {
-    const user = this.auth.currentUser;
-    if (!user || !user.email) throw new Error('No user logged in');
+ async deleteUser(password: string) {
+  const user = this.auth.currentUser;
+  if (!user || !user.email) throw new Error('No user logged in');
 
-    const credential = EmailAuthProvider.credential(user.email, password);
+  const credential = EmailAuthProvider.credential(user.email, password);
 
-    runInInjectionContext(this.injector, async () => {
-      await reauthenticateWithCredential(user, credential);
-    });
 
-    runInInjectionContext(this.injector, async () => {
-      const userDocRef = doc(this.firestore, 'users', user.uid);
-      await deleteDoc(userDocRef);
-      await user.delete();
-    });
-  }
+  await runInInjectionContext(this.injector, () => reauthenticateWithCredential(user, credential));
+
+
+  await runInInjectionContext(this.injector, async () => {
+    const userDocRef = doc(this.firestore, 'users', user.uid);
+    await deleteDoc(userDocRef);
+    await user.delete();
+  });
+}
 
   get uid(): string | null {
     return this.currentUserUid();
