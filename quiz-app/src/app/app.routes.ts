@@ -29,7 +29,8 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/quiz-create/quiz-create'
-          ).then((c) => c.QuizCreate)
+          ).then((c) => c.QuizCreate),
+          canActivate: [GuestGuard]
       },
 
       { path: 'page-not-found', component: PageNotFoundComponent },

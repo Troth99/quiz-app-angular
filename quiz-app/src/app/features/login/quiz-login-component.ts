@@ -44,22 +44,28 @@ export class QuizLoginComponent implements OnInit, OnDestroy {
   passwordVisible = false;
   loginError: string | null = null;
 
-  ngOnInit(): void {
-    this.redirectUrl = this.route.snapshot.queryParamMap.get('redirectUrl');
+ ngOnInit(): void {
+  this.redirectUrl = this.route.snapshot.queryParamMap.get('redirectUrl');
 
-    this.validators.setState(this.submitted, this.emailFocused);
+  this.validators.setState(this.submitted, this.emailFocused);
 
-    const routeSub = this.route.queryParamMap.subscribe((params) => {
-      const message = params.get('message');
-      if (message === 'login-required') {
-        this.toast.show('Please log in to access the profile.');
-      }
-    });
+  const routeSub = this.route.queryParamMap.subscribe((params) => {
+    const message = params.get('message');
+    if (message === 'login-required') {
+      this.toast.show('Please log in to access this page.');
 
-     this.formGroup.reset()
-    this.subscription.add(routeSub);
-  }
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { message: null },
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      });
+    }
+  });
 
+  this.formGroup.reset();
+  this.subscription.add(routeSub);
+}
   onLogin(): void {
     this.submitted = true;
     this.loginError = null;

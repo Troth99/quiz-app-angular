@@ -1,0 +1,141 @@
+form {
+  max-width: 720px;
+  margin: 40px auto;
+  padding: 30px 25px;
+  background: #e8f0fe;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #0d3b66;
+  box-sizing: border-box;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 28px;
+  font-weight: 700;
+  font-size: 2rem;
+  color: #084298;
+  letter-spacing: 0.04em;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-size: 1rem;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 1rem;
+  border: 2px solid #a7c0f4;
+  border-radius: 10px;
+  background-color: #f7fbff;
+  transition: all 0.25s ease-in-out;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+}
+
+input[type="text"]:focus {
+  border-color: #2c7be5;
+  background-color: #e3f0ff;
+  outline: none;
+  box-shadow: 0 0 8px #2c7be5aa;
+}
+
+div[formArrayName="questions"] > div {
+  background: white;
+  padding: 20px 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.08);
+  margin-bottom: 30px;
+  transition: box-shadow 0.3s ease;
+}
+
+div[formArrayName="questions"] > div:hover {
+  box-shadow: 0 6px 20px rgb(0 0 0 / 0.15);
+}
+
+div[formArrayName="answers"] {
+  margin-left: 25px;
+  margin-top: 10px;
+}
+
+div[formArrayName="answers"] > div {
+  margin-bottom: 12px;
+}
+
+input[type="checkbox"] {
+  transform: scale(1.25);
+  margin-right: 8px;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+button[type="button"] {
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 8px;
+}
+
+button[type="button"]:hover {
+  background-color: #155bb5;
+}
+
+button[type="submit"] {
+  background-color: #0b59d9;
+  color: white;
+  border: none;
+  width: 100%;
+  padding: 16px 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  border-radius: 14px;
+  cursor: pointer;
+  margin-top: 30px;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:disabled {
+  background-color: #aac7fc;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+
+@media (max-width: 640px) {
+  form {
+    padding: 20px 15px;
+    margin: 20px;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+  }
+
+  div[formArrayName="questions"] > div {
+    padding: 15px 20px;
+  }
+
+  button[type="button"] {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+  }
+
+  button[type="submit"] {
+    font-size: 1.1rem;
+    padding: 14px 0;
+  }
+
+  div[formArrayName="answers"] {
+    margin-left: 15px;
+  }
+}

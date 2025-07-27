@@ -49,7 +49,7 @@ export class QuizCreateFormService {
     });
   }
 
-    private createAnswer(): FormGroup {
+    public createAnswer(): FormGroup {
     return this.fb.group({
       text: ['', Validators.required],
       isCorrect: [false]

@@ -1,8 +1,22 @@
-import { inject, Injectable, Injector, runInInjectionContext } from '@angular/core';
+import {
+  inject,
+  Injectable,
+  Injector,
+  runInInjectionContext,
+} from '@angular/core';
 import { from, map, Observable } from 'rxjs';
 import { Category } from '../models/quizzes/category.model';
 import { Quiz } from '../models';
-import { Firestore, collection, collectionData, doc, setDoc, addDoc } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  doc,
+  setDoc,
+  addDoc,
+  getDoc,
+  getDocs,
+} from '@angular/fire/firestore';
 
 @Injectable({ providedIn: 'root' })
 export class QuizService {
@@ -11,21 +25,35 @@ export class QuizService {
   private injector = inject(Injector);
 
   getCategories(): Observable<Category[]> {
-    const categoriesRef = collection(this.firestore, 'quizzes');
-    // Взимаме документите (категориите) от 'quizzes' колекцията
-    return collectionData(categoriesRef, { idField: 'id' }) as Observable<Category[]>;
+    return runInInjectionContext(this.injector, () => {
+      const categoriesRef = collection(this.firestore, 'quizzes');
+   
+      return from(getDocs(categoriesRef)).pipe(
+        map((snapshot) =>
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            name: doc.id,
+          }))
+        )
+      );
+    });
   }
 
   createCategory(categoryName: string): Observable<void> {
-    const categoryDoc = doc(this.firestore, `quizzes/${categoryName}`);
-    // Създаваме празен документ с името на категорията в 'quizzes' колекцията
-    return from(setDoc(categoryDoc, {}));
+    return runInInjectionContext(this.injector, () => {
+      const categoryDoc = doc(this.firestore, `quizzes/${categoryName}`);
+      return from(setDoc(categoryDoc, {}));
+    })
+
   }
 
   addQuizToCategory(categoryName: string, quizData: Quiz): Observable<string> {
     return runInInjectionContext(this.injector, () => {
-      const quizzesRef = collection(this.firestore, `quizzes/${categoryName}/tests`);
-      return from(addDoc(quizzesRef, quizData)).pipe(map(ref => ref.id));
+      const quizzesRef = collection(
+        this.firestore,
+        `quizzes/${categoryName}/tests`
+      );
+      return from(addDoc(quizzesRef, quizData)).pipe(map((ref) => ref.id));
     });
   }
 }
