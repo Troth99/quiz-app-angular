@@ -1,37 +1,44 @@
 <form [formGroup]="formService.form" (ngSubmit)="onSubmit()">
   <h2>Create quiz</h2>
 
-  <div>
-    <label>Title:</label>
-    <input formControlName="title" required />
+  <div class="form-group">
+    <label for="title">Title:</label>
+    <input id="title" formControlName="title" required />
   </div>
 
- <label>Category:</label>
-<input list="categories" formControlName="category" placeholder="Select or add category" />
-
-<datalist id="categories">
-  <option *ngFor="let category of categories" [value]="category.name"></option>
-</datalist>
+  <div class="form-group">
+    <label for="category">Category:</label>
+    <input id="category" list="categories" formControlName="category" placeholder="Select or add category" />
+    <datalist id="categories">
+      <option *ngFor="let category of categories" [value]="category.name"></option>
+    </datalist>
+  </div>
 
   <hr />
-<div formArrayName="questions">
-  <div *ngFor="let q of formService.questions.controls; let i = index" [formGroupName]="i">
-    <h3>Question {{ i + 1 }}</h3>
-    <input type="text" formControlName="text" placeholder="Question title" required />
 
-    <div formArrayName="answers">
-      <div *ngFor="let a of getAnswersControls(q); let j = index" [formGroupName]="j">
-        <input type="text" formControlName="text" placeholder="Answer" required />
-        <label>
-          <input type="checkbox" formControlName="isCorrect" />
-          Correct
-        </label>
+  <div formArrayName="questions">
+    <div *ngFor="let q of formService.questions.controls; let i = index" [formGroupName]="i">
+      <h3>Question {{ i + 1 }}</h3>
+      <input type="text" formControlName="text" placeholder="Question title" required />
+
+      <div formArrayName="answers">
+        <div *ngFor="let a of getAnswersControls(q); let j = index" [formGroupName]="j" style="position: relative;">
+          <input type="text" formControlName="text" placeholder="Answer" required />
+          <label>
+            <input type="checkbox" formControlName="isCorrect" />
+            Correct
+          </label>
+          <button type="button" class="remove-answer" (click)="removeAnswer(i, j)">-Remove</button>
+        </div>
+        <div class="answer-buttons">
+          <button type="button" (click)="addAnswer(i)">+ Add Answer</button>
+        </div>
       </div>
-      <button type="button" (click)="addAnswer(i)">+ Answer</button>
+
     </div>
   </div>
-</div>
 
   <hr />
+
   <button type="submit" [disabled]="formService.form.invalid">Create quiz</button>
 </form>

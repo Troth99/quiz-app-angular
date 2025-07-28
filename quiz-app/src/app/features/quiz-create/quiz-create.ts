@@ -87,6 +87,10 @@ export class QuizCreate implements OnInit, OnDestroy {
     }
   }
 
+removeAnswer(questionIndex: number, answerIndex: number) {
+  const answersArray = this.formService.questions.at(questionIndex).get('answers') as FormArray;
+  answersArray.removeAt(answerIndex);
+}
   getAnswersControls(q: AbstractControl): AbstractControl[] {
   return (q.get('answers') as FormArray).controls;
 }

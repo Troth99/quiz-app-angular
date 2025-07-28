@@ -1,0 +1,7 @@
+<h2>Quiz Categories</h2>
+<ul>
+  <li *ngFor="let category of categories$ | async">
+    <button (click)="selectCategory(category.id)">{{ category.name }}</button>
+  </li>
+</ul>
+

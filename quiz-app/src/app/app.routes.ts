@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 
 import {
-  QuizControlerComponent,
   QuizHomeComponent,
   QuizLoginComponent,
   QuizRegisterComponent,
@@ -12,57 +11,63 @@ import { AuthGuard, PageNotFoundComponent } from './core';
 import { GuestGuard } from './core/guards';
 
 export const routes: Routes = [
-  {
-    path: '',
-    component: MainLayout,
-    children: [
-      { path: '', component: QuizHomeComponent },
-      {
-        path: 'quiz/categories',
-        loadComponent: () =>
-          import(
-            './features/quiz/quiz-controler-component/quiz-controler-component'
-          ).then((c) => c.QuizControlerComponent),
-      },
-      {
-        path: 'quiz/create',
-        loadComponent: () =>
-          import(
-            './features/quiz-create/quiz-create'
-          ).then((c) => c.QuizCreate),
-          canActivate: [GuestGuard]
-      },
+ {
+  path: '',
+  component: MainLayout,
+  children: [
+    { path: '', component: QuizHomeComponent },
 
-      { path: 'page-not-found', component: PageNotFoundComponent },
+    {
+      path: 'quiz/categories',
+      loadComponent: () =>
+        import('./features/quiz/quiz-category/quiz-category')
+          .then((c) => c.QuizCategory),
+    },
+    {
+      path: 'quiz/categories/:categoryId/tests',
+      loadComponent: () =>
+        import('./features/quiz/quiz-list-component/quiz-list-component')
+          .then((c) => c.QuizListComponent),
+    },
 
-      {
-        path: 'profile',
-        component: ProfileLayoutComponent, 
-        canActivate: [GuestGuard],
-        children: [
-          {
-            path: '',
-            loadComponent: () =>
-              import('./features/profile/profile').then((c) => c.Profile),
-          },
-          {
-            path: 'change-display-name',
-            loadComponent: () =>
-              import(
-                './features/profile/profile-setthings/change-display-name/change-display-name'
-              ).then((c) => c.ChangeDisplayName),
-          },
-          {
-            path: 'change-password',
-            loadComponent: () => 
-              import(
-                './features/auth/change-password/change-password'
-              ). then((c) => c.changePassword)
-          }
-        ],
-      },
-    ],
-  },
+    {
+      path: 'quiz/create',
+      loadComponent: () =>
+        import('./features/quiz-create/quiz-create')
+          .then((c) => c.QuizCreate),
+      canActivate: [GuestGuard],
+    },
+
+    { path: 'page-not-found', component: PageNotFoundComponent },
+
+    {
+      path: 'profile',
+      component: ProfileLayoutComponent,
+      canActivate: [GuestGuard],
+      children: [
+        {
+          path: '',
+          loadComponent: () =>
+            import('./features/profile/profile').then((c) => c.Profile),
+        },
+        {
+          path: 'change-display-name',
+          loadComponent: () =>
+            import(
+              './features/profile/profile-setthings/change-display-name/change-display-name'
+            ).then((c) => c.ChangeDisplayName),
+        },
+        {
+          path: 'change-password',
+          loadComponent: () =>
+            import('./features/auth/change-password/change-password')
+              .then((c) => c.changePassword),
+        },
+      ],
+    },
+  ],
+ },
+
 
   {
     path: 'auth',

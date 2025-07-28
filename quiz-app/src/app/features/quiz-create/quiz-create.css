@@ -19,32 +19,41 @@ h2 {
   letter-spacing: 0.04em;
 }
 
-label {
-  display: block;
+/* Title и Category на един ред */
+.form-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  flex: 0 0 80px;
   font-weight: 600;
-  margin-bottom: 6px;
   font-size: 1rem;
 }
 
-input[type="text"] {
-  width: 100%;
-  padding: 14px 16px;
+.form-group input[list],
+.form-group input[formControlName="title"] {
+  flex: 1;
+  padding: 12px 16px;
   font-size: 1rem;
   border: 2px solid #a7c0f4;
   border-radius: 10px;
   background-color: #f7fbff;
   transition: all 0.25s ease-in-out;
   box-sizing: border-box;
-  margin-bottom: 16px;
 }
 
-input[type="text"]:focus {
+.form-group input[list]:focus,
+.form-group input[formControlName="title"]:focus {
   border-color: #2c7be5;
   background-color: #e3f0ff;
   outline: none;
   box-shadow: 0 0 8px #2c7be5aa;
 }
 
+/* Въпросите */
 div[formArrayName="questions"] > div {
   background: white;
   padding: 20px 25px;
@@ -58,6 +67,34 @@ div[formArrayName="questions"] > div:hover {
   box-shadow: 0 6px 20px rgb(0 0 0 / 0.15);
 }
 
+div[formArrayName="questions"] h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: #084298;
+  font-weight: 700;
+}
+
+/* Вход за въпрос */
+div[formArrayName="questions"] input[formControlName="text"] {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 1rem;
+  border: 2px solid #a7c0f4;
+  border-radius: 10px;
+  background-color: #f7fbff;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+  transition: all 0.25s ease-in-out;
+}
+
+div[formArrayName="questions"] input[formControlName="text"]:focus {
+  border-color: #2c7be5;
+  background-color: #e3f0ff;
+  outline: none;
+  box-shadow: 0 0 8px #2c7be5aa;
+}
+
+/* Отговори */
 div[formArrayName="answers"] {
   margin-left: 25px;
   margin-top: 10px;
@@ -65,16 +102,69 @@ div[formArrayName="answers"] {
 
 div[formArrayName="answers"] > div {
   margin-bottom: 12px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-input[type="checkbox"] {
+div[formArrayName="answers"] input[type="text"] {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 1rem;
+  border: 2px solid #a7c0f4;
+  border-radius: 10px;
+  background-color: #f7fbff;
+  transition: all 0.25s ease-in-out;
+}
+
+div[formArrayName="answers"] input[type="text"]:focus {
+  border-color: #2c7be5;
+  background-color: #e3f0ff;
+  outline: none;
+  box-shadow: 0 0 8px #2c7be5aa;
+}
+
+div[formArrayName="answers"] label {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  user-select: none;
+  white-space: nowrap;
+}
+
+div[formArrayName="answers"] input[type="checkbox"] {
   transform: scale(1.25);
-  margin-right: 8px;
-  vertical-align: middle;
+  margin-right: 6px;
   cursor: pointer;
 }
 
-button[type="button"] {
+/* Бутон премахване отговор */
+button.remove-answer {
+  background: #cc0000cc;
+  color: white;
+  border: none;
+  font-weight: 700;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  user-select: none;
+}
+
+button.remove-answer:hover {
+  background-color: #ff4444cc;
+  transform: scale(1.1);
+}
+
+/* Бутон добавяне отговор */
+.answer-buttons {
+  margin-left: 25px;
+}
+
+button[type="button"]:not(.remove-answer) {
   background-color: #1a73e8;
   color: white;
   border: none;
@@ -86,10 +176,11 @@ button[type="button"] {
   margin-top: 8px;
 }
 
-button[type="button"]:hover {
+button[type="button"]:not(.remove-answer):hover {
   background-color: #155bb5;
 }
 
+/* Submit бутон */
 button[type="submit"] {
   background-color: #0b59d9;
   color: white;
@@ -110,7 +201,6 @@ button[type="submit"]:disabled {
 }
 
 /* Responsive */
-
 @media (max-width: 640px) {
   form {
     padding: 20px 15px;
@@ -121,11 +211,20 @@ button[type="submit"]:disabled {
     font-size: 1.6rem;
   }
 
+  .form-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form-group label {
+    margin-bottom: 6px;
+  }
+
   div[formArrayName="questions"] > div {
     padding: 15px 20px;
   }
 
-  button[type="button"] {
+  button[type="button"]:not(.remove-answer) {
     padding: 8px 14px;
     font-size: 0.9rem;
   }

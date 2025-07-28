@@ -24,10 +24,20 @@ export class QuizService {
 
   private injector = inject(Injector);
 
+  getTestByCategory(categoryName: string): Observable<Quiz[]> {
+    return runInInjectionContext(this.injector, () => {
+      const testsRef = collection(
+        this.firestore,
+        `quizzes/${categoryName}/tests`
+      );
+      return collectionData(testsRef, { idField: 'id' }) as Observable<Quiz[]>;
+    });
+  }
+  
   getCategories(): Observable<Category[]> {
     return runInInjectionContext(this.injector, () => {
       const categoriesRef = collection(this.firestore, 'quizzes');
-   
+
       return from(getDocs(categoriesRef)).pipe(
         map((snapshot) =>
           snapshot.docs.map((doc) => ({
@@ -43,8 +53,7 @@ export class QuizService {
     return runInInjectionContext(this.injector, () => {
       const categoryDoc = doc(this.firestore, `quizzes/${categoryName}`);
       return from(setDoc(categoryDoc, {}));
-    })
-
+    });
   }
 
   addQuizToCategory(categoryName: string, quizData: Quiz): Observable<string> {
