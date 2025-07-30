@@ -59,5 +59,27 @@ updateLogin(uid: string): Observable<void | undefined> {
   });
 }
 
+addQuizToUser(uid: string, quizId: string): Observable<void> {
+  return runInInjectionContext(this.injector, () => {
+    const userDocRef = doc(this.firestore, 'users', uid);
 
+    return from(getDoc(userDocRef)).pipe(
+      switchMap((snapshot) => {
+        if (!snapshot.exists()) {
+          throw new Error('User not found');
+        }
+        const userData = snapshot.data() as User;
+
+
+        const createdQuizzies = userData.createdQuizzies  || [];
+
+        if (!createdQuizzies.includes(quizId)) {
+          createdQuizzies.push(quizId);
+        }
+
+        return from(updateDoc(userDocRef, { createdQuizzies  }));
+      })
+    );
+  });
+}
 }

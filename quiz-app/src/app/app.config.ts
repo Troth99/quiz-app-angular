@@ -21,6 +21,7 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 export const appConfig: ApplicationConfig = {
   
   providers: [
+  
     provideStorage(() => getStorage()),
     provideHttpClient(),
     provideBrowserGlobalErrorListeners(),
@@ -31,6 +32,7 @@ export const appConfig: ApplicationConfig = {
     provideAnalytics(() => getAnalytics()),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    
   ],
 };

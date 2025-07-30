@@ -4,7 +4,7 @@ import {
   Injector,
   runInInjectionContext,
 } from '@angular/core';
-import { from, map, Observable } from 'rxjs';
+import { combineLatest, forkJoin, from, map, Observable, of, switchMap, tap } from 'rxjs';
 import { Category } from '../models/quizzes/category.model';
 import { Quiz } from '../models';
 import {
@@ -16,7 +16,10 @@ import {
   addDoc,
   getDoc,
   getDocs,
+  query,
+  where,
 } from '@angular/fire/firestore';
+
 
 @Injectable({ providedIn: 'root' })
 export class QuizService {
@@ -65,4 +68,49 @@ export class QuizService {
       return from(addDoc(quizzesRef, quizData)).pipe(map((ref) => ref.id));
     });
   }
+
+  getMyCreateQuizes(userId: string): Observable<Quiz[]>{
+    
+  return this.getCategories().pipe(
+  switchMap(categories => {
+    if (!categories.length) {
+      return of([]);  
+    }
+
+    const quizzesObservables = categories.map(category => {
+      const testsRef = collection(this.firestore, `quizzes/${category.name}/tests`);
+      const q = query(testsRef, where('createdBy', '==', userId));
+      return collectionData(q, { idField: 'id' }) as Observable<Quiz[]>;
+    });
+
+    return forkJoin(quizzesObservables);
+  }),
+  map(results => results.flat())
+);
+  }
+
+getQuizzesByUser(userId: string): Observable<Quiz[]> {
+  return this.getCategories().pipe(
+    switchMap(categories => {
+      if (!categories.length) return of([]);
+
+      return runInInjectionContext(this.injector, () => {
+
+        const quizzesObservables = categories.map(category => {
+          const testsRef = collection(this.firestore, `quizzes/${category.name}/tests`);
+          const q = query(testsRef, where('createdBy', '==', userId));
+          return collectionData(q, { idField: 'id' }) as Observable<Quiz[]>;
+        });
+  
+        return combineLatest(quizzesObservables).pipe(
+          map(results => results.flat())
+        );
+      })
+    })
+  );
+}
+
+
+
+
 }

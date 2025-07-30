@@ -1,1 +1,22 @@
-<p>quiz-list-component works!</p>
+
+<div *ngIf="quizzess$ | async as quizzes">
+  <div *ngIf="quizzes.length > 0; else noTests">
+  <div class="quiz-container">
+  <ul>
+    @for(quiz of quizzes; track quiz){
+        <li>
+              <img class="quiz-img" src="{{ 'test-show-banner.avif' }}" alt="Quiz Image" />
+      <div class="quiz-text">
+        <h3>{{ quiz.title | uppercase }}</h3>
+        <p>{{ quiz.description }}</p>
+      </div> 
+        </li>
+    }
+
+  </ul>
+</div>
+  </div>
+  <ng-template #noTests>
+    <p>No tests found for this category.</p>
+  </ng-template>
+</div>

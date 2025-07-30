@@ -10,6 +10,8 @@ import {
   UserCredential,
   updateProfile,
   EmailAuthProvider,
+  onAuthStateChanged,
+  User,
 } from 'firebase/auth';
 import {
   from,
@@ -60,6 +62,18 @@ export class AuthService {
       this._isLoggedIn.set(true);
     }
   }
+
+authState(): Observable<User | null> {
+  return runInInjectionContext(this.injector, () => {
+    return new Observable<User | null>((subscriber) => {
+      const unsubscribe = onAuthStateChanged(this.auth, (user) => {
+        subscriber.next(user);
+      });
+      return { unsubscribe };
+    });
+  });
+}
+
   register(
     email: string,
     password: string,
@@ -67,6 +81,7 @@ export class AuthService {
   ): Observable<UserCredential> {
     this.loading.set(true);
 
+  
     return runInInjectionContext(this.injector, () =>
       from(createUserWithEmailAndPassword(this.auth, email, password)).pipe(
         switchMap((userCredential) => {

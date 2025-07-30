@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, inject, input, Input, OnInit, SimpleChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Quiz } from '../../../core/models';
 import { QuizService } from '../../../core/services/quiz.service';
@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './quiz-list-component.css'
 })
 export class QuizListComponent implements OnInit {
+@Input() category? : string
 
 categoryName!: string;
 

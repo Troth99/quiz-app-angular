@@ -10,5 +10,6 @@ export interface User {
     lastLogin: Date| null;
     quizStats: QuizStats;
     recentQuizzes?: RecentQuiz[]
+    createdQuizzies? : string[]
     lastDisplayNameChange? : Timestamp | Date   
 }

@@ -19,7 +19,7 @@ h2 {
   letter-spacing: 0.04em;
 }
 
-/* Title и Category на един ред */
+
 .form-group {
   display: flex;
   align-items: center;
@@ -52,8 +52,24 @@ h2 {
   outline: none;
   box-shadow: 0 0 8px #2c7be5aa;
 }
+.form-group input[formControlName="description"] {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 1rem;
+  border: 2px solid #a7c0f4;
+  border-radius: 10px;
+  background-color: #f7fbff;
+  transition: all 0.25s ease-in-out;
+  box-sizing: border-box;
+}
 
-/* Въпросите */
+.form-group input[formControlName="description"]:focus {
+  border-color: #2c7be5;
+  background-color: #e3f0ff;
+  outline: none;
+  box-shadow: 0 0 8px #2c7be5aa;
+}
+
 div[formArrayName="questions"] > div {
   background: white;
   padding: 20px 25px;
@@ -74,7 +90,7 @@ div[formArrayName="questions"] h3 {
   font-weight: 700;
 }
 
-/* Вход за въпрос */
+
 div[formArrayName="questions"] input[formControlName="text"] {
   width: 100%;
   padding: 14px 16px;
@@ -94,7 +110,7 @@ div[formArrayName="questions"] input[formControlName="text"]:focus {
   box-shadow: 0 0 8px #2c7be5aa;
 }
 
-/* Отговори */
+
 div[formArrayName="answers"] {
   margin-left: 25px;
   margin-top: 10px;
@@ -140,7 +156,7 @@ div[formArrayName="answers"] input[type="checkbox"] {
   cursor: pointer;
 }
 
-/* Бутон премахване отговор */
+
 button.remove-answer {
   background: #cc0000cc;
   color: white;
@@ -180,7 +196,7 @@ button[type="button"]:not(.remove-answer):hover {
   background-color: #155bb5;
 }
 
-/* Submit бутон */
+
 button[type="submit"] {
   background-color: #0b59d9;
   color: white;
@@ -199,12 +215,49 @@ button[type="submit"]:disabled {
   background-color: #aac7fc;
   cursor: not-allowed;
 }
+.quiz-created-message {
+  background-color: #e6ffe6;
+  border: 1px solid #4caf50;
+  padding: 20px;
+  border-radius: 6px;
+  max-width: 400px;
+  margin: 20px auto;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  color: #2e7d32;
+}
+
+.quiz-created-message h2 {
+  margin-bottom: 15px;
+}
+
+.quiz-created-message p {
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+.quiz-created-message button {
+  margin: 10px 8px 0 8px;
+  padding: 8px 16px;
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.quiz-created-message button:hover {
+  background-color: #388e3c;
+}
 
 /* Responsive */
 @media (max-width: 640px) {
   form {
     padding: 20px 15px;
     margin: 20px;
+     
   }
 
   h2 {
@@ -212,8 +265,8 @@ button[type="submit"]:disabled {
   }
 
   .form-group {
-    flex-direction: column;
     align-items: flex-start;
+    gap: 0px;
   }
 
   .form-group label {

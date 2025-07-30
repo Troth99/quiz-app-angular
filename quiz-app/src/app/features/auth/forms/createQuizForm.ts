@@ -37,6 +37,13 @@ export class QuizCreateFormService {
     this.addQuestion(); 
   }
 
+  resetFormWithQuestions(count: number = 10){
+    this.form.reset();
+    this.questions.clear();
+    for(let i = 0; i< count; i++){
+      this.addQuestion()
+    }
+  }
       private createQuestion(): FormGroup {
     return this.fb.group({
       text: ['', Validators.required],

@@ -7,4 +7,5 @@ export interface Quiz {
     timeLimit?: number;
     questions: Question[];
     createdAt? :string
+    createdBy: string
 }

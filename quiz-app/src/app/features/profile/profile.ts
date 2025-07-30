@@ -31,9 +31,8 @@ export class Profile implements OnInit, OnDestroy {
   user = signal<User | null>(null);
   uid = this.authService.uid;
 
-  saving = false
+  saving = false;
   ngOnInit(): void {
-
     if (!this.uid) return;
 
     const userSub = this.userService.getUser(this.uid).subscribe((rawData) => {
@@ -82,11 +81,10 @@ export class Profile implements OnInit, OnDestroy {
   }
 
   async changeAvatar(event: Event) {
-
-    if(!this.auth.currentUser){
+    if (!this.auth.currentUser) {
       await this.authService.logout();
       this.router.navigate(['/auth/login']);
-      return
+      return;
     }
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
@@ -117,48 +115,62 @@ export class Profile implements OnInit, OnDestroy {
     }
   }
 
+  
+  viewMyCreatedQuizzes() {
+    this.router.navigate(['profile/my-created-quizzes']);
+  }
 
-async updateUserProfilePhotoUrl(url: string) {
-  this.user.update((u) => (u ? { ...u, photoUrl: url } : u));
+  async updateUserProfilePhotoUrl(url: string) {
+    this.user.update((u) => (u ? { ...u, photoUrl: url } : u));
 
-  if (this.uid) {
-    try {
-      await firstValueFrom(this.userService.updateUser(this.uid, { photoUrl: url }));
-      this.toast.show('Profile picture was updated succesfully');
-    } catch (error) {
-      this.toast.show('There was error updated profile picture, please log in again.');
-      console.error(error);
+    if (this.uid) {
+      try {
+        await firstValueFrom(
+          this.userService.updateUser(this.uid, { photoUrl: url })
+        );
+        this.toast.show('Profile picture was updated succesfully');
+      } catch (error) {
+        this.toast.show(
+          'There was error updated profile picture, please log in again.'
+        );
+        console.error(error);
+      }
     }
   }
-}
 
   changeDisplayName() {
     this.router.navigate(['profile/change-display-name']);
   }
 
-async deleteAccount() {
-  if (!confirm('Are you sure you want to delete your account? This action is irreversible.')) return;
+  async deleteAccount() {
+    if (
+      !confirm(
+        'Are you sure you want to delete your account? This action is irreversible.'
+      )
+    )
+      return;
 
-  const password = prompt('Enter your password to confirm account deletion');
-  if (!password) {
-    this.toast.show('Password is required to delete account.');
-    return;
+    const password = prompt('Enter your password to confirm account deletion');
+    if (!password) {
+      this.toast.show('Password is required to delete account.');
+      return;
+    }
+
+    this.saving = true;
+
+    try {
+      await this.authService.deleteUser(password);
+      await this.authService.logout();
+      this.router.navigate(['/']);
+    } catch (error) {
+      console.error(error);
+      this.toast.show(
+        'Failed to delete account. Please check your password and try again.'
+      );
+    } finally {
+      this.saving = false;
+    }
   }
-
-  this.saving = true;
-
-  try {
-    await this.authService.deleteUser(password);
-    await this.authService.logout();
-    this.router.navigate(['/']);
-  } catch (error) {
-    console.error(error);
-    this.toast.show('Failed to delete account. Please check your password and try again.');
-  } finally {
-    this.saving = false;
-  }
-}
-
 
   logout() {
     this.authService.logout();
