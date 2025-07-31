@@ -68,6 +68,7 @@ createdCategory: string | null = null;
     timeLimit: formValue.timeLimit || 0,
     createdAt: new Date().toISOString(),
     createdBy: user.uid,
+    category: formValue.category,
     questions: formValue.questions.map((q: Question) => ({
       text: q.text,
       type: q.type,

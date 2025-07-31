@@ -18,7 +18,10 @@ import {
   getDocs,
   query,
   where,
+  docData,
+  updateDoc,
 } from '@angular/fire/firestore';
+import { deleteDoc } from 'firebase/firestore';
 
 
 @Injectable({ providedIn: 'root' })
@@ -109,8 +112,26 @@ getQuizzesByUser(userId: string): Observable<Quiz[]> {
     })
   );
 }
+getQuizById(categoryName: string, quizId: string): Observable<Quiz | null> {
+
+  return runInInjectionContext(this.injector, () => {
+    const quizDoc = doc(this.firestore, `quizzes/${categoryName}/tests/${quizId}`);
+    return docData(quizDoc, { idField: 'id' }) as Observable<Quiz | null>;
+  })
+}
+
+updateQuiz(categoryName: string, quizId: string, quizData: Quiz): Observable<void> {
+  return runInInjectionContext(this.injector, () => {
+    const quizDoc = doc(this.firestore, `quizzes/${categoryName}/tests/${quizId}`);
+    return from(setDoc(quizDoc, quizData, {merge : true}));
+  });
+}
 
 
-
-
+deleteQuiz(categoryName: string, quizId: string): Observable<void> {
+  return runInInjectionContext(this.injector, () => {
+     const quizDoc = doc(this.firestore, `quizzes/${categoryName}/tests/${quizId}`);
+     return from(deleteDoc(quizDoc))
+  })
+}
 }

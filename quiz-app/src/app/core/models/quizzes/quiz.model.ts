@@ -8,4 +8,5 @@ export interface Quiz {
     questions: Question[];
     createdAt? :string
     createdBy: string
+    category: string
 }

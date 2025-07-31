@@ -44,6 +44,7 @@ div[formArrayName="answers"] input[type="text"] {
   background-color: #f7fbff;
   transition: all 0.25s ease-in-out;
   box-sizing: border-box;
+  margin-bottom: 16px;
 }
 
 .form-group input[list]:focus,
@@ -71,8 +72,7 @@ div[formArrayName="questions"] > div:hover {
 }
 
 div[formArrayName="questions"] h3 {
-  margin-top: 0;
-  margin-bottom: 12px;
+  margin: 0 0 12px 0;
   color: #084298;
   font-weight: 700;
 }
@@ -162,7 +162,7 @@ button[type="submit"]:disabled {
   cursor: not-allowed;
 }
 
-.quiz-created-message {
+.quiz-saved-message {
   background-color: #e6ffe6;
   border: 1px solid #4caf50;
   padding: 20px;
@@ -174,16 +174,11 @@ button[type="submit"]:disabled {
   color: #2e7d32;
 }
 
-.quiz-created-message h2 {
+.quiz-saved-message h2 {
   margin-bottom: 15px;
 }
 
-.quiz-created-message p {
-  margin: 8px 0;
-  font-size: 16px;
-}
-
-.quiz-created-message button {
+.quiz-saved-message button {
   margin: 10px 8px 0 8px;
   padding: 8px 16px;
   background-color: #4caf50;
@@ -195,11 +190,10 @@ button[type="submit"]:disabled {
   transition: background-color 0.3s ease;
 }
 
-.quiz-created-message button:hover {
+.quiz-saved-message button:hover {
   background-color: #388e3c;
 }
 
-/* Responsive */
 @media (max-width: 640px) {
   form {
     padding: 20px 15px;

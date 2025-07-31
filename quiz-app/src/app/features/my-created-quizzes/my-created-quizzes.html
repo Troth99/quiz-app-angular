@@ -2,10 +2,10 @@
   <div *ngFor="let quiz of quizzes" class="quiz-card">
     <h3 class="quiz-title">{{ quiz.title }}</h3>
     <p class="quiz-description">{{ quiz.description }}</p>
-    <p class="quiz-createdAt">Created at: {{ quiz.createdAt | date:'medium' }}</p>
+    <p class="quiz-createdAt">Created at: {{ quiz.createdAt | timeAgo }}</p>
     <div class="btn-group">
-      <button class="edit-btn" (click)="editQuiz(quiz.id)">Edit</button>
-      <button class="delete-btn" (click)="deleteQuiz(quiz.id)">Delete</button>
+     <button class="edit-btn" (click)="editQuiz(quiz.id, quiz.category)">Edit</button>
+     <button class="delete-btn" (click)="deleteQuiz(quiz.id, quiz.category)">Delete</button>
     </div>
   </div>
 </div>

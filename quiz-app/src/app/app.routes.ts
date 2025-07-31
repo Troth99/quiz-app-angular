@@ -67,13 +67,20 @@ export const routes: Routes = [
                 (c) => c.changePassword
               ),
           },
-        {
-  path: 'my-created-quizzes',
-  loadComponent: () =>
-    import('./features/my-created-quizzes/my-created-quizzes').then(
-      (c) => c.MyCreatedQuizzes
-    ),
-},
+          {
+            path: 'my-created-quizzes',
+            loadComponent: () =>
+              import('./features/my-created-quizzes/my-created-quizzes').then(
+                (c) => c.MyCreatedQuizzes
+              ),
+          },
+          {
+            path: 'edit/:id',
+            loadComponent: () => 
+              import('./features/edit-quiz/edit-quiz').then (
+                (c) => c.EditQuiz
+              )
+          }
         ],
       },
     ],

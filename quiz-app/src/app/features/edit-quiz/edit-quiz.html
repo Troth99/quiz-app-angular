@@ -1,0 +1,79 @@
+<div *ngIf="!quizSaved; else savedBlock">
+  <form [formGroup]="formService.form" (ngSubmit)="onSubmit()">
+    <h2>Edit quiz</h2>
+
+    <div class="form-group">
+      <label for="title">Title:</label>
+      <input id="title" formControlName="title" required />
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description:</label>
+      <input
+        id="description"
+        formControlName="description"
+        placeholder="Add quiz description"
+      />
+    </div>
+
+ 
+    <hr />
+
+    <div formArrayName="questions">
+      <div
+        *ngFor="let q of formService.questions.controls; let i = index"
+        [formGroupName]="i"
+      >
+        <h3>Question {{ i + 1 }}</h3>
+        <input
+          type="text"
+          formControlName="text"
+          placeholder="Question title"
+          required
+        />
+
+        <div formArrayName="answers">
+          <div
+            *ngFor="let a of getAnswersControls(q); let j = index"
+            [formGroupName]="j"
+            style="position: relative"
+          >
+            <input
+              type="text"
+              formControlName="text"
+              placeholder="Answer"
+              required
+            />
+            <label>
+              <input type="checkbox" formControlName="isCorrect" />
+              Correct
+            </label>
+            <button
+              type="button"
+              class="remove-answer"
+              (click)="removeAnswer(i, j)"
+            >
+              - Remove
+            </button>
+          </div>
+          <div class="answer-buttons">
+            <button type="button" (click)="addAnswer(i)">+ Add Answer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+
+    <button type="submit" [disabled]="formService.form.invalid">
+      Save changes
+    </button>
+  </form>
+</div>
+
+<ng-template #savedBlock>
+  <div class="quiz-saved-message">
+    <h2>Quiz updated successfully!</h2>
+    <button (click)="goBack()">Back to my quizzes</button>
+  </div>
+</ng-template>
