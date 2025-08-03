@@ -23,10 +23,20 @@ export class TimeAgoPipe implements PipeTransform {
 
     if (isNaN(seconds)) return '';
 
-    if (seconds < 60) return 'just now';
-    if (seconds < 3600) return `${Math.floor(seconds / 60)} minute(s) ago`;
-    if (seconds < 86400) return `${Math.floor(seconds / 3600)} hour(s) ago`;
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(seconds / 3600);
+    const days = Math.floor(seconds / 86400);
+    const weeks = Math.floor(days / 7);
+    const months = Math.floor(days / 30);
 
+    if (seconds < 60) return 'just now';
+    if (minutes < 60) return `${minutes} minute(s) ago`;
+    if (hours < 24) return `${hours} hour(s) ago`;
+    if (days < 7) return `${days} day(s) ago`;
+    if (weeks < 4) return `${weeks} week(s) ago`;
+    if (months < 1) return `${days} day(s) ago`; 
+
+ 
     return date.toLocaleDateString('en-GB', {
       day: '2-digit',
       month: '2-digit',
