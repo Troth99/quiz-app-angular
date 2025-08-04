@@ -57,7 +57,6 @@ export class MyCreatedQuizzes implements OnInit, OnDestroy {
 
     this.quizService.deleteQuiz(category, quizId).subscribe({
       next: () => {
-        console.log('Quiz deleted');
         this.loadQuizzes();
       },
       error: (err) => console.error('Delete failed', err),

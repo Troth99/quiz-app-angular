@@ -40,6 +40,14 @@ export const routes: Routes = [
           ),
         canActivate: [GuestGuard],
       },
+      {
+        path: 'quiz/play/:categoryName/:id',
+        loadComponent: () => 
+          import('./features/quiz/quiz-player/quiz-player').then(
+            (c) => c.QuizPlayer
+          ),
+          runGuardsAndResolvers: 'paramsChange'
+      },
 
       { path: 'page-not-found', component: PageNotFoundComponent },
 

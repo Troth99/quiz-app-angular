@@ -134,4 +134,6 @@ deleteQuiz(categoryName: string, quizId: string): Observable<void> {
      return from(deleteDoc(quizDoc))
   })
 }
+
+
 }

@@ -1,0 +1,240 @@
+.quiz-player-wrapper {
+  max-width: 1160px;
+  margin: 30px auto;
+  padding: 25px 30px;
+  background: #f0f8ff;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 70, 150, 0.18);
+  color: #0a2540;
+  display: flex;
+  gap: 30px;
+}
+
+.quiz-main {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.play-quiz-btn {
+  min-width: 130px;
+  font-weight: 600;
+}
+
+.quiz-main h1 {
+  color: #0d47a1;
+  font-size: 2.4rem;
+  margin-bottom: 5px;
+}
+
+.quiz-main p {
+  font-size: 1.1rem;
+  color: #1a237e;
+  margin-bottom: 20px;
+}
+
+.quiz-main h2 {
+  font-weight: 600;
+  color: #064c9b;
+  margin-bottom: 15px;
+  font-size: 1.4rem; 
+}
+
+.question-text {
+  background-color: #e3f2fd;
+  padding: 12px 18px;
+  border-radius: 7px;
+  margin-bottom: 12px;
+  border-left: 5px solid #2196f3;
+  color: #0d47a1;
+  font-weight: 500;
+}
+
+.quiz-main > button {
+  align-self: flex-end;
+  margin-top: 20px;
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  min-width: 130px;
+  font-weight: 600;
+}
+
+.quiz-main > button:disabled {
+  background-color: #90caf9;
+  cursor: not-allowed;
+}
+
+button.mat-raised-button:hover,
+button.mat-mdc-raised-button:hover {
+  filter: brightness(0.9);
+}
+
+.quiz-sidebar {
+  flex: 1.5; /* увеличено от 1 */
+  background-color: #e8f0fe;
+  padding: 20px 18px;
+  border-radius: 10px;
+  color: #0a2540;
+  box-shadow: inset 0 0 8px rgba(33, 150, 243, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.meta-item {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1565c0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #bbdefb;
+  padding-bottom: 10px;
+}
+
+.meta-item a {
+  color: #1976d2;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.meta-item a:hover {
+  text-decoration: underline;
+}
+
+.comments-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.comments-section h4 {
+  margin-bottom: 12px;
+  color: #0d47a1;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.comments-section textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1.5px solid #90caf9;
+  font-size: 1rem;
+  resize: vertical;
+  font-family: inherit;
+  color: #0a2540;
+  transition: border-color 0.3s ease;
+}
+
+.comments-section textarea:disabled {
+  background-color: #f0f5fb;
+  border-color: #bbdefb;
+  cursor: not-allowed;
+  color: #78909c;
+}
+
+.comments-section textarea:focus:not(:disabled) {
+  border-color: #1976d2;
+  outline: none;
+  box-shadow: 0 0 7px #90caf9;
+}
+
+.comments-section button {
+  align-self: flex-start;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: background-color 0.3s ease;
+}
+
+.comments-section button:disabled {
+  background-color: #90caf9;
+  cursor: not-allowed;
+}
+
+.comments-section ul {
+  margin: 10px 0 0 0;
+  padding-left: 18px;
+  max-height: 400px; 
+  overflow-y: auto;
+  border-top: 1px solid #bbdefb;
+}
+
+.comments-section ul li {
+  margin-bottom: 12px;
+  border-bottom: 1px solid #bbdefb;
+  padding-bottom: 8px;
+  font-size: 0.95rem;
+  color: #0a2540;
+}
+
+.login-prompt {
+  margin-top: 8px;
+  font-size: 0.95rem;
+  color: #0d47a1;
+}
+
+.login-prompt a {
+  font-weight: 700;
+  color: #0d47a1;
+  text-decoration: none;
+}
+
+.login-prompt a:hover {
+  text-decoration: underline;
+}
+
+.login-message {
+  margin-top: 10px;
+  margin-bottom: 0; 
+  font-size: 0.95rem;
+  color: #0d47a1;
+}
+
+.login-message a {
+  font-weight: 700;
+  color: #0d47a1;
+  text-decoration: none;
+}
+
+.login-message a:hover {
+  text-decoration: underline;
+}
+
+/* responsive */
+@media (max-width: 768px) {
+  .quiz-player-wrapper {
+    flex-direction: column;
+    padding: 20px 16px;
+    gap: 20px;
+  }
+
+  .quiz-main h1 {
+    font-size: 1.8rem;
+  }
+
+  .quiz-main p,
+  .quiz-main h2 {
+    font-size: 1rem;
+  }
+
+  .quiz-sidebar {
+    padding: 16px;
+  }
+
+  .quiz-main > button {
+    width: 100%;
+    align-self: stretch;
+  }
+
+  .comments-section button {
+    width: 100%;
+  }
+}
