@@ -19,6 +19,11 @@
 .play-quiz-btn {
   min-width: 130px;
   font-weight: 600;
+
+  /* Добавяме фиксиран бордер, за да няма смяна на размер при hover */
+  border: 2px solid transparent;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, filter 0.3s ease;
 }
 
 .quiz-main h1 {
@@ -57,7 +62,11 @@
   font-size: 1.1rem;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+
+  /* Фиксирана граница и преход */
+  border: 2px solid transparent;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
   min-width: 130px;
   font-weight: 600;
 }
@@ -65,11 +74,25 @@
 .quiz-main > button:disabled {
   background-color: #90caf9;
   cursor: not-allowed;
+  border-color: transparent;
+}
+
+button.mat-raised-button,
+button.mat-mdc-raised-button,
+.play-quiz-btn,
+.quiz-main > button {
+  /* Унифицираме, ако ползваш тези бутони, за да е консистентно */
+  border: 2px solid transparent;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, filter 0.3s ease;
 }
 
 button.mat-raised-button:hover,
-button.mat-mdc-raised-button:hover {
+button.mat-mdc-raised-button:hover,
+.play-quiz-btn:hover,
+.quiz-main > button:hover {
   filter: brightness(0.9);
+  border-color: #1976d2; /* добавяме видима граница при hover без преместване */
 }
 
 .quiz-sidebar {

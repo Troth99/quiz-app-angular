@@ -1,14 +1,21 @@
-<div *ngIf="myQuizzess$ | async as quizzes; else noQuizzes" class="quiz-container">
-  <div *ngFor="let quiz of quizzes" class="quiz-card">
-    <h3 class="quiz-title">{{ quiz.title }}</h3>
-    <p class="quiz-description">{{ quiz.description }}</p>
-    <p class="quiz-createdAt">Created at: {{ quiz.createdAt | timeAgo }}</p>
-    <div class="btn-group">
-     <button class="edit-btn" (click)="editQuiz(quiz.id, quiz.category)">Edit</button>
-     <button class="delete-btn" (click)="deleteQuiz(quiz.id, quiz.category)">Delete</button>
+<div *ngIf="loading$ | async; else quizzesList" class="loading-spinner">
+  <app-loading></app-loading>
+</div>
+
+<ng-template #quizzesList>
+  <div *ngIf="myQuizzess$ | async as quizzes; else noQuizzes" class="quiz-container">
+    <div *ngFor="let quiz of quizzes" class="quiz-card">
+      <h3 class="quiz-title">{{ quiz.title }}</h3>
+      <p class="quiz-description">{{ quiz.description }}</p>
+      <p class="quiz-createdAt">Created at: {{ quiz.createdAt | timeAgo }}</p>
+      <div class="btn-group">
+        <button class="edit-btn" (click)="editQuiz(quiz.id, quiz.category)">Edit</button>
+        <button class="delete-btn" (click)="deleteQuiz(quiz.id, quiz.category)">Delete</button>
+      </div>
     </div>
   </div>
-</div>
+</ng-template>
+
 <ng-template #noQuizzes>
   <p style="text-align:center; margin-top: 40px; color: #888;">No quizzes created yet.</p>
 </ng-template>

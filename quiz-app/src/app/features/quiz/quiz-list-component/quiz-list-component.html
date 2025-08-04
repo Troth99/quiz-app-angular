@@ -2,10 +2,7 @@
   <div *ngIf="quizzes.length > 0; else noTests">
     <div class="quiz-container">
       <ul>
-        <li *ngFor="let quiz of quizzes"
-            (mousemove)="onMouseMove($event, quiz.id)"
-            (mouseleave)="onMouseLeave()"
-        >
+        <li *ngFor="let quiz of quizzes">
           <a [routerLink]="['/quiz/play', quiz.category, quiz.id]" class="quiz-link">
             <img class="quiz-img" src="test-show-banner.avif" alt="Quiz Image" />
             <div class="quiz-text">
@@ -13,16 +10,6 @@
               <p>{{ quiz.description }}</p>
             </div>
           </a>
-
-          <div
-            class="tooltip"
-            *ngIf="tooltipVisible && tooltipQuizId === quiz.id"
-            [style.top.px]="tooltipY"
-            [style.left.px]="tooltipX"
-          >
-            <strong>{{ quiz.title }}</strong><br />
-            {{ quiz.description }}
-          </div>
         </li>
       </ul>
     </div>

@@ -34,34 +34,6 @@ export class QuizListComponent implements OnInit {
     }
   }
 
-onMouseMove(event: MouseEvent, quizId: string | number | undefined): void {
-  if (!quizId) return;
-  this.tooltipVisible = true;
-  this.tooltipQuizId = quizId;
-
-  const target = event.target as HTMLElement;
-  const container = target.closest('.quiz-container') as HTMLElement;
-
-  if (!container) return;
 
 
-  const rect = container.getBoundingClientRect();
-
-  let posX = event.clientX - rect.left + 10;
-  let posY = event.clientY - rect.top + 10;
-
-  
-  const tooltipWidth = 320;
-  if (posX + tooltipWidth > rect.width) {
-    posX = posX - tooltipWidth - 20;
-  }
-
-  this.tooltipX = posX;
-  this.tooltipY = posY;
-}
-
-  onMouseLeave(): void {
-    this.tooltipVisible = false;
-    this.tooltipQuizId = null;
-  }
 }

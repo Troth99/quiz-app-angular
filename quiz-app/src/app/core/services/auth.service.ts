@@ -62,7 +62,9 @@ export class AuthService {
       this._isLoggedIn.set(true);
     }
   }
-
+/**
+ * Observable stream of the current Firebase auth user (or null if logged out).
+ */
 authState(): Observable<User | null> {
   return runInInjectionContext(this.injector, () => {
     return new Observable<User | null>((subscriber) => {

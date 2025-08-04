@@ -2,6 +2,7 @@ import {
   ApplicationConfig,
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
+  isDevMode,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
@@ -11,17 +12,19 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAnalytics, getAnalytics } from '@angular/fire/analytics';
 import { environment } from '../enviroments/enviroment';
-import {provideFirestore, getFirestore} from '@angular/fire/firestore'
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideHttpClient } from '@angular/common/http';
 import { provideStorage } from '@angular/fire/storage';
 import { getStorage } from 'firebase/storage';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-
+import { provideStore } from '@ngrx/store';
+import { provideEffects } from '@ngrx/effects';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { MyQuizzesEffects } from './core/store/quiz-store/quiz.effects';
+import { myQuizzesReducer } from './core/store/quiz-store/quiz.reducer';
 
 export const appConfig: ApplicationConfig = {
-  
   providers: [
-  
     provideStorage(() => getStorage()),
     provideHttpClient(),
     provideBrowserGlobalErrorListeners(),
@@ -32,7 +35,12 @@ export const appConfig: ApplicationConfig = {
     provideAnalytics(() => getAnalytics()),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
-    AngularFirestoreModule,
+
+    provideStore({
+      myQuizzes: myQuizzesReducer,
+    }),
     
+    provideEffects(MyQuizzesEffects),
+    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],
 };
