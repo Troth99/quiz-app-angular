@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { combineLatest, forkJoin, from, map, Observable, of, switchMap, tap } from 'rxjs';
 import { Category } from '../models/quizzes/category.model';
-import { Quiz } from '../models';
+import { Comment, Quiz } from '../models';
 import {
   Firestore,
   collection,
@@ -20,12 +20,22 @@ import {
   where,
   docData,
   updateDoc,
+  orderBy,
 } from '@angular/fire/firestore';
 import { deleteDoc } from 'firebase/firestore';
+import { DocumentReference } from 'firebase/firestore/lite';
 
 
 @Injectable({ providedIn: 'root' })
 export class QuizService {
+
+
+deleteComment(categoryName: string, quizId: string, commentId: string): Observable<void> {
+  return runInInjectionContext(this.injector, () => {
+    const commentDocRef = doc(this.firestore, `quizzes/${categoryName}/tests/${quizId}/comments/${commentId}`);
+    return from(deleteDoc(commentDocRef));
+  })
+}
   constructor(private firestore: Firestore) {}
 
   private injector = inject(Injector);
@@ -135,5 +145,24 @@ deleteQuiz(categoryName: string, quizId: string): Observable<void> {
   })
 }
 
+addComment(categoryName: string, quizId: string, comment: string, userId: string, userName: string, userPhotoUrl?: string | null): Observable<DocumentReference> {
+  return runInInjectionContext(this.injector, () => {
+    const commentsRef = collection(this.firestore, `quizzes/${categoryName}/tests/${quizId}/comments`);
+    return from(addDoc(commentsRef, {
+      text: comment,
+      userId,
+      userName,
+      userPhotoUrl: userPhotoUrl || undefined || null,
+      createdAt: new Date(),
+    }));
+  });
+}
 
+getComments(categoryName: string, quizId: string): Observable<Comment[]>{
+  return runInInjectionContext(this.injector, () => {
+  const commentsRef = collection(this.firestore, `quizzes/${categoryName}/tests/${quizId}/comments`);
+  const commentsQuery = query(commentsRef, orderBy('createdAt', 'desc'))
+  return collectionData(commentsQuery, {idField: 'id'}) as Observable<Comment[]>
+  })
+}
 }

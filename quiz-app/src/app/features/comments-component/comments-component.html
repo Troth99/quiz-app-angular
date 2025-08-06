@@ -1,0 +1,52 @@
+<div class="meta-item comments-section">
+  <h4>Comments</h4>
+
+  <textarea
+    [(ngModel)]="newComment"
+    [placeholder]="isLoggedIn() ? 'Write your comment...' : 'Please login to add comment'"
+    [disabled]="!isLoggedIn()"
+    rows="3"
+  ></textarea>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="submitComment()"
+    [disabled]="!isLoggedIn()"
+  >
+    Add comment
+  </button>
+
+  <div class="login-prompt" *ngIf="!isLoggedIn()">
+    <a [routerLink]="['/auth/login']" [queryParams]="{ redirectUrl: currentUrl }" class="login-link">
+      Login
+    </a> to add comment
+  </div>
+
+  <ul>
+    <li *ngFor="let comment of comments$ | async" class="comment-item">
+      <img
+        [src]="comment.userPhotoUrl || 'assets/default-avatar.png'"
+        alt="User avatar"
+        class="comment-avatar"
+      />
+      <div class="comment-content">
+        <div class="comment-text">{{ comment.text }}</div>
+        <div class="comment-meta">
+          <small>{{ comment.userName || 'No username' }} • {{ comment.createdAt | firestoreDate | date: 'short' }}</small>
+
+          <button
+            *ngIf="canDelete(comment)"
+            (click)="deleteComent(comment.id)"
+            class="delete-btn"
+            aria-label="Delete comment"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </li>
+    <li *ngIf="(comments$ | async)?.length === 0">
+      There are no comments yet.
+    </li>
+  </ul>
+</div>

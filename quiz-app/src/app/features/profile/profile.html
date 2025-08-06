@@ -18,10 +18,10 @@
 
       <div class="dates">
         <div>
-          <strong>Member since:</strong> {{ user()?.createdAt | date:'longDate' }}
+          <strong>Member since:</strong> {{ user()?.createdAt | firestoreDate | date:'longDate' }}
         </div>
         <div>
-          <strong>Last login:</strong> {{ user()?.lastLogin | date:'short' }}
+          <strong>Last login:</strong> {{ user()?.lastLogin | firestoreDate | date:'short' }}
         </div>
       </div>
 

@@ -31,15 +31,15 @@
   </div>
 
   <aside class="quiz-sidebar">
-<div class="meta-item">
-  <strong>Author:</strong>
-  <ng-container *ngIf="authorName !== 'Deleted user'; else deletedUser">
-    <a [routerLink]="['/user', authorId]">{{ authorName }}</a>
-  </ng-container>
-  <ng-template #deletedUser>
-    <span class="deleted-user">{{ authorName }}</span>
-  </ng-template>
-</div>
+    <div class="meta-item">
+      <strong>Author:</strong>
+      <ng-container *ngIf="authorName !== 'Deleted user'; else deletedUser">
+        <a [routerLink]="['/user', authorId]">{{ authorName }}</a>
+      </ng-container>
+      <ng-template #deletedUser>
+        <span class="deleted-user">{{ authorName }}</span>
+      </ng-template>
+    </div>
 
     <div class="meta-item"><strong>Likes:</strong> 123</div>
 
@@ -54,36 +54,13 @@
       </button>
     </div>
 
-    <div class="meta-item comments-section">
-      <h4>Comments</h4>
-
-      <textarea
-        [(ngModel)]="newComment"
-        [placeholder]="isLoggedIn() ? 'Write your comment...' : 'Please login to add comment'"
-        [disabled]="!isLoggedIn()"
-        rows="3"
-      ></textarea>
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="addComment()"
-        [disabled]="!isLoggedIn()"
-      >
-        Add comment
-      </button>
-      <div *ngIf="!isLoggedIn()" style="margin-top: 5px">
-        <a
-          [routerLink]="['/auth/login']"
-          [queryParams]="{ redirectUrl : currentUrl }"
-          >Login</a
-        >
-        to add comment
-      </div>
-
-      <ul>
-        <li *ngFor="let comment of comments">{{ comment }}</li>
-        <li *ngIf="comments.length === 0">There are no comments yet.</li>
-      </ul>
+    <div *ngIf="categoryName && quizId">
+    <app-comments-component
+  [categoryName]="categoryName"
+  [quizId]="quizId"
+  [quizOwnerId]="authorId"
+  [currentUrl]="currentUrl"
+></app-comments-component>
     </div>
   </aside>
 </div>

@@ -8,10 +8,11 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { Loading } from '../../shared';
 import { Auth } from '@angular/fire/auth';
+import { FirestoreDatePipe } from '../../core/pipes/convertFirebaseTimetampToDate.pipe';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, MatButtonModule, MatSnackBarModule, Loading],
+  imports: [CommonModule, MatButtonModule, MatSnackBarModule, Loading, FirestoreDatePipe],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
@@ -38,19 +39,9 @@ export class Profile implements OnInit, OnDestroy {
     const userSub = this.userService.getUser(this.uid).subscribe((rawData) => {
       if (!rawData) return;
 
-      const parsed: User = {
-        ...rawData,
-        createdAt:
-          rawData['createdAt'] instanceof Timestamp
-            ? rawData['createdAt'].toDate()
-            : rawData['createdAt'],
-        lastLogin:
-          rawData['lastLogin'] instanceof Timestamp
-            ? rawData['lastLogin'].toDate()
-            : rawData['lastLogin'],
-      } as User;
+   
 
-      this.user.set(parsed);
+      this.user.set(rawData);
     });
 
     const routeSub = this.route.queryParamMap.subscribe((params) => {

@@ -1,5 +1,4 @@
 import { Pipe, PipeTransform } from "@angular/core";
-import { Timestamp } from 'firebase/firestore'; // или от къде импортираш Timestamp
 
 
 @Pipe({

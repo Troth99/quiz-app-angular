@@ -20,7 +20,7 @@
   min-width: 130px;
   font-weight: 600;
 
-  /* Добавяме фиксиран бордер, за да няма смяна на размер при hover */
+
   border: 2px solid transparent;
   box-sizing: border-box;
   transition: border-color 0.3s ease, filter 0.3s ease;
@@ -63,7 +63,6 @@
   border-radius: 8px;
   cursor: pointer;
 
-  /* Фиксирана граница и преход */
   border: 2px solid transparent;
   box-sizing: border-box;
   transition: border-color 0.3s ease, background-color 0.3s ease;
@@ -81,7 +80,7 @@ button.mat-raised-button,
 button.mat-mdc-raised-button,
 .play-quiz-btn,
 .quiz-main > button {
-  /* Унифицираме, ако ползваш тези бутони, за да е консистентно */
+
   border: 2px solid transparent;
   box-sizing: border-box;
   transition: border-color 0.3s ease, filter 0.3s ease;
@@ -92,11 +91,11 @@ button.mat-mdc-raised-button:hover,
 .play-quiz-btn:hover,
 .quiz-main > button:hover {
   filter: brightness(0.9);
-  border-color: #1976d2; /* добавяме видима граница при hover без преместване */
+  border-color: #1976d2; 
 }
 
 .quiz-sidebar {
-  flex: 1.5; /* увеличено от 1 */
+  flex: 1.5; 
   background-color: #e8f0fe;
   padding: 20px 18px;
   border-radius: 10px;
@@ -128,75 +127,6 @@ button.mat-mdc-raised-button:hover,
   text-decoration: underline;
 }
 
-.comments-section {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.comments-section h4 {
-  margin-bottom: 12px;
-  color: #0d47a1;
-  font-size: 1.2rem;
-  font-weight: 700;
-}
-
-.comments-section textarea {
-  width: 100%;
-  min-height: 120px;
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: 1.5px solid #90caf9;
-  font-size: 1rem;
-  resize: vertical;
-  font-family: inherit;
-  color: #0a2540;
-  transition: border-color 0.3s ease;
-}
-
-.comments-section textarea:disabled {
-  background-color: #f0f5fb;
-  border-color: #bbdefb;
-  cursor: not-allowed;
-  color: #78909c;
-}
-
-.comments-section textarea:focus:not(:disabled) {
-  border-color: #1976d2;
-  outline: none;
-  box-shadow: 0 0 7px #90caf9;
-}
-
-.comments-section button {
-  align-self: flex-start;
-  padding: 8px 18px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 700;
-  transition: background-color 0.3s ease;
-}
-
-.comments-section button:disabled {
-  background-color: #90caf9;
-  cursor: not-allowed;
-}
-
-.comments-section ul {
-  margin: 10px 0 0 0;
-  padding-left: 18px;
-  max-height: 400px; 
-  overflow-y: auto;
-  border-top: 1px solid #bbdefb;
-}
-
-.comments-section ul li {
-  margin-bottom: 12px;
-  border-bottom: 1px solid #bbdefb;
-  padding-bottom: 8px;
-  font-size: 0.95rem;
-  color: #0a2540;
-}
 
 .login-prompt {
   margin-top: 8px;
