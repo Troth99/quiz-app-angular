@@ -6,10 +6,14 @@ import {
   doc,
   docData,
   getDoc,
+  getDocs,
+  query,
   updateDoc,
+  where,
 } from '@angular/fire/firestore';
-import { Observable, from, of, switchMap } from 'rxjs';
+import { Observable, from, map, of, switchMap } from 'rxjs';
 import { User } from '../models';
+import { Auth } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +29,7 @@ export class UserService {
   });
 }
 
-  constructor(private firestore: Firestore, private injector: Injector) {}
+  constructor(private firestore: Firestore, private injector: Injector, private auth: Auth) {}
 
   getUser(uid: string): Observable<User> {
     return runInInjectionContext(this.injector, () => {
@@ -59,6 +63,10 @@ updateLogin(uid: string): Observable<void | undefined> {
   });
 }
 
+getCurrentUserId(): string | null {
+  return this.auth.currentUser?.uid || null;
+}
+
 addQuizToUser(uid: string, quizId: string): Observable<void> {
   return runInInjectionContext(this.injector, () => {
     const userDocRef = doc(this.firestore, 'users', uid);
@@ -79,6 +87,18 @@ addQuizToUser(uid: string, quizId: string): Observable<void> {
 
         return from(updateDoc(userDocRef, { createdQuizzies  }));
       })
+    );
+  });
+}
+
+isDisplayNameTaken(displayName: string): Observable<boolean> {
+  return runInInjectionContext(this.injector, () => {
+    const displayNameLower = displayName.toLowerCase();
+    const usersRef = collection(this.firestore, 'users');
+    const q = query(usersRef, where('displayNameLower', '==', displayNameLower));
+
+    return from(getDocs(q)).pipe(
+      map(snapshot => !snapshot.empty)
     );
   });
 }

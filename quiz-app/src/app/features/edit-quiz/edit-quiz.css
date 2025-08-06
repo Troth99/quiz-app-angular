@@ -177,6 +177,42 @@ button[type="submit"]:disabled {
 .quiz-saved-message h2 {
   margin-bottom: 15px;
 }
+.no-access {
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 600px;
+  border: 2px solid #e74c3c;
+  background-color: #fdecea;
+  color: #c0392b;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.no-access h2 {
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  color: #c0392b;
+}
+
+.no-access p {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.no-access button {
+  padding: 0.5rem 1rem;
+  background-color: #c0392b;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.no-access button:hover {
+  background-color: #a93226;
+}
 
 .quiz-saved-message button {
   margin: 10px 8px 0 8px;

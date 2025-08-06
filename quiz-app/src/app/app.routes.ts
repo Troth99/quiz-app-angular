@@ -49,6 +49,14 @@ export const routes: Routes = [
           runGuardsAndResolvers: 'paramsChange'
       },
 
+      {
+        path: "user/:id",
+        loadComponent: () => 
+          import('./features/profile-view/profile-view').then(
+            (c) => c.ProfileView
+          )
+      },
+
       { path: 'page-not-found', component: PageNotFoundComponent },
 
       {

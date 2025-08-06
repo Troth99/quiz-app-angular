@@ -19,6 +19,9 @@
         @if (submitted && form.displayName.hasError('required')) {
         <div class="error">Name is required.</div>
         }
+        @if((submitted || form.displayName.touched) && form.displayName.hasError('taken')){
+          <div class="error">Username is already taken.</div>
+        }
       </div>
 
       <div class="input-group">

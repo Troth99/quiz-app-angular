@@ -96,6 +96,7 @@ authState(): Observable<User | null> {
             switchMap(() => {
               const userDoc = {
                 displayName,
+                displayNameLower: displayName.toLowerCase(),
                 createdQuizzies: [],
                 email: user.email || '',
                 photoUrl: '',
@@ -199,6 +200,7 @@ authState(): Observable<User | null> {
           from(
             updateDoc(userDoc, {
               displayName: newName,
+              displayNameLower: newName.toLowerCase(),
               lastDisplayNameChange: serverTimestamp(),
             })
           )

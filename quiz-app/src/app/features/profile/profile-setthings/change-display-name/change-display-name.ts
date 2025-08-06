@@ -88,17 +88,25 @@ export class ChangeDisplayName implements OnInit {
     }
   }
 
-  saveName() {
-    if (this.nameForm.invalid) return;
+ saveName() {
+  if (this.nameForm.invalid) return;
 
-    this.canChangeName$.pipe(take(1)).subscribe((canChange) => {
-      if (!canChange) return;
+  this.canChangeName$.pipe(take(1)).subscribe((canChange) => {
+    if (!canChange) return;
 
-      const newName = this.nameForm.value.displayName;
+    const newName = this.nameForm.value.displayName;
 
-      if(newName === this.currentName){
-        this.error = 'New name must be different than the current name.'
-        return
+    if (newName === this.currentName) {
+      this.error = 'New name must be different than the current name.';
+      return;
+    }
+
+  
+    this.userService.isDisplayNameTaken(newName).pipe(take(1)).subscribe(isTaken => {
+      if (isTaken) {
+        this.error = 'Display name is already taken.';
+        this.saving = false;
+        return;
       }
 
       this.saving = true;
@@ -120,7 +128,8 @@ export class ChangeDisplayName implements OnInit {
         },
       });
     });
-  }
+  });
+}
 
   get displayNameInvalid(): boolean {
     const control = this.nameForm.get('displayName');

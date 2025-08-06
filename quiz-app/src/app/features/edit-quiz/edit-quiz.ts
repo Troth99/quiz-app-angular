@@ -12,16 +12,22 @@ import { CommonModule } from '@angular/common';
 import { Category } from '../../core/models/quizzes/category.model';
 import { QuizService } from '../../core/services/quiz.service';
 import { Subscription } from 'rxjs';
+import { UserService } from '../../core';
+import { Loading } from '../../shared';
 
 @Component({
   selector: 'app-edit-quiz',
   templateUrl: './edit-quiz.html',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, Loading],
   styleUrls: ['./edit-quiz.css'],
 })
 export class EditQuiz implements OnInit, OnDestroy {
   private quizId?: string | undefined | null;
   private categoryName?: string | undefined | null;
+
+  hasAccess = true;
+
+  loading = true;
 
   private originalCreatedBy: string | undefined;
 
@@ -32,28 +38,47 @@ export class EditQuiz implements OnInit, OnDestroy {
   formService = inject(QuizCreateFormService);
 
   private router = inject(Router);
+  private userService = inject(UserService)
 
   private quizService = inject(QuizService);
   private route = inject(ActivatedRoute);
 
-  ngOnInit(): void {
-    this.quizId = this.route.snapshot.paramMap.get('id');
-    this.categoryName = this.route.snapshot.queryParamMap.get('category');
+ngOnInit(): void {
+  this.quizId = this.route.snapshot.paramMap.get('id');
+  this.categoryName = this.route.snapshot.queryParamMap.get('category');
 
-    if (!this.quizId || !this.categoryName) {
-      return;
-    }
+  if (!this.quizId || !this.categoryName) {
+    this.loading = false;
+    return;
+  }
 
-    this.quizSub = this.quizService
-      .getQuizById(this.categoryName, this.quizId)
-      .subscribe((quiz) => {
+  this.quizSub = this.quizService
+    .getQuizById(this.categoryName, this.quizId)
+    .subscribe({
+      next: (quiz) => {
         if (quiz) {
+          this.originalCreatedBy = quiz.createdBy;
+
+          const currentUserId = this.userService.getCurrentUserId();
+          if (currentUserId !== this.originalCreatedBy) {
+            this.hasAccess = false;
+            this.loading = false;
+            return;
+          }
+
           this.loadQuizToForm(quiz);
         } else {
           console.warn('Quiz not found');
         }
-      });
-  }
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.loading = false;
+      }
+    });
+}
+
 
   loadQuizToForm(quiz: Quiz) {
     this.originalCreatedBy = quiz.createdBy;

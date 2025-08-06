@@ -1,4 +1,8 @@
-<div *ngIf="!quizSaved; else savedBlock">
+<div *ngIf="loading" class="loading-spinner">
+  <app-loading></app-loading>
+</div>
+
+<div *ngIf="hasAccess && !quizSaved; else fallbackBlock">
   <form [formGroup]="formService.form" (ngSubmit)="onSubmit()">
     <h2>Edit quiz</h2>
 
@@ -16,7 +20,6 @@
       />
     </div>
 
- 
     <hr />
 
     <div formArrayName="questions">
@@ -71,9 +74,19 @@
   </form>
 </div>
 
-<ng-template #savedBlock>
-  <div class="quiz-saved-message">
-    <h2>Quiz updated successfully!</h2>
-    <button (click)="goBack()">Back to my quizzes</button>
-  </div>
+<ng-template #fallbackBlock>
+  <ng-container *ngIf="!hasAccess">
+    <div class="no-access">
+      <h2>You dont have permissions to this quiz.</h2>
+      <p>Only the owner of the quiz can edit the quiz..</p>
+      <button (click)="goBack()">Back to my created quizes</button>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="quizSaved">
+    <div class="quiz-saved-message">
+      <h2>Quiz updated successfully!</h2>
+      <button (click)="goBack()">Back to my quizzes</button>
+    </div>
+  </ng-container>
 </ng-template>

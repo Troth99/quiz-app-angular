@@ -230,7 +230,11 @@ button.mat-mdc-raised-button:hover,
 .login-message a:hover {
   text-decoration: underline;
 }
-
+.deleted-user {
+  color: #888;
+  cursor: default;
+  user-select: none;
+}
 /* responsive */
 @media (max-width: 768px) {
   .quiz-player-wrapper {

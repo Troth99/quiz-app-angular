@@ -22,6 +22,8 @@ import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { MyQuizzesEffects } from './core/store/quiz-store/quiz.effects';
 import { myQuizzesReducer } from './core/store/quiz-store/quiz.reducer';
+import { userReducer } from './core/store/view-profile-store/view-profile.reducer';
+import { UserEffects } from './core/store/view-profile-store/view-profile.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -38,9 +40,10 @@ export const appConfig: ApplicationConfig = {
 
     provideStore({
       myQuizzes: myQuizzesReducer,
+      viewUser: userReducer,
     }),
     
-    provideEffects(MyQuizzesEffects),
+    provideEffects(MyQuizzesEffects, UserEffects),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],
 };

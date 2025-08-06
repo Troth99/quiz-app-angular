@@ -51,7 +51,14 @@ export class QuizPlayer implements OnInit, OnDestroy {
       switchMap(quiz => {
         this.authorId = quiz.createdBy;
         return this.userService.getUser(this.authorId).pipe(
-          tap(user => this.authorName = user.displayName),
+          tap(user => {
+            if(user) {
+              this.authorName = user.displayName
+            }else {
+              this.authorName = 'Deleted user';
+              this.authorId = ''
+            }
+          }),
           map(() => quiz)
         )
       })

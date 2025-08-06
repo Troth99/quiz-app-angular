@@ -1,5 +1,4 @@
 <div class="quiz-player-wrapper" *ngIf="quiz$ | async as quiz">
-  
   <div class="quiz-main">
     <h1>{{ quiz.title }}</h1>
     <p>{{ quiz.description }}</p>
@@ -14,27 +13,45 @@
     </div>
 
     <ng-container *ngIf="isLoggedIn(); else loginBlock">
-  <button mat-raised-button color="primary" (click)="startQuiz(quiz)">▶ Play Quiz</button>
+      <button mat-raised-button color="primary" (click)="startQuiz(quiz)">
+        ▶ Play Quiz
+      </button>
     </ng-container>
 
     <ng-template #loginBlock>
       <p class="login-message">
-        Please,  <a [routerLink]="['/auth/login']" [queryParams]="{ redirectUrl : currentUrl }">Log in</a>, order to start the quiz.
+        Please,
+        <a
+          [routerLink]="['/auth/login']"
+          [queryParams]="{ redirectUrl : currentUrl }"
+          >Log in</a
+        >, order to start the quiz.
       </p>
     </ng-template>
   </div>
 
-
   <aside class="quiz-sidebar">
-    <div class="meta-item">
-      <strong>Author:</strong>
-      <a [routerLink]="['/profile', authorId]">{{ authorName }}</a>
-    </div>
+<div class="meta-item">
+  <strong>Author:</strong>
+  <ng-container *ngIf="authorName !== 'Deleted user'; else deletedUser">
+    <a [routerLink]="['/user', authorId]">{{ authorName }}</a>
+  </ng-container>
+  <ng-template #deletedUser>
+    <span class="deleted-user">{{ authorName }}</span>
+  </ng-template>
+</div>
 
     <div class="meta-item"><strong>Likes:</strong> 123</div>
 
     <div class="meta-item">
-     <button mat-stroked-button color="warn" (click)="reportBug() " style="background-color: rgb(243, 120, 120);">Report a Bug</button>
+      <button
+        mat-stroked-button
+        color="warn"
+        (click)="reportBug() "
+        style="background-color: rgb(243, 120, 120)"
+      >
+        Report a Bug
+      </button>
     </div>
 
     <div class="meta-item comments-section">
@@ -46,12 +63,22 @@
         [disabled]="!isLoggedIn()"
         rows="3"
       ></textarea>
-      <button mat-raised-button color="primary" (click)="addComment()" [disabled]="!isLoggedIn()">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="addComment()"
+        [disabled]="!isLoggedIn()"
+      >
         Add comment
       </button>
-      <div *ngIf="!isLoggedIn()" style="margin-top: 5px;">
-  <a [routerLink]="['/auth/login']" [queryParams]="{ redirectUrl : currentUrl }">Login</a> to add comment
-</div>
+      <div *ngIf="!isLoggedIn()" style="margin-top: 5px">
+        <a
+          [routerLink]="['/auth/login']"
+          [queryParams]="{ redirectUrl : currentUrl }"
+          >Login</a
+        >
+        to add comment
+      </div>
 
       <ul>
         <li *ngFor="let comment of comments">{{ comment }}</li>
