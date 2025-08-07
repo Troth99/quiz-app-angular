@@ -1,14 +1,15 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { finalize, Observable, startWith, tap } from 'rxjs';
 import { Quiz } from '../../../core/models';
 import { QuizService } from '../../../core/services/quiz.service';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Loading } from '../../../shared';
 
 @Component({
   selector: 'app-quiz-list-component',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, Loading],
   templateUrl: './quiz-list-component.html',
   styleUrls: ['./quiz-list-component.css']
 })
@@ -16,12 +17,10 @@ export class QuizListComponent implements OnInit {
   @Input() category?: string;
 
   categoryName!: string;
-  quizzess$!: Observable<Quiz[]>;
+  quizzes: Quiz[] = [];
+  isLoading = true;
 
-  tooltipVisible = false;
-  tooltipX = 0;
-  tooltipY = 0;
-  tooltipQuizId: string | number | null = null;
+ 
 
   private quizService = inject(QuizService);
   private route = inject(ActivatedRoute);
@@ -30,10 +29,20 @@ export class QuizListComponent implements OnInit {
     this.categoryName = this.route.snapshot.paramMap.get('categoryId') ?? this.category ?? '';
 
     if (this.categoryName) {
-      this.quizzess$ = this.quizService.getTestByCategory(this.categoryName);
+      this.isLoading = true;
+      this.quizService.getTestByCategory(this.categoryName).subscribe({
+        next: quizzes => {
+          this.quizzes = quizzes;
+          this.isLoading = false;
+        },
+        error: () => {
+          this.isLoading = false;
+        }
+      });
     }
   }
 
-
-
+  checkIfCompelte(quiz: Quiz): boolean {
+    return !!quiz.completedByUser;
+  }
 }

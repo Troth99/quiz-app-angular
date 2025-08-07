@@ -124,9 +124,22 @@
   white-space: nowrap;
 }
 
+.not-found-message {
+  max-width: 600px;
+  margin: 100px auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 0 25px rgba(0, 91, 187, 0.25);
+  padding: 40px 30px;
+  text-align: center;
+  font-size: 1.5rem;
+  color: #003f7f;
+  font-weight: 600;
+  user-select: none;
+}
 
 
-/* Мобилна версия */
+
 @media (max-width: 767px) {
   .buttons-group {
     flex-direction: column;
@@ -154,7 +167,7 @@
   }
 }
 
-/* Таблет и по-големи екрани */
+
 @media (min-width: 500px) {
   .buttons-group {
     flex-direction: row;

@@ -9,4 +9,5 @@ export interface Quiz {
     createdAt? :string
     createdBy: string
     category: string
+      completedByUser?: boolean;
 }

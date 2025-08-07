@@ -165,4 +165,11 @@ getComments(categoryName: string, quizId: string): Observable<Comment[]>{
   return collectionData(commentsQuery, {idField: 'id'}) as Observable<Comment[]>
   })
 }
+
+getUserQuizStatus(userId: string, categoryName: string, quizId: string): Observable<{ isComplete: boolean }> {
+  return runInInjectionContext(this.injector, () => {
+    const statusDoc = doc(this.firestore, `users/${userId}/quizStatus/${categoryName}_${quizId}`);
+    return docData(statusDoc) as Observable<{ isComplete: boolean }>;
+  });
+}
 }

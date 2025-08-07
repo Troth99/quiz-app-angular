@@ -1,76 +1,91 @@
 # 🎯 QuizApp – Angular + Firebase
 
-A modern single-page application for creating, solving, and tracking quizzes. Built with **Angular** and fully integrated with **Firebase**, this app demonstrates real-world SPA architecture, cloud-based backend, and user authentication.
+**QuizApp** is a modern single-page application (SPA) for creating, solving, and tracking quizzes. Built with **Angular** and fully integrated with **Firebase**, it includes user authentication, real-time database, and live hosting.
 
 ---
 
-## 🧩 Features
+## 🧩 Key Features
 
-- 🔐 **Authentication**  
-  - User registration and login using **Firebase Auth**
-  
-- 📝 **Quiz Functionality**  
-  - Dynamic loading of quizzes from **Firestore**
-  - Multiple-choice questions
-  - Real-time scoring
-  - Timer per quiz (optional)
-  - Result summary at the end
+### 🔐 Authentication
+- User registration and login via **Firebase Authentication**
+- Session handling and auto logout
 
-- 👤 **User Dashboard (for logged-in users)**  
-  - View solved quizzes
-  - Track results and scores
+### 📝 Quiz Solving
+- Quizzes loaded dynamically from **Firestore**
+- Multiple-choice questions
+- Per-quiz timer (optional)
+- Real-time scoring and results
+- End-of-quiz summary
 
-- 🌐 **Guest Mode (for unregistered users)**  
-  - Solve available quizzes without saving results
-  - View public quizzes
+### 👤 User Dashboard (after login)
+- History of solved quizzes
+- Detailed stats and progress tracking
 
-- ⚙️ **Admin Mode (optional if implemented)**  
-  - Add / edit / delete quizzes
-  - Manage questions and options
+### 🌐 Guest Mode (no login required)
+- Access to public quizzes
+- View details for the quizzes, likes and comments
 
-- ☁️ **Firebase Integration**  
-  - Firebase Authentication (login, register, logout)
-  - Firestore Database (quizzes, questions, results)
-  - Firebase Hosting for live deployment
-  - Environment-based config (secure)
+### 🛠️Logged in user (CRUD)
+- Add / edit / delete quizzes
+- Manage questions and options
+
+### 💬 Quiz Details & Comments
+- View descriptions and instructions per quiz
+- Optional commenting system
 
 ---
 
-## 📦 Technologies
+## ☁️ Firebase Integration
+
+- **Authentication** – login, registration, logout
+- **Firestore** – quizzes, questions, results, comments
+- **Hosting** – production build hosted on Firebase
+- **Environment Config** – separate config files for dev/prod
+
+---
+
+## 📦 Tech Stack
 
 - [Angular 20](https://angular.dev/)
 - [Firebase](https://firebase.google.com/)
 - [AngularFire](https://github.com/angular/angularfire)
 - [Angular Material](https://material.angular.io/)
-- TypeScript, RxJS
+- [NgRx](https://ngrx.io/) – Reactive State Management
+- TypeScript, RxJS, SCSS
 
 ---
 
-## ▶️ Getting Started
+## ▶️ Installation & Running Locally
 
-Follow these steps to clone the project, install dependencies, run it locally:
+Follow these steps to run the app locally:
 
-### 1. Clone the repo and install dependencies
-
-First, clone the repository to your local machine and install the required packages:
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/your-username/quiz-app-angular.git
 cd quiz-app-angular
-``` 
+```
 
-### 2. Install the required packages
-```bash 
+### 2. Install dependencies
+
+```bash
 npm install
 npm install firebase @angular/fire
 npm install @angular/material @angular/cdk @angular/animations
 npm install @angular/material-icons
+npm install @ngrx/store @ngrx/effects @ngrx/store-devtools @ngrx/entity
 ```
-### 3. Run the development server
+
+### 3. Run development server
 
 ```bash
 ng serve
 ```
 
-### 4. Live Demo
-You can see the live version of the app here: https://quiz-app-3471b.web.app/
+Open your browser at [http://localhost:4200](http://localhost:4200)
+
+---
+
+## 🌍 Live Demo
+
+👉 [https://quiz-app-3471b.web.app/](https://quiz-app-3471b.web.app/)

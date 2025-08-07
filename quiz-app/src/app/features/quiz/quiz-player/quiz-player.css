@@ -19,12 +19,19 @@
 .play-quiz-btn {
   min-width: 130px;
   font-weight: 600;
-
-
   border: 2px solid transparent;
   box-sizing: border-box;
   transition: border-color 0.3s ease, filter 0.3s ease;
 }
+
+.like-btn {
+   min-width: 130px;
+  font-weight: 600;
+  border: 2px solid transparent;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, filter 0.3s ease;
+}
+
 
 .quiz-main h1 {
   color: #0d47a1;
@@ -89,6 +96,7 @@ button.mat-mdc-raised-button,
 button.mat-raised-button:hover,
 button.mat-mdc-raised-button:hover,
 .play-quiz-btn:hover,
+.like-btn:hover,
 .quiz-main > button:hover {
   filter: brightness(0.9);
   border-color: #1976d2; 
@@ -164,6 +172,30 @@ button.mat-mdc-raised-button:hover,
   color: #888;
   cursor: default;
   user-select: none;
+}
+
+.custom-btn {
+  background-color: #1976d2;
+  color: white;
+  font-weight: 600;
+  padding: 10px 22px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(25, 118, 210, 0.5);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  user-select: none;
+  font-size: 1rem;
+}
+
+.custom-btn:hover {
+  background-color: #115293;
+  box-shadow: 0 5px 14px rgba(17, 82, 147, 0.7);
+}
+
+.custom-btn:active {
+  background-color: #0b3d73;
+  box-shadow: none;
 }
 /* responsive */
 @media (max-width: 768px) {

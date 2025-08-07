@@ -42,9 +42,9 @@ currentuserId = this.authService.uid;
     }
   }
 
-  canDelete(comment: Comment): boolean {
-    return comment.userId === this.currentuserId || this.currentuserId === this.quizOwnerId;
-  };
+canDelete(comment: Comment): boolean {
+  return comment.userId === this.currentuserId;
+}
 
 deleteComent(commentId: string) {
   const sub = this.quizService.deleteComment(this.categoryName, this.quizId, commentId)

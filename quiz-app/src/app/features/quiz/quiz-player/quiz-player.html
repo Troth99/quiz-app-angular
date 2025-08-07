@@ -42,17 +42,20 @@
     </div>
 
     <div class="meta-item"><strong>Likes:</strong> 123</div>
+<div class="meta-item">
+  <button
+    mat-stroked-button
+    color="warn"
+    (click)="reportBug()"
+    style="background-color: rgb(243, 120, 120)"
+  >
+    Report a Bug
+  </button>
 
-    <div class="meta-item">
-      <button
-        mat-stroked-button
-        color="warn"
-        (click)="reportBug() "
-        style="background-color: rgb(243, 120, 120)"
-      >
-        Report a Bug
-      </button>
-    </div>
+<button class="custom-btn" (click)="likeQuiz()">
+  👍 Like
+</button>
+</div>
 
     <div *ngIf="categoryName && quizId">
     <app-comments-component

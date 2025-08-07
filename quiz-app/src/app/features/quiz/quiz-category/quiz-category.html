@@ -1,7 +1,15 @@
-<h2>Quiz Categories</h2>
-<ul>
-  <li *ngFor="let category of categories$ | async">
-    <button (click)="selectCategory(category.id)">{{ category.name }}</button>
-  </li>
-</ul>
-
+<div class="quiz-categories">
+  <h2>Quiz Categories</h2>
+  @if(isLoading) {
+    <app-loading></app-loading>
+  }
+  @if(!isLoading) {
+    <ul class="categories-list">
+      @for(category of categories; track category.id) {
+        <li class="category-card" (click)="selectCategory(category.id)">
+          <span>{{ category.name }}</span>
+        </li>
+      }
+    </ul>
+  }
+</div>
