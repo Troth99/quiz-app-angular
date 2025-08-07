@@ -1,5 +1,13 @@
-<div *ngIf="user$ | async as user; else loading">
-  <ng-container *ngIf="user; else notFound">
+<ng-template #loading>
+  <app-loading></app-loading>
+</ng-template>
+
+<div *ngIf="loading$ | async; else loaded">
+  <!-- Показва се докато зарежда -->
+</div>
+
+<ng-template #loaded>
+  <div *ngIf="user$ | async as user; else notFound">
     <div class="profile-card">
       <div class="avatar-wrapper">
         <img [src]="user.photoUrl || 'default-profile.jpg'" alt="User Avatar" class="avatar" />
@@ -41,15 +49,11 @@
         </div>
       </div>
     </div>
-  </ng-container>
-</div>
-
-<ng-template #loading>
-  <app-loading></app-loading>
+  </div>
 </ng-template>
 
 <ng-template #notFound>
   <div class="not-found-message">
-    Profile is deleted or not found.
+    User has been deleted or not found.
   </div>
 </ng-template>

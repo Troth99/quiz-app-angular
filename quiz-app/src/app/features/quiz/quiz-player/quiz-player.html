@@ -1,69 +1,86 @@
-<div class="quiz-player-wrapper" *ngIf="quiz$ | async as quiz">
-  <div class="quiz-main">
-    <h1>{{ quiz.title }}</h1>
-    <p>{{ quiz.description }}</p>
-
-    <h2>
-      The quiz includes these questions. You can press ▶ Play to test your
-      knowledge.
-    </h2>
-
-    <div *ngFor="let question of quiz.questions">
-      <p class="question-text">{{ question.text }}</p>
-    </div>
-
-    <ng-container *ngIf="isLoggedIn(); else loginBlock">
-      <button mat-raised-button color="primary" (click)="startQuiz(quiz)">
-        ▶ Play Quiz
-      </button>
-    </ng-container>
-
-    <ng-template #loginBlock>
-      <p class="login-message">
-        Please,
-        <a
-          [routerLink]="['/auth/login']"
-          [queryParams]="{ redirectUrl : currentUrl }"
-          >Log in</a
-        >, order to start the quiz.
-      </p>
-    </ng-template>
-  </div>
-
-  <aside class="quiz-sidebar">
-    <div class="meta-item">
-      <strong>Author:</strong>
-      <ng-container *ngIf="authorName !== 'Deleted user'; else deletedUser">
-        <a [routerLink]="['/user', authorId]">{{ authorName }}</a>
-      </ng-container>
-      <ng-template #deletedUser>
-        <span class="deleted-user">{{ authorName }}</span>
-      </ng-template>
-    </div>
-
-    <div class="meta-item"><strong>Likes:</strong> 123</div>
-<div class="meta-item">
-  <button
-    mat-stroked-button
-    color="warn"
-    (click)="reportBug()"
-    style="background-color: rgb(243, 120, 120)"
-  >
-    Report a Bug
-  </button>
-
-<button class="custom-btn" (click)="likeQuiz()">
-  👍 Like
-</button>
+<div *ngIf="loading">
+  <app-loading></app-loading>
 </div>
 
-    <div *ngIf="categoryName && quizId">
-    <app-comments-component
-  [categoryName]="categoryName"
-  [quizId]="quizId"
-  [quizOwnerId]="authorId"
-  [currentUrl]="currentUrl"
-></app-comments-component>
+<div *ngIf="!loading">
+  <ng-container *ngIf="quiz$ | async as quiz; else notFound">
+    <div class="quiz-player-wrapper">
+      <div class="quiz-main">
+        <h1>{{ quiz.title }}</h1>
+        <p>{{ quiz.description }}</p>
+
+        <h2>
+          The quiz includes these questions. You can press ▶ Play to test your knowledge.
+        </h2>
+
+        <div *ngFor="let question of quiz.questions">
+          <p class="question-text">{{ question.text }}</p>
+        </div>
+
+        <ng-container *ngIf="isLoggedIn(); else loginBlock">
+          <button mat-raised-button color="primary" (click)="startQuiz(quiz)">
+            ▶ Play Quiz
+          </button>
+        </ng-container>
+
+        <ng-template #loginBlock>
+          <p class="login-message">
+            Please,
+            <a [routerLink]="['/auth/login']" [queryParams]="{ redirectUrl: currentUrl }">Log in</a>,
+            in order to start the quiz.
+          </p>
+        </ng-template>
+      </div>
+
+      <aside class="quiz-sidebar">
+        <div class="meta-item">
+          <strong>Author:</strong>
+          <ng-container *ngIf="authorName !== 'Deleted user'; else deletedUser">
+            <a [routerLink]="['/user', authorId]">{{ authorName }}</a>
+          </ng-container>
+          <ng-template #deletedUser>
+            <span class="deleted-user">{{ authorName }}</span>
+          </ng-template>
+        </div>
+
+        <div class="meta-item">
+          <strong>Likes:</strong> {{ quiz.likesCount || 0 }}
+        </div>
+
+        <div class="meta-item">
+          <button
+            mat-stroked-button
+            color="warn"
+            (click)="reportBug()"
+            style="background-color: rgb(243, 120, 120)"
+          >
+            Report a Bug
+          </button>
+
+          <button
+            class="custom-btn"
+            *ngIf="!(hasLiked$ | async)"
+            (click)="likeQuiz()"
+          >
+            👍 Like
+          </button>
+        </div>
+
+        <div *ngIf="categoryName && quizId">
+          <app-comments-component
+            [categoryName]="categoryName"
+            [quizId]="quizId"
+            [quizOwnerId]="authorId"
+            [currentUrl]="currentUrl"
+          ></app-comments-component>
+        </div>
+      </aside>
     </div>
-  </aside>
+  </ng-container>
+
+  <ng-template #notFound>
+    <div class="quiz-not-found">
+      <p>Quiz not found.</p>
+    </div>
+  </ng-template>
 </div>

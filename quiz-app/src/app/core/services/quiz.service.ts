@@ -22,7 +22,7 @@ import {
   updateDoc,
   orderBy,
 } from '@angular/fire/firestore';
-import { deleteDoc } from 'firebase/firestore';
+import { deleteDoc, increment } from 'firebase/firestore';
 import { DocumentReference } from 'firebase/firestore/lite';
 
 
@@ -172,4 +172,39 @@ getUserQuizStatus(userId: string, categoryName: string, quizId: string): Observa
     return docData(statusDoc) as Observable<{ isComplete: boolean }>;
   });
 }
+
+
+likeQuiz(categoryName: string, quizId: string, userId: string): Observable<void> {
+  return runInInjectionContext(this.injector, () => {
+    const likeDocRef = doc(this.firestore, `quizzes/${categoryName}/tests/${quizId}/likes/${userId}`);
+    const quizDocRef = doc(this.firestore, `quizzes/${categoryName}/tests/${quizId}`);
+
+    return from(getDoc(likeDocRef)).pipe(
+      switchMap((likeDocSnap ) => {
+
+        if(likeDocSnap.exists()) {
+          throw new Error('You already liked this quiz.')
+        }
+
+      return from(runInInjectionContext(this.injector, () => 
+          setDoc(likeDocRef, { likedAt: new Date() })
+        )).pipe(
+          switchMap(() => from(runInInjectionContext(this.injector, () =>
+            updateDoc(quizDocRef, { likesCount: increment(1) })
+          ))),
+          map(() => void 0)
+        );
+      })
+    )
+
+  })
+}
+hasLikedQuiz(categoryName: string, quizId: string, userId: string): Observable<boolean> {
+    return runInInjectionContext(this.injector, () => {
+      const likeDocRef = doc(this.firestore, `quizzes/${categoryName}/tests/${quizId}/likes/${userId}`);
+      return from(getDoc(likeDocRef)).pipe(
+        map((snap) => snap.exists())
+      );
+    });
+  }
 }

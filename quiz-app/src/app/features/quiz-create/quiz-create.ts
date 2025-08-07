@@ -137,6 +137,8 @@ resetForm(): void {
   this.createdCategory = null;
   this.formService.resetFormWithQuestions(10)
 }
+
+
 ngOnDestroy(): void {
   this.subscriptions.unsubscribe()
 }

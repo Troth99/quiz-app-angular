@@ -24,11 +24,13 @@
 
   <ul>
     <li *ngFor="let comment of comments$ | async" class="comment-item">
-      <img
-        [src]="comment.userPhotoUrl || 'assets/default-avatar.png'"
-        alt="User avatar"
-        class="comment-avatar"
-      />
+      <a [routerLink]="['/user', comment.userId]">
+  <img
+    [src]="comment.userPhotoUrl || 'default-profile.jpg'"
+    alt="User avatar"
+    class="comment-avatar"
+  />
+</a>
       <div class="comment-content">
         <div class="comment-text">{{ comment.text }}</div>
         <div class="comment-meta">

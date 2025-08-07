@@ -1,0 +1,71 @@
+<div *ngIf="quizName === 'Quiz not found'" class="quiz-not-found">
+  <p>Quiz not found.</p>
+</div>
+
+<form
+  *ngIf="quizName !== 'Quiz not found' && !successMessageVisible"
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+  class="bug-report-form"
+  novalidate
+>
+  <h2>Report a Bug for "{{ quizName }}"</h2>
+
+  <input type="hidden" formControlName="testId" />
+
+  <div class="form-group">
+    <label for="title">Title</label>
+    <input
+      id="title"
+      class="title-field"
+      formControlName="title"
+      placeholder="Brief summary"
+      [class.invalid]="form.get('title')?.touched && form.get('title')?.invalid"
+    />
+    <div class="error" *ngIf="form.get('title')?.touched && form.get('title')?.invalid">
+      Title is required.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea
+      id="description"
+      formControlName="description"
+      placeholder="Explain the problem in detail"
+      rows="5"
+      [class.invalid]="form.get('description')?.touched && form.get('description')?.invalid"
+    ></textarea>
+    <div class="error" *ngIf="form.get('description')?.touched && form.get('description')?.invalid">
+      Description is required.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="screenshot">Screenshot (optional)</label>
+
+    <div class="custom-file-upload">
+      <button type="button" (click)="fileInput.click()" class="choose-file-btn">
+        Choose File
+      </button>
+      <span class="file-name">{{ selectedFileName || 'No file chosen' }}</span>
+      <input
+        type="file"
+        #fileInput
+        id="screenshot"
+        (change)="onFileChange($event)"
+        accept="image/*"
+        hidden
+      />
+    </div>
+  </div>
+
+ <button type="submit" class="submit-btn" [disabled]="form.invalid || loading">
+  <span *ngIf="loading">Loading...</span>
+  <span *ngIf="!loading">Submit Bug Report</span>
+</button>
+</form>
+
+<div *ngIf="successMessageVisible" class="success-message">
+  Bug report submitted successfully.
+</div>

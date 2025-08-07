@@ -42,20 +42,28 @@ export const routes: Routes = [
       },
       {
         path: 'quiz/play/:categoryName/:id',
-        loadComponent: () => 
+        loadComponent: () =>
           import('./features/quiz/quiz-player/quiz-player').then(
             (c) => c.QuizPlayer
           ),
-          runGuardsAndResolvers: 'paramsChange'
+        runGuardsAndResolvers: 'paramsChange',
       },
 
       {
-        path: "user/:id",
-        loadComponent: () => 
+        path: 'user/:id',
+        loadComponent: () =>
           import('./features/profile-view/profile-view').then(
             (c) => c.ProfileView
-          )
+          ),
       },
+         {
+            path: 'quiz/:categoryName/:quizId/report-bug',
+            loadComponent: () =>
+              import('./features/quiz/quiz-bug-report/quiz-bug-report').then(
+                (c) => c.QuizBugReport
+              ),
+            canActivate: [GuestGuard], 
+          },
 
       { path: 'page-not-found', component: PageNotFoundComponent },
 
@@ -92,11 +100,10 @@ export const routes: Routes = [
           },
           {
             path: 'edit/:id',
-            loadComponent: () => 
-              import('./features/edit-quiz/edit-quiz').then (
-                (c) => c.EditQuiz
-              )
-          }
+            loadComponent: () =>
+              import('./features/edit-quiz/edit-quiz').then((c) => c.EditQuiz),
+          },
+       
         ],
       },
     ],

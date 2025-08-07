@@ -197,6 +197,19 @@ button.mat-mdc-raised-button:hover,
   background-color: #0b3d73;
   box-shadow: none;
 }
+.quiz-not-found {
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 400px;
+  background-color: #ffe6e6;
+  color: #b00020;
+  border: 1px solid #b00020;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(176, 0, 32, 0.25);
+}
 /* responsive */
 @media (max-width: 768px) {
   .quiz-player-wrapper {
