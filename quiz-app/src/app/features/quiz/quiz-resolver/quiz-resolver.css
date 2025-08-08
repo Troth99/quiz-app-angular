@@ -1,0 +1,147 @@
+.quiz-container {
+  display: block;
+  max-width: 720px;
+  margin: 24px auto;
+  background: linear-gradient(135deg, #d0e6ff 0%, #f0f7ff 100%);
+  padding: 32px 28px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.15);
+  color: #1c3a70;
+  user-select: none;
+}
+.timer {
+  bottom: 30px;
+  background-color: #d9534f;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 800;
+  font-size: 1.3rem;
+  user-select: none;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(217, 83, 79, 0.6);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.timer::before {
+  content: "⏰";
+  font-size: 1.4rem;
+}
+h2 {
+  font-weight: 800;
+  font-size: 2.4rem;
+  margin-bottom: 14px;
+  letter-spacing: -0.02em;
+  color: #124083;
+}
+
+p {
+  font-weight: 500;
+  font-size: 1.1rem;
+  color: #3a5998;
+  margin-bottom: 28px;
+  line-height: 1.5;
+}
+
+h3 {
+  font-weight: 800;
+  font-size: 1.6rem;
+  margin: 36px 0 18px;
+  color: #143e8a;
+  border-left: 5px solid #3b82f6;
+  padding-left: 14px;
+  letter-spacing: -0.015em;
+}
+label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  font-size: 1.2rem;
+  color: #234b8a;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+label:hover {
+  color: #3b82f6;
+}
+
+input[type='checkbox'] {
+  width: 28px;
+  height: 28px;
+  margin-right: 16px;
+  cursor: pointer;
+  accent-color: #3b82f6;
+  transition: accent-color 0.3s ease;
+}
+
+input[type='checkbox']:hover {
+  accent-color: #2563eb;
+}
+
+button,
+.submit-btn {
+  margin-top: 40px;
+  padding: 14px 36px;
+  background-color: #3b82f6;
+  border-radius: 10px;
+  border: none;
+  color: white;
+  font-weight: 700;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(59, 130, 246, 0.4);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+button:hover,
+.submit-btn:hover {
+  background-color: #2563eb;
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.6);
+}
+
+p.loading {
+  text-align: center;
+  font-style: italic;
+  color: #557bbf;
+  font-size: 1rem;
+  user-select: none;
+}
+
+@media (max-width: 640px) {
+  :host {
+    padding: 20px 16px;
+    margin: 12px;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+    margin-top: 18px;
+    margin-bottom: 10px;
+  }
+
+  label {
+    font-size: 1.1rem;
+  }
+
+  input[type='checkbox'] {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+  }
+
+  button[type='submit'] {
+    width: 100%;
+    padding: 14px 0;
+    font-size: 1.1rem;
+  }
+}

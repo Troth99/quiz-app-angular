@@ -8,14 +8,14 @@ import {
 
 import { AuthLayout, MainLayout, ProfileLayoutComponent } from './core/layouts';
 import { AuthGuard, PageNotFoundComponent } from './core';
-import { GuestGuard } from './core/guards';
+import { GuestGuard, QuizActiveGuard } from './core/guards';
 
 export const routes: Routes = [
   {
     path: '',
     component: MainLayout,
     children: [
-      { path: '', component: QuizHomeComponent },
+      { path: '', component: QuizHomeComponent, canActivate: [QuizActiveGuard] },
 
       {
         path: 'quiz/categories',
@@ -23,6 +23,7 @@ export const routes: Routes = [
           import('./features/quiz/quiz-category/quiz-category').then(
             (c) => c.QuizCategory
           ),
+        canActivate: [QuizActiveGuard]
       },
       {
         path: 'quiz/categories/:categoryId/tests',
@@ -30,6 +31,7 @@ export const routes: Routes = [
           import(
             './features/quiz/quiz-list-component/quiz-list-component'
           ).then((c) => c.QuizListComponent),
+        canActivate: [QuizActiveGuard]
       },
 
       {
@@ -38,7 +40,7 @@ export const routes: Routes = [
           import('./features/quiz-create/quiz-create').then(
             (c) => c.QuizCreate
           ),
-        canActivate: [GuestGuard],
+        canActivate: [GuestGuard, QuizActiveGuard],
       },
       {
         path: 'quiz/play/:categoryName/:id',
@@ -47,6 +49,7 @@ export const routes: Routes = [
             (c) => c.QuizPlayer
           ),
         runGuardsAndResolvers: 'paramsChange',
+        canActivate: [QuizActiveGuard]
       },
 
       {
@@ -55,27 +58,37 @@ export const routes: Routes = [
           import('./features/profile-view/profile-view').then(
             (c) => c.ProfileView
           ),
+        canActivate: [QuizActiveGuard]
       },
-         {
-            path: 'quiz/:categoryName/:quizId/report-bug',
-            loadComponent: () =>
-              import('./features/quiz/quiz-bug-report/quiz-bug-report').then(
-                (c) => c.QuizBugReport
-              ),
-            canActivate: [GuestGuard], 
-          },
+      {
+        path: 'quiz/:categoryName/:quizId/report-bug',
+        loadComponent: () =>
+          import('./features/quiz/quiz-bug-report/quiz-bug-report').then(
+            (c) => c.QuizBugReport
+          ),
+        canActivate: [GuestGuard, QuizActiveGuard],
+      },
 
-      { path: 'page-not-found', component: PageNotFoundComponent },
+      {
+        path: 'quiz-resolve/:categoryName/:quizId',
+        loadComponent: () => 
+          import('./features/quiz/quiz-resolver/quiz-resolver').then(
+            (c) => c.QuizResolver
+          ),
+      },
+
+      { path: 'page-not-found', component: PageNotFoundComponent, canActivate: [QuizActiveGuard] },
 
       {
         path: 'profile',
         component: ProfileLayoutComponent,
-        canActivate: [GuestGuard],
+        canActivate: [GuestGuard, QuizActiveGuard],
         children: [
           {
             path: '',
             loadComponent: () =>
               import('./features/profile/profile').then((c) => c.Profile),
+            canActivate: [QuizActiveGuard]
           },
           {
             path: 'change-display-name',
@@ -83,6 +96,7 @@ export const routes: Routes = [
               import(
                 './features/profile/profile-setthings/change-display-name/change-display-name'
               ).then((c) => c.ChangeDisplayName),
+            canActivate: [QuizActiveGuard]
           },
           {
             path: 'change-password',
@@ -90,6 +104,7 @@ export const routes: Routes = [
               import('./features/auth/change-password/change-password').then(
                 (c) => c.changePassword
               ),
+            canActivate: [QuizActiveGuard]
           },
           {
             path: 'my-created-quizzes',
@@ -97,13 +112,14 @@ export const routes: Routes = [
               import('./features/my-created-quizzes/my-created-quizzes').then(
                 (c) => c.MyCreatedQuizzes
               ),
+            canActivate: [QuizActiveGuard]
           },
           {
             path: 'edit/:id',
             loadComponent: () =>
               import('./features/edit-quiz/edit-quiz').then((c) => c.EditQuiz),
+            canActivate: [QuizActiveGuard]
           },
-       
         ],
       },
     ],

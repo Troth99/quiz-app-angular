@@ -1,0 +1,29 @@
+@if (quiz === undefined) {
+  <app-loading></app-loading>
+} @else {
+  <div class="quiz-container">
+    <div class="timer">
+  Time left: {{ formattedTime }}
+  </div>
+
+    <h2>{{ quiz?.title }}</h2>
+    <p>{{ quiz?.description }}</p>
+  
+    <form (ngSubmit)="submit()">
+      @for (item of questionsWithIndex; track item.qIndex) {
+        <h3>{{ item.qIndex + 1 }}. {{ item.question.text }}</h3>
+  
+        @for (answerItem of item.answersWithIndex; track answerItem.aIndex) {
+          <label>
+            <input
+              type="checkbox"
+              (change)="onCheckboxChange(item.qIndex, answerItem.aIndex, $event)" />
+            {{ answerItem.answer.text }}
+          </label>
+        }
+      }
+  
+      <button type="button" class="submit-btn" (click)="submit()">Submit the quiz</button>
+    </form>
+  </div>
+}

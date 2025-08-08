@@ -1,86 +1,80 @@
-<div *ngIf="loading">
-  <app-loading></app-loading>
-</div>
+@if (loading) {
+<app-loading></app-loading>
+} @else { @if (quizSubject.value) {
+<div class="quiz-player-wrapper">
+  <div class="quiz-main">
+    <h1>{{ quizSubject.value.title }}</h1>
+    <p>{{ quizSubject.value.description }}</p>
 
-<div *ngIf="!loading">
-  <ng-container *ngIf="quiz$ | async as quiz; else notFound">
-    <div class="quiz-player-wrapper">
-      <div class="quiz-main">
-        <h1>{{ quiz.title }}</h1>
-        <p>{{ quiz.description }}</p>
+    <h2>
+      The quiz includes these questions. You can press ▶ Play to test your
+      knowledge.
+    </h2>
 
-        <h2>
-          The quiz includes these questions. You can press ▶ Play to test your knowledge.
-        </h2>
+    @for (question of quizSubject.value.questions; track question.id) {
+    <p class="question-text">{{ question.text }}</p>
+    
+    } @if (isLoggedIn()) {
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="startQuiz(quizSubject.value)"
+    >
+      ▶ Play Quiz
+    </button>
+    } @else {
+    <p class="login-message">
+      Please,
+      <a
+        [routerLink]="['/auth/login']"
+        [queryParams]="{ redirectUrl: currentUrl }"
+        >Log in</a
+      >, in order to start the quiz.
+    </p>
+    }
+  </div>
 
-        <div *ngFor="let question of quiz.questions">
-          <p class="question-text">{{ question.text }}</p>
-        </div>
-
-        <ng-container *ngIf="isLoggedIn(); else loginBlock">
-          <button mat-raised-button color="primary" (click)="startQuiz(quiz)">
-            ▶ Play Quiz
-          </button>
-        </ng-container>
-
-        <ng-template #loginBlock>
-          <p class="login-message">
-            Please,
-            <a [routerLink]="['/auth/login']" [queryParams]="{ redirectUrl: currentUrl }">Log in</a>,
-            in order to start the quiz.
-          </p>
-        </ng-template>
-      </div>
-
-      <aside class="quiz-sidebar">
-        <div class="meta-item">
-          <strong>Author:</strong>
-          <ng-container *ngIf="authorName !== 'Deleted user'; else deletedUser">
-            <a [routerLink]="['/user', authorId]">{{ authorName }}</a>
-          </ng-container>
-          <ng-template #deletedUser>
-            <span class="deleted-user">{{ authorName }}</span>
-          </ng-template>
-        </div>
-
-        <div class="meta-item">
-          <strong>Likes:</strong> {{ quiz.likesCount || 0 }}
-        </div>
-
-        <div class="meta-item">
-          <button
-            mat-stroked-button
-            color="warn"
-            (click)="reportBug()"
-            style="background-color: rgb(243, 120, 120)"
-          >
-            Report a Bug
-          </button>
-
-          <button
-            class="custom-btn"
-            *ngIf="!(hasLiked$ | async)"
-            (click)="likeQuiz()"
-          >
-            👍 Like
-          </button>
-        </div>
-
-        <div *ngIf="categoryName && quizId">
-          <app-comments-component
-            [categoryName]="categoryName"
-            [quizId]="quizId"
-            [quizOwnerId]="authorId"
-            [currentUrl]="currentUrl"
-          ></app-comments-component>
-        </div>
-      </aside>
+  <aside class="quiz-sidebar">
+    <div class="meta-item">
+      <strong>Author:</strong>
+      @if (authorName !== 'Deleted user') {
+      <a [routerLink]="['/user', authorId]">{{ authorName }}</a>
+      } @else {
+      <span class="deleted-user">{{ authorName }}</span>
+      }
     </div>
-  </ng-container>
 
-  <ng-template #notFound>
-    <div class="quiz-not-found">
-      <p>Quiz not found.</p>
+    <div class="meta-item">
+      <strong>Likes:</strong> {{ quizSubject.value.likesCount || 0 }}
     </div>
-  </ng-template>
+
+    <div class="meta-item">
+      <button
+        mat-stroked-button
+        color="warn"
+        (click)="reportBug()"
+        style="background-color: rgb(243, 120, 120)"
+      >
+        Report a Bug
+      </button>
+
+      @if ((hasLiked$ | async) === false) {
+      <button class="custom-btn" (click)="likeQuiz()">👍 Like</button>
+      }
+    </div>
+
+    @if (categoryName && quizId) {
+    <app-comments-component
+      [categoryName]="categoryName"
+      [quizId]="quizId"
+      [quizOwnerId]="authorId"
+      [currentUrl]="currentUrl"
+    ></app-comments-component>
+    }
+  </aside>
 </div>
+} @else {
+<div class="quiz-not-found">
+  <p>Quiz not found.</p>
+</div>
+} }

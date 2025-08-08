@@ -12,6 +12,7 @@ import {
   catchError,
   filter,
   finalize,
+  forkJoin,
   map,
   Observable,
   of,
@@ -50,6 +51,9 @@ export class QuizPlayer implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private userService = inject(UserService);
 
+  timeLeftSeconds = 0;
+  private intervalId? : number;
+
   currentUrl!: string;
 
   quizSubject = new BehaviorSubject<Quiz | null>(null);
@@ -69,10 +73,11 @@ export class QuizPlayer implements OnInit, OnDestroy {
   categoryName: string = '';
   quizId: string = '';
 
-  private hasLikedSubject = new BehaviorSubject<boolean>(false);
+  private hasLikedSubject = new BehaviorSubject<boolean | null>(null);
 
-  hasLiked$!: Observable<boolean>;
-
+  hasLiked$ = this.hasLikedSubject
+    .asObservable()
+    .pipe(filter((val): val is boolean => val !== null));
   loading = true;
 
   ngOnInit(): void {
@@ -82,17 +87,20 @@ export class QuizPlayer implements OnInit, OnDestroy {
 
     this.loading = true;
 
-    this.subscription = this.authService.authState().subscribe((user) => {
-      if (user) {
-        this.quizService
-          .hasLikedQuiz(this.categoryName, this.quizId, user.uid)
-          .subscribe((hasLiked) => this.hasLikedSubject.next(hasLiked));
-      } else {
-        this.hasLikedSubject.next(false);
-      }
-    });
-
-    this.hasLiked$ = this.hasLikedSubject.asObservable();
+    this.subscription = this.authService
+      .authState()
+      .pipe(
+        switchMap((user) => {
+          if (!user) {
+            this.hasLikedSubject.next(false);
+            return of(null);
+          }
+          return this.quizService
+            .hasLikedQuiz(this.categoryName, this.quizId, user.uid)
+            .pipe(tap((hasLiked) => this.hasLikedSubject.next(hasLiked)));
+        })
+      )
+      .subscribe();
 
     this.quizService
       .getQuizById(this.categoryName, this.quizId)
@@ -115,17 +123,16 @@ export class QuizPlayer implements OnInit, OnDestroy {
       .subscribe({
         next: (quiz) => {
           this.quizSubject.next(quiz);
-          this.loading = false; 
+          this.loading = false;
         },
         error: () => {
-          this.loading = false; 
+          this.loading = false;
         },
       });
   }
 
   reportBug() {
     if (!this.quizId) {
-      console.error('Quiz id missing');
       return;
     }
 
@@ -139,15 +146,19 @@ export class QuizPlayer implements OnInit, OnDestroy {
 
   startQuiz(quiz: Quiz) {
     if (!this.isLoggedIn()) {
-      this.router.navigate(['/login']);
-      return;
-    }
+    this.router.navigate(['/auth/login'], { queryParams: { redirectUrl: this.currentUrl } });
+    return;
   }
+
+
+  this.router.navigate(['quiz-resolve', this.categoryName, this.quizId])
+
+  }
+
   likeQuiz() {
     const userId = this.userService.getCurrentUserId();
 
     if (!userId || !this.categoryName || !this.quizId) {
-      console.error('Missing data for like action.');
       return;
     }
 
