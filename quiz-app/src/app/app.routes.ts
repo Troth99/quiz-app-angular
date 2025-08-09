@@ -8,7 +8,7 @@ import {
 
 import { AuthLayout, MainLayout, ProfileLayoutComponent } from './core/layouts';
 import { AuthGuard, PageNotFoundComponent } from './core';
-import { GuestGuard, QuizActiveGuard } from './core/guards';
+import { GuestGuard, QuizActiveGuard, QuizStartGuard } from './core/guards';
 
 export const routes: Routes = [
   {
@@ -75,6 +75,7 @@ export const routes: Routes = [
           import('./features/quiz/quiz-resolver/quiz-resolver').then(
             (c) => c.QuizResolver
           ),
+          canActivate: [QuizStartGuard]
       },
 
       { path: 'page-not-found', component: PageNotFoundComponent, canActivate: [QuizActiveGuard] },

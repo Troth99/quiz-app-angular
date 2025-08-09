@@ -1,5 +1,5 @@
 import { Component, HostListener, inject, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { QuizService } from '../../../core/services/quiz.service';
 import { CommonModule } from '@angular/common';
 import { catchError, Observable, of } from 'rxjs';
@@ -7,6 +7,7 @@ import { Quiz } from '../../../core/models';
 import { Loading } from '../../../shared';
 import { QuizTimerService } from '../../../core/services/quizTimerService..serive';
 import { QuizStateService } from '../../../core/services/quizState.service';
+import { QuizEvaluatorService } from '../../../core/services/quizEvaluatir.service';
 
 
 @Component({
@@ -21,7 +22,10 @@ export class QuizResolver implements OnInit, OnDestroy {
   private quizService = inject(QuizService);
   private quizTimerService = inject(QuizTimerService);
   private quizState = inject(QuizStateService);
+  private evaluator = inject(QuizEvaluatorService);
+  private router = inject(Router)
 
+  result?: {correctCount: number, wrongQuestions: number []};
 
   quiz$!: Observable<Quiz | null>;
   quiz?: Quiz | null;
@@ -30,6 +34,8 @@ export class QuizResolver implements OnInit, OnDestroy {
 
   timeLeftSeconds = 0;
   private intervalId?: number;
+
+  previewMode = false;
 
 
 
@@ -86,9 +92,12 @@ export class QuizResolver implements OnInit, OnDestroy {
   }
 
   submit() {
+    if(! this.quiz) {
+      return;
+    }
     this.quizState.setActive(false)
     this.quizTimerService.stop()
-    console.log(this.selectedAnswers);
+      this.result = this.evaluator.evaluate(this.quiz, this.selectedAnswers)
   }
 
 get questionsWithIndex() {
@@ -104,6 +113,53 @@ get formattedTime(): string {
   return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
+previewQuiz(): void {
+  this.previewMode = true;
+}
+
+closePreview() {
+  this.previewMode = false;
+}
+
+isAnswerSelected(questionIndex: number, answerIndex: number): boolean {
+  return this.selectedAnswers?.[questionIndex]?.includes(answerIndex) || false;
+}
+
+isAnswerMissed(questionIndex: number, answerIndex: number): boolean {
+  if (!this.quiz) return false;
+  const question = this.quiz.questions?.[questionIndex];
+  if (!question) return false;
+  const answer = question.answers?.[answerIndex];
+  if (!answer) return false;
+
+  return answer.isCorrect && !this.isAnswerSelected(questionIndex, answerIndex);
+}
+isAnswerCorrect(questionIndex: number, answerIndex: number): boolean {
+  if (!this.quiz) return false;
+  const question = this.quiz.questions?.[questionIndex];
+  if (!question) return false;
+  const answer = question.answers?.[answerIndex];
+  return answer?.isCorrect === true && this.isAnswerSelected(questionIndex, answerIndex);
+}
+
+isAnswerWrong(questionIndex: number, answerIndex: number): boolean {
+  if (!this.quiz) return false;
+  const question = this.quiz.questions?.[questionIndex];
+  if (!question) return false;
+
+  const answer = question.answers?.[answerIndex];
+  if (!answer) return false;
+
+ 
+  return this.isAnswerSelected(questionIndex, answerIndex) && !answer.isCorrect;
+}
+get safeQuestions() {
+  return this.quiz?.questions ?? [];
+}
+
+moreQuizzes() {
+  this.router.navigate(['quiz/categories'])
+}
   ngOnDestroy() {
 
   }

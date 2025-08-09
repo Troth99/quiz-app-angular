@@ -150,6 +150,7 @@ export class QuizPlayer implements OnInit, OnDestroy {
     return;
   }
 
+  
 
   this.router.navigate(['quiz-resolve', this.categoryName, this.quizId])
 

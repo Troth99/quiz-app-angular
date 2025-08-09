@@ -1,29 +1,80 @@
 @if (quiz === undefined) {
-  <app-loading></app-loading>
-} @else {
-  <div class="quiz-container">
-    <div class="timer">
-  Time left: {{ formattedTime }}
-  </div>
+<app-loading></app-loading>
 
-    <h2>{{ quiz?.title }}</h2>
-    <p>{{ quiz?.description }}</p>
-  
-    <form (ngSubmit)="submit()">
-      @for (item of questionsWithIndex; track item.qIndex) {
-        <h3>{{ item.qIndex + 1 }}. {{ item.question.text }}</h3>
-  
-        @for (answerItem of item.answersWithIndex; track answerItem.aIndex) {
-          <label>
-            <input
-              type="checkbox"
-              (change)="onCheckboxChange(item.qIndex, answerItem.aIndex, $event)" />
-            {{ answerItem.answer.text }}
-          </label>
-        }
-      }
-  
-      <button type="button" class="submit-btn" (click)="submit()">Submit the quiz</button>
-    </form>
-  </div>
+} @else {
+<div class="quiz-container">
+  @if (!result) {
+
+  <div class="timer">Time left: {{ formattedTime }}</div>
+
+  <h2>{{ quiz?.title }}</h2>
+  <p>{{ quiz?.description }}</p>
+
+  <form (ngSubmit)="submit()">
+    @for (item of questionsWithIndex; track item.qIndex) {
+    <h3>{{ item.qIndex + 1 }}. {{ item.question.text }}</h3>
+
+    @for (answerItem of item.answersWithIndex; track answerItem.aIndex) {
+    <label>
+      <input
+        type="checkbox"
+        (change)="onCheckboxChange(item.qIndex, answerItem.aIndex, $event)"
+      />
+      {{ answerItem.answer.text }}
+    </label>
+    } }
+
+    <button type="button" class="submit-btn" (click)="submit()">Submit the quiz</button>
+
+  </form>
+  } @else if (!previewMode) {
+  <h2>Your result</h2>
+  <p>
+    Correct answers: {{ result.correctCount }} / {{ quiz?.questions?.length || 0
+    }}
+  </p>
+
+  @if (result.wrongQuestions.length > 0) {
+  <h3>Mistakes</h3>
+  <ul>
+    @for (wrongIndex of result.wrongQuestions; track wrongIndex) {
+    <li>
+      {{ wrongIndex + 1 }}. {{ quiz && quiz.questions &&
+      quiz.questions[wrongIndex].text }}
+    </li>
+    }
+  </ul>
+  }
+
+  <button type="button" (click)="previewQuiz()">Preview Quiz</button>
+  <button type="button" (click)="moreQuizzes()">Try another quiz</button>
+  } @else {
+
+
+  <h2>Preview Quiz - Your Answers</h2>
+  <p>
+    You can see your selected answers marked in green (correct) and red
+    (incorrect).
+  </p>
+
+  @for (item of questionsWithIndex; track item.qIndex) {
+  <h3>{{ item.qIndex + 1 }}. {{ item.question.text }}</h3>
+
+  @for (answerItem of item.answersWithIndex; track answerItem.aIndex) {
+
+
+    <label [style.background-color]="
+      isAnswerSelected(item.qIndex, answerItem.aIndex)
+        ? (isAnswerCorrect(item.qIndex, answerItem.aIndex) ? 'lightgreen' : 'lightcoral')
+        : (isAnswerMissed(item.qIndex, answerItem.aIndex) ? 'lightgreen' : 'transparent')">
+      <input type="checkbox"
+             [checked]="isAnswerSelected(item.qIndex, answerItem.aIndex)"
+             disabled />
+      {{ answerItem.answer.text }}
+    </label>
+  } }
+
+  <button type="button" (click)="closePreview()">Close Preview</button>
+  }
+</div>
 }

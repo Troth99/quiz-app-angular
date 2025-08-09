@@ -113,6 +113,15 @@ p.loading {
   user-select: none;
 }
 
+.correct {
+  color: green;
+  font-weight: bold;
+}
+
+.wrong {
+  color: red;
+  font-weight: bold;
+}
 @media (max-width: 640px) {
   :host {
     padding: 20px 16px;
