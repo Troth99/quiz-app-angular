@@ -31,8 +31,10 @@ export class QuizTimerService {
     const elapsed = Date.now() - this.startTimestamp;
     return Math.max(this.durationMs - elapsed, 0);
   }
-
-
+getElapsedTimeSeconds(): number {
+  if (!this.startTimestamp) return 0;
+  return Math.floor((Date.now() - this.startTimestamp) / 1000);
+}
  stop() {
     this.startTimestamp = null; 
     localStorage.removeItem('quizStart');

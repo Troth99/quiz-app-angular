@@ -9,10 +9,11 @@ import * as UserActions from '../../core/store/view-profile-store/view-profile.a
 
 import { ActivatedRoute } from '@angular/router';
 import { FirestoreDatePipe } from '../../core/pipes/convertFirebaseTimetampToDate.pipe';
+import { FormatTimePipe } from '../../core/pipes/format.pipe';
 
 @Component({
   selector: 'app-profile-view',
-  imports: [Loading, CommonModule, FirestoreDatePipe],
+  imports: [Loading, CommonModule, FirestoreDatePipe, FormatTimePipe],
   templateUrl: './profile-view.html',
   styleUrl: './profile-view.css'
 })

@@ -1,35 +1,41 @@
 import { Injectable, Injector, runInInjectionContext } from '@angular/core';
 import {
   Firestore,
+  Timestamp,
+  arrayUnion,
   collection,
   collectionData,
   doc,
   docData,
   getDoc,
   getDocs,
+  increment,
   query,
+  setDoc,
   updateDoc,
   where,
 } from '@angular/fire/firestore';
 import { Observable, from, map, of, switchMap } from 'rxjs';
 import { User } from '../models';
 import { Auth } from '@angular/fire/auth';
+import { RecentQuiz } from '../models/quizzes/recentQuizes.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-
-
-
   updateUser(uid: string, data: Partial<User>): Observable<void> {
-  return runInInjectionContext(this.injector, () => {
-    const userDocRef = doc(this.firestore, 'users', uid);
-    return from(updateDoc(userDocRef, data));
-  });
-}
+    return runInInjectionContext(this.injector, () => {
+      const userDocRef = doc(this.firestore, 'users', uid);
+      return from(updateDoc(userDocRef, data));
+    });
+  }
 
-  constructor(private firestore: Firestore, private injector: Injector, private auth: Auth) {}
+  constructor(
+    private firestore: Firestore,
+    private injector: Injector,
+    private auth: Auth
+  ) {}
 
   getUser(uid: string): Observable<User> {
     return runInInjectionContext(this.injector, () => {
@@ -45,63 +51,127 @@ export class UserService {
     });
   }
 
-updateLogin(uid: string): Observable<void | undefined> {
-  return runInInjectionContext(this.injector, () => {
-    const userDocRef = doc(this.firestore, 'users', uid);
+  updateLogin(uid: string): Observable<void | undefined> {
+    return runInInjectionContext(this.injector, () => {
+      const userDocRef = doc(this.firestore, 'users', uid);
 
-    return from(getDoc(userDocRef)).pipe(
-      switchMap((snapshot) => {
-        if (snapshot.exists()) {
-         
-          return runInInjectionContext(this.injector, () => {
-            return from(updateDoc(userDocRef, { lastLogin: new Date() }));
-          });
-        }
-        return of(undefined);
-      })
-    );
-  });
+      return from(getDoc(userDocRef)).pipe(
+        switchMap((snapshot) => {
+          if (snapshot.exists()) {
+            return runInInjectionContext(this.injector, () => {
+              return from(updateDoc(userDocRef, { lastLogin: new Date() }));
+            });
+          }
+          return of(undefined);
+        })
+      );
+    });
+  }
+
+  getCurrentUserId(): string | null {
+    return this.auth.currentUser?.uid || null;
+  }
+
+  addQuizToUser(uid: string, quizId: string): Observable<void> {
+    return runInInjectionContext(this.injector, () => {
+      const userDocRef = doc(this.firestore, 'users', uid);
+
+      return from(getDoc(userDocRef)).pipe(
+        switchMap((snapshot) => {
+          if (!snapshot.exists()) {
+            throw new Error('User not found');
+          }
+          const userData = snapshot.data() as User;
+
+          const createdQuizzies = userData.createdQuizzies || [];
+
+          if (!createdQuizzies.includes(quizId)) {
+            createdQuizzies.push(quizId);
+          }
+
+          return from(updateDoc(userDocRef, { createdQuizzies }));
+        })
+      );
+    });
+  }
+
+  isDisplayNameTaken(displayName: string): Observable<boolean> {
+    return runInInjectionContext(this.injector, () => {
+      const displayNameLower = displayName.toLowerCase();
+      const usersRef = collection(this.firestore, 'users');
+      const q = query(
+        usersRef,
+        where('displayNameLower', '==', displayNameLower)
+      );
+
+      return from(getDocs(q)).pipe(map((snapshot) => !snapshot.empty));
+    });
+  }
+
+updateQuizStats(
+  statsUpdate: {
+    quizzesTaken: number;
+    totalScore: number;
+    timeSpent: number;
+  },
+  recentQuiz: RecentQuiz
+): Observable<void> {
+  return from(
+    runInInjectionContext(this.injector, async () => {
+      const userRef = doc(this.firestore, `users/${this.getCurrentUserId()}`);
+      const docSnap = await getDoc(userRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        let recentQuizzes: RecentQuiz[] = data?.['recentQuizzes'] || [];
+
+        recentQuizzes.push(recentQuiz);
+
+        recentQuizzes.sort((a, b) => {
+          const getTime = (d: RecentQuiz['date']): number => {
+            if (d && typeof (d as Timestamp).toMillis === 'function') {
+              return (d as Timestamp).toMillis();
+            }
+            if (d instanceof Date) {
+              return d.getTime();
+            }
+            if (typeof d === 'string') {
+              return new Date(d).getTime();
+            }
+            return 0;
+          };
+          return getTime(b.date) - getTime(a.date);
+        });
+
+        recentQuizzes = recentQuizzes.slice(0, 5);
+
+    
+        await runInInjectionContext(this.injector, () =>
+          updateDoc(userRef, {
+            'quizStats.quizzesTaken': increment(statsUpdate.quizzesTaken),
+            'quizStats.totalScore': increment(statsUpdate.totalScore),
+            'quizStats.timeSpent': increment(statsUpdate.timeSpent),
+            recentQuizzes,
+          })
+        );
+      } else {
+       
+        await runInInjectionContext(this.injector, () =>
+          setDoc(
+            userRef,
+            {
+              quizStats: {
+                quizzesTaken: statsUpdate.quizzesTaken,
+                totalScore: statsUpdate.totalScore,
+                timeSpent: statsUpdate.timeSpent,
+              },
+              recentQuizzes: [recentQuiz],
+            },
+            { merge: true }
+          )
+        );
+      }
+    })
+  );
 }
-
-getCurrentUserId(): string | null {
-  return this.auth.currentUser?.uid || null;
-}
-
-addQuizToUser(uid: string, quizId: string): Observable<void> {
-  return runInInjectionContext(this.injector, () => {
-    const userDocRef = doc(this.firestore, 'users', uid);
-
-    return from(getDoc(userDocRef)).pipe(
-      switchMap((snapshot) => {
-        if (!snapshot.exists()) {
-          throw new Error('User not found');
-        }
-        const userData = snapshot.data() as User;
-
-
-        const createdQuizzies = userData.createdQuizzies  || [];
-
-        if (!createdQuizzies.includes(quizId)) {
-          createdQuizzies.push(quizId);
-        }
-
-        return from(updateDoc(userDocRef, { createdQuizzies  }));
-      })
-    );
-  });
-}
-
-isDisplayNameTaken(displayName: string): Observable<boolean> {
-  return runInInjectionContext(this.injector, () => {
-    const displayNameLower = displayName.toLowerCase();
-    const usersRef = collection(this.firestore, 'users');
-    const q = query(usersRef, where('displayNameLower', '==', displayNameLower));
-
-    return from(getDocs(q)).pipe(
-      map(snapshot => !snapshot.empty)
-    );
-  });
-}
-
-
 }

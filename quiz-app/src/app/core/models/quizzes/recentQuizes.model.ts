@@ -1,6 +1,10 @@
+import { Timestamp } from "@angular/fire/firestore";
+
+
 export interface RecentQuiz {
-    title: string;
-    score: number;
-    total:number;
-    date: Date
+  quizId: string;
+  quizTitle: string;
+  score: number;
+  total: number;
+  date: Date | Timestamp;
 }

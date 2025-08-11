@@ -9,10 +9,11 @@ import { firstValueFrom, Subscription } from 'rxjs';
 import { Loading } from '../../shared';
 import { Auth } from '@angular/fire/auth';
 import { FirestoreDatePipe } from '../../core/pipes/convertFirebaseTimetampToDate.pipe';
+import { FormatTimePipe } from '../../core/pipes/format.pipe';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, MatButtonModule, MatSnackBarModule, Loading, FirestoreDatePipe],
+  imports: [CommonModule, MatButtonModule, MatSnackBarModule, Loading, FirestoreDatePipe, FormatTimePipe],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })

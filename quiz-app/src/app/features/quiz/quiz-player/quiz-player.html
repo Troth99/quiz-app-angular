@@ -11,7 +11,7 @@
       knowledge.
     </h2>
 
-    @for (question of quizSubject.value.questions; track question.id) {
+    @for (question of quizSubject.value.questions; track $index) {
     <p class="question-text">{{ question.text }}</p>
     
     } @if (isLoggedIn()) {

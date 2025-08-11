@@ -1,81 +1,120 @@
 @if (user()) {
-  <div class="profile-card">
-    <div class="avatar-wrapper">
-      <input type="file" #fileInput accept="image/*" (change)="changeAvatar($event)" hidden />
-      
-      <div class="avatar-wrapper" (click)="fileInput.click()" style="cursor: pointer;">
-        <img
-          [src]="user()?.photoUrl || 'default-profile.jpg'"
-          alt="User Avatar"
-          class="avatar"
-        />
+<div class="profile-card">
+  <div class="avatar-wrapper">
+    <input
+      type="file"
+      #fileInput
+      accept="image/*"
+      (change)="changeAvatar($event)"
+      hidden
+    />
+
+    <div
+      class="avatar-wrapper"
+      (click)="fileInput.click()"
+      style="cursor: pointer"
+    >
+      <img
+        [src]="user()?.photoUrl || 'default-profile.jpg'"
+        alt="User Avatar"
+        class="avatar"
+      />
+    </div>
+  </div>
+
+  <div class="details">
+    <h1><span>Welcome</span>, {{ user()?.displayName }}</h1>
+    <p class="email">{{ user()?.email }}</p>
+
+    <div class="dates">
+      <div>
+        <strong>Member since:</strong> {{ user()?.createdAt | firestoreDate |
+        date:'longDate' }}
+      </div>
+      <div>
+        <strong>Last login:</strong> {{ user()?.lastLogin | firestoreDate |
+        date:'short' }}
       </div>
     </div>
 
-    <div class="details">
-      <h1><span>Welcome</span>, {{ user()?.displayName }}</h1>
-      <p class="email">{{ user()?.email }}</p>
+    <div class="quiz-and-recent">
+      <section class="quiz-stats">
+        <h2>Quiz Statistics</h2>
+        <ul>
+          <li>
+            <strong>Quizzes Taken:</strong> {{ user()?.quizStats?.quizzesTaken
+            || 0 }}
+          </li>
+          <li>
+            <strong>Total Score:</strong> {{ user()?.quizStats?.totalScore || 0
+            }}
+          </li>
+          <li>
+            <strong>Time Spent:</strong> {{ user()?.quizStats?.timeSpent |
+            formatTime }}
+          </li>
+        </ul>
+      </section>
 
-      <div class="dates">
-        <div>
-          <strong>Member since:</strong> {{ user()?.createdAt | firestoreDate | date:'longDate' }}
-        </div>
-        <div>
-          <strong>Last login:</strong> {{ user()?.lastLogin | firestoreDate | date:'short' }}
-        </div>
-      </div>
+      <section class="recent-quizzes">
+        <h2>Last Solved Quizzes</h2>
+        @if (user()?.recentQuizzes?.length) {
+        <ul>
+          @for (quiz of user()?.recentQuizzes; track $index) {
+          <li>
+            <strong>{{ quiz.quizTitle }}</strong> — result: {{
+            quiz.score }}/{{ quiz.total }}
 
-      <div class="quiz-and-recent">
-        <section class="quiz-stats">
-          <h2>Quiz Statistics</h2>
-          <ul>
-            <li><strong>Quizzes Taken:</strong> {{ user()?.quizStats?.quizzesTaken || 0 }}</li>
-            <li><strong>Total Score:</strong> {{ user()?.quizStats?.totalScore || 0 }}</li>
-            <li><strong>Time Spent:</strong> {{ user()?.quizStats?.timeSpent || '0' }} seconds</li>
-          </ul>
-        </section>
-
-        <section class="recent-quizzes">
-          <h2>Last Solved Quizzes</h2>
-          @if (user()?.recentQuizzes?.length) {
-            <ul>
-              @for (quiz of user()?.recentQuizzes; track quiz) {
-                <li>
-                  <strong>{{ quiz.title }}</strong> — result: {{ quiz.score }}/{{ quiz.total }}
-                  <span class="date">{{ quiz.date | date:'shortDate' }}</span>
-                </li>
-              }
-            </ul>
-          } @else {
-            <p>No quizzes solved yet.</p>
+            <span class="date"
+              >{{ quiz.date | firestoreDate | date:'shortDate' }}</span
+            >
+          </li>
           }
-        </section>
-      </div>
-    </div>
-
-    <div class="buttons-group">
-      <button mat-raised-button (click)="changeDisplayName()">Change Name</button>
-      <button mat-raised-button (click)="changePassword()">Change Password</button>
-      <button mat-raised-button (click)="viewMyCreatedQuizzes()">My created quizzess</button>
-
-      <div class="more-options-container">
-        <button class="more-options-button" mat-raised-button (click)="toggleMoreOptions()">
-          More Options ▼
-        </button>
-
-        @if (showMoreOptions) {
-          <div class="more-options-menu">
-            <button mat-raised-button (click)="disableAccount()">Disable Account</button>
-            <button mat-raised-button (click)="deleteAccount()" class="danger">Delete Account</button>
-          </div>
+        </ul>
+        } @else {
+        <p>No quizzes solved yet.</p>
         }
-      </div>
-
-      <button mat-raised-button class="logout-btn" (click)="logout()">Logout</button>
+      </section>
     </div>
   </div>
-} @else {
-  <div class="loading-message">
-    <app-loading></app-loading>
+
+  <div class="buttons-group">
+    <button mat-raised-button (click)="changeDisplayName()">Change Name</button>
+    <button mat-raised-button (click)="changePassword()">
+      Change Password
+    </button>
+    <button mat-raised-button (click)="viewMyCreatedQuizzes()">
+      My created quizzess
+    </button>
+
+    <div class="more-options-container">
+      <button
+        class="more-options-button"
+        mat-raised-button
+        (click)="toggleMoreOptions()"
+      >
+        More Options ▼
+      </button>
+
+      @if (showMoreOptions) {
+      <div class="more-options-menu">
+        <button mat-raised-button (click)="disableAccount()">
+          Disable Account
+        </button>
+        <button mat-raised-button (click)="deleteAccount()" class="danger">
+          Delete Account
+        </button>
+      </div>
+      }
+    </div>
+
+    <button mat-raised-button class="logout-btn" (click)="logout()">
+      Logout
+    </button>
   </div>
+</div>
+} @else {
+<div class="loading-message">
+  <app-loading></app-loading>
+</div>
 }

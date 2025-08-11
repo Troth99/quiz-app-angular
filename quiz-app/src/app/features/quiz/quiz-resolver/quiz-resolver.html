@@ -24,8 +24,9 @@
     </label>
     } }
 
-    <button type="button" class="submit-btn" (click)="submit()">Submit the quiz</button>
-
+    <button type="button" class="submit-btn" (click)="openConfirm()">
+      Submit the quiz
+    </button>
   </form>
   } @else if (!previewMode) {
   <h2>Your result</h2>
@@ -50,7 +51,6 @@
   <button type="button" (click)="moreQuizzes()">Try another quiz</button>
   } @else {
 
-
   <h2>Preview Quiz - Your Answers</h2>
   <p>
     You can see your selected answers marked in green (correct) and red
@@ -62,16 +62,19 @@
 
   @for (answerItem of item.answersWithIndex; track answerItem.aIndex) {
 
-
-    <label [style.background-color]="
+  <label
+    [style.background-color]="
       isAnswerSelected(item.qIndex, answerItem.aIndex)
         ? (isAnswerCorrect(item.qIndex, answerItem.aIndex) ? 'lightgreen' : 'lightcoral')
-        : (isAnswerMissed(item.qIndex, answerItem.aIndex) ? 'lightgreen' : 'transparent')">
-      <input type="checkbox"
-             [checked]="isAnswerSelected(item.qIndex, answerItem.aIndex)"
-             disabled />
-      {{ answerItem.answer.text }}
-    </label>
+        : (isAnswerMissed(item.qIndex, answerItem.aIndex) ? 'lightgreen' : 'transparent')"
+  >
+    <input
+      type="checkbox"
+      [checked]="isAnswerSelected(item.qIndex, answerItem.aIndex)"
+      disabled
+    />
+    {{ answerItem.answer.text }}
+  </label>
   } }
 
   <button type="button" (click)="closePreview()">Close Preview</button>
