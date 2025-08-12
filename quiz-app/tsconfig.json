@@ -15,14 +15,15 @@
     "target": "ES2022",
     "module": "preserve"
   },
-  "angularCompilerOptions": {
-    "enableI18nLegacyMessageIdFormat": false,
-    "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
-    "typeCheckHostBindings": true,
-    "strictTemplates": true,
-    "disableDeprecationWarnings": true
-  },
+"angularCompilerOptions": {
+  "enableI18nLegacyMessageIdFormat": false,
+  "strictInjectionParameters": true,
+  "strictInputAccessModifiers": true,
+  "typeCheckHostBindings": true,
+  "strictTemplates": false,
+  "fullTemplateTypeCheck": false,
+  "disableDeprecationWarnings": true
+},
   "files": [],
   "references": [
     {

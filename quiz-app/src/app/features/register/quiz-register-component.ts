@@ -2,11 +2,10 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService, UserService } from '../../core';
 import { Router, RouterLink } from '@angular/router';
-import { finalize, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { RegisterFormService } from '../auth/forms/createRegisterForm';
 import { RegisterErrorHandler } from '../../shared';
 import { EMPTY } from 'rxjs';
-
 
 @Component({
   selector: 'app-quiz-register-component',
@@ -26,58 +25,93 @@ export class QuizRegisterComponent implements OnInit {
   private router = inject(Router);
   private formService = inject(RegisterFormService);
   private errorHandler = inject(RegisterErrorHandler);
+  private userService = inject(UserService);
 
-  private userSerive = inject(UserService)
-
-  get loading() {
-    return this.authService.isLoading();
-  }
+  loading = false;
 
   ngOnInit(): void {
     this.registerForm = this.formService.createForm();
+
+    this.registerForm.get('email')?.valueChanges.subscribe(() => {
+      const emailControl = this.registerForm.get('email');
+      if (emailControl?.hasError('emailExists')) {
+        emailControl.setErrors(null);
+      }
+      this.serverError = null;
+    });
   }
 
   get form() {
     return this.formService.getControls(this.registerForm);
   }
 
-onRegister() {
-  this.submitted = true;
-  this.serverError = null;
+  onRegister() {
+    this.submitted = true;
+    this.serverError = null;
 
-  if (this.registerForm.invalid) return;
-
-  const { displayName, email, password } = this.registerForm.value;
-
-  this.userSerive.isDisplayNameTaken(displayName).pipe(
-    switchMap(isTaken => {
-      if (isTaken) {
-        this.serverError = 'Display name is already taken';
-        const control = this.registerForm.get('displayName');
-        if (control) {
-          control.setErrors({ taken: true });
-          control.markAsTouched();
-          control.markAsDirty();
-        }
-        this.submitted = false;
-        return EMPTY;
-      }
-      return this.authService.register(email, password, displayName);
-    }),
-    finalize(() => {
-      this.submitted = false;
-    })
-  ).subscribe({
-    next: () => {
-      this.authService.login(email, password).subscribe({
-        next: () => this.router.navigate(['/profile']),
-        error: err => console.error('Login error:', err),
-      });
-    },
-    error: err => {
-      this.serverError = this.errorHandler.reigsterHandlerErrors(err, this.registerForm);
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      return;
     }
-  });
-}
 
+    this.loading = true;
+
+    const { displayName, email, password } = this.registerForm.value;
+
+    this.userService.isDisplayNameTaken(displayName).pipe(
+      switchMap(isTakenDisplayName => {
+        if (isTakenDisplayName) {
+          this.serverError = 'Display name is already taken';
+          const control = this.registerForm.get('displayName');
+          if (control) {
+            control.setErrors({ taken: true });
+            control.markAsTouched();
+            control.markAsDirty();
+          }
+          this.loading = false;
+          return EMPTY;
+        }
+        return this.userService.isEmailTaken(email);
+      }),
+      switchMap(isTakenEmail => {
+        if (isTakenEmail) {
+          this.serverError = 'Email is already registered.';
+          const control = this.registerForm.get('email');
+          if (control) {
+            control.setErrors({ emailExists: true });
+            control.markAsTouched();
+            control.markAsDirty();
+          }
+          this.loading = false;
+          return EMPTY;
+        }
+        return this.authService.register(email, password, displayName);
+      }),
+    ).subscribe({
+      next: () => {
+        this.authService.login(email, password).subscribe({
+          next: () => {
+            this.loading = false;
+            this.router.navigate(['/profile']);
+          },
+          error: err => {
+            this.loading = false;
+            console.error('Login error:', err);
+          }
+        });
+      },
+      error: err => {
+        this.serverError = this.errorHandler.reigsterHandlerErrors(err, this.registerForm);
+
+        const emailControl = this.registerForm.get('email');
+        if (emailControl?.hasError('emailExists')) {
+          emailControl.markAsTouched();
+          emailControl.markAsDirty();
+        }
+
+        this.submitted = false;
+        this.loading = false;
+      }
+    });
+  }
 }

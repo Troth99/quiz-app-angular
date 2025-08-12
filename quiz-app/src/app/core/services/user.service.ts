@@ -174,4 +174,10 @@ updateQuizStats(
     })
   );
 }
+isEmailTaken(email: string): Observable<boolean> {
+  const usersRef = collection(this.firestore, 'users');
+  const q = query(usersRef, where('email', '==', email.toLowerCase()));
+  return from(getDocs(q)).pipe(map(snapshot => !snapshot.empty));
+}
+
 }

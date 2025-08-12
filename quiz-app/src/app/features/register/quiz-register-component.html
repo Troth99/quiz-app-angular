@@ -34,9 +34,9 @@
         />
         @if (submitted && form.email.hasError('required')) {
         <div class="error">Email is required.</div>
-        } @if (submitted && form.email.hasError('email')) {
-        <div class="error">Invalid email format.</div>
-        }
+        }@if ((submitted || form.email.touched) && form.email.hasError('email')) {
+  <div class="error">Invalid email format.</div>
+}
         @if (submitted && form.email.hasError('emailExists')) {
             <div class="error">Email is already registered.</div>
           }
@@ -54,6 +54,7 @@
           class="toggle-password"
           (click)="passwordVisible = !passwordVisible"
         >
+
           @if(!passwordVisible){
           <span>👁️</span>
           }@else if (passwordVisible){
@@ -94,7 +95,7 @@
         }
       </div>
 
-      <button type="submit">
+      <button type="submit" [disabled]="loading">
         @if(loading){
         <span>Loading...</span>
         }@else if (!loading){

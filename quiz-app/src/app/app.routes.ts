@@ -78,6 +78,16 @@ export const routes: Routes = [
           canActivate: [QuizStartGuard]
       },
 
+      {
+        path: 'leaderboard',
+        loadComponent: () => 
+          import('./features/leaderboard/leaderboard').then(
+            (c) => c.Leaderboard
+          ),
+          canActivate: [QuizActiveGuard]
+      },
+
+
       { path: 'page-not-found', component: PageNotFoundComponent, canActivate: [QuizActiveGuard] },
 
       {
