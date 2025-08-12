@@ -1,48 +1,47 @@
 <nav class="quiz-nav">
-  <div class="logo" >
+  <div class="logo">
     <a routerLink="/"><img src="logo.png" alt="logo" /></a>
   </div>
 
- <button class="hamburger" id="openMenu" (click)="toggleMobileMenu()">&#9776;</button>
+  <button class="hamburger" id="openMenu" (click)="toggleMobileMenu()">
+    &#9776;
+  </button>
 
   <ul class="nav-left">
     <li><a routerLink="/">HOME</a></li>
     <li><a routerLink="/quiz/categories">QUIZ</a></li>
     <li><a routerLink="/leaderboard">LEADERBOARD</a></li>
   </ul>
-  
+
   <div class="nav-center">
-    <input type="text" placeholder="Search..." (input)="onSearch()" />
-    <button class="search-btn">🔍</button>
+    <app-search-bar (search)="handleSearch($event)"></app-search-bar>
   </div>
-  
+
   <ul class="nav-right">
     @if(isLoggedIn()){
-       <li><a routerLink="/quiz/create">CREATE QUIZ</a></li>
-      <li><a routerLink="/results">MY RESULTS</a></li>
-      <li><a routerLink="/profile">PROFILE</a></li>
-    }
-    @if(!isLoggedIn()){
-      <li><a routerLink="/auth/login">LOGIN</a></li>
-      <li><a routerLink="/auth/register">REGISTER</a></li>
+    <li><a routerLink="/quiz/create">CREATE QUIZ</a></li>
+    <li><a routerLink="/results">MY RESULTS</a></li>
+    <li><a routerLink="/profile">PROFILE</a></li>
+    } @if(!isLoggedIn()){
+    <li><a routerLink="/auth/login">LOGIN</a></li>
+    <li><a routerLink="/auth/register">REGISTER</a></li>
     }
   </ul>
 </nav>
 
 <div class="mobile-menu-overlay" [class.active]="mobileMenuActive">
   <ul class="mobile-menu">
-    <li><a routerLink="/" >HOME</a></li>
+    <li><a routerLink="/">HOME</a></li>
     <li><a routerLink="/quiz/categories">QUIZ</a></li>
     <li><a routerLink="/leaderboard">LEADERBOARD</a></li>
-    
+
     @if(isLoggedIn()){
-      <li><a routerLink="/quiz/create">CREATE QUIZ</a></li>
-      <li><a routerLink="/results">MY RESULTS</a></li>
-      <li><a routerLink="/profile">PROFILE</a></li>
-    }
-    @if(!isLoggedIn()){
-      <li><a routerLink="/auth/login">LOGIN</a></li>
-      <li><a routerLink="/auth/register">REGISTER</a></li>
+    <li><a routerLink="/quiz/create">CREATE QUIZ</a></li>
+    <li><a routerLink="/results">MY RESULTS</a></li>
+    <li><a routerLink="/profile">PROFILE</a></li>
+    } @if(!isLoggedIn()){
+    <li><a routerLink="/auth/login">LOGIN</a></li>
+    <li><a routerLink="/auth/register">REGISTER</a></li>
     }
   </ul>
 </div>

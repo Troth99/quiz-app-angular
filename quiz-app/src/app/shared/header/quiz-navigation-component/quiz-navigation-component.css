@@ -83,13 +83,14 @@
 
 .hamburger {
   display: none;
+  position: absolute;
+  top: 50%;
+  right: 2rem;
+  transform: translateY(-50%);
   font-size: 2rem;
   background: none;
   border: none;
   cursor: pointer;
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  z-index: 1001;
   color: white;
+  z-index: 1001;
 }

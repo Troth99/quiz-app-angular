@@ -69,13 +69,14 @@ submitComment() {
     return;
   }
 
-
   this.userService.getUser(userId).pipe(
     take(1),
     switchMap(user => {
       const userName = user.displayName || 'No name';
       const userPhotoUrl = user.photoUrl || null;
-      return this.quizService.addComment(categoryName, quizId, this.newComment.trim(), userId, userName, userPhotoUrl);
+      return this.quizService.addComment(
+        categoryName, quizId, this.newComment.trim(), userId, userName, userPhotoUrl
+      );
     })
   ).subscribe({
     next: () => {
@@ -85,7 +86,6 @@ submitComment() {
     error: err => console.error('Failed to add comment', err),
   });
 }
-
 isLoggedIn(): boolean {
   return this.authService.isLoggedIn();
 }

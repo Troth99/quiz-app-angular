@@ -87,6 +87,16 @@ export const routes: Routes = [
           canActivate: [QuizActiveGuard]
       },
 
+      {
+        path: 'search',
+        loadComponent: () =>
+          import('./features/search-result-component/search-result-component').then(
+            (c) => c.SearchResultComponent
+          ),
+          canActivate: [QuizActiveGuard]
+      },
+
+
 
       { path: 'page-not-found', component: PageNotFoundComponent, canActivate: [QuizActiveGuard] },
 

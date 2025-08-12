@@ -59,7 +59,7 @@
       </button>
 
       @if ((hasLiked$ | async) === false) {
-      <button class="custom-btn" (click)="likeQuiz()">👍 Like</button>
+      <button class="custom-btn" (click)="likeQuiz()"  [disabled]="isLiking">👍 Like</button>
       }
     </div>
 

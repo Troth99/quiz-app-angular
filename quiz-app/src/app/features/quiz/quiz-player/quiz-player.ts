@@ -54,6 +54,8 @@ export class QuizPlayer implements OnInit, OnDestroy {
   timeLeftSeconds = 0;
   private intervalId? : number;
 
+  isLiking = false;
+
   currentUrl!: string;
 
   quizSubject = new BehaviorSubject<Quiz | null>(null);
@@ -157,23 +159,28 @@ export class QuizPlayer implements OnInit, OnDestroy {
   }
 
   likeQuiz() {
-    const userId = this.userService.getCurrentUserId();
+  if (this.isLiking) return;
 
-    if (!userId || !this.categoryName || !this.quizId) {
-      return;
-    }
-
-    this.quizService
-      .likeQuiz(this.categoryName, this.quizId, userId)
-      .subscribe({
-        next: () => {
-          this.hasLikedSubject.next(true);
-        },
-        error: (err) => {
-          console.error('Error liking quiz:', err.message);
-        },
-      });
+  const userId = this.userService.getCurrentUserId();
+  if (!userId || !this.categoryName || !this.quizId) {
+    return;
   }
+
+  this.isLiking = true;
+  this.hasLikedSubject.next(true);
+
+  this.quizService.likeQuiz(this.categoryName, this.quizId, userId)
+    .subscribe({
+      next: () => {
+        this.isLiking = false;
+      },
+      error: (err) => {
+        console.error('Error liking quiz:', err.message);
+        this.hasLikedSubject.next(false);
+        this.isLiking = false;
+      }
+    });
+}
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();

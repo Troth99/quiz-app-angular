@@ -14,14 +14,17 @@ import { Loading } from '../../../shared';
 import { QuizTimerService } from '../../../core/services/quizTimerService..serive';
 import { QuizStateService } from '../../../core/services/quizState.service';
 import { QuizEvaluatorService } from '../../../core/services/quizEvaluatir.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmDialog } from '../../../shared/confirm-dialog/confirm-dialog';
 import { UserService } from '../../../core';
+import { MatButtonModule } from '@angular/material/button';
+import { QuizTimeExpired } from '../quiz-time-expired/quiz-time-expired';
+
 
 @Component({
   selector: 'app-quiz-resolver',
   standalone: true,
-  imports: [CommonModule, Loading],
+  imports: [CommonModule, Loading, MatDialogModule, MatButtonModule],
   templateUrl: './quiz-resolver.html',
   styleUrls: ['./quiz-resolver.css'],
 })
@@ -68,6 +71,8 @@ export class QuizResolver implements OnInit, OnDestroy {
     this.intervalId = window.setInterval(() => {
       this.updateTimeLeft();
     }, 1000);
+
+
   }
 
   updateTimeLeft() {
@@ -80,10 +85,20 @@ export class QuizResolver implements OnInit, OnDestroy {
     }
   }
 
-  onTimeExpired() {
-    this.quizState.setActive(false);
-    alert('Time run out');
-  }
+onTimeExpired() {
+  this.quizState.setActive(false);
+  this.quizTimerService.stop();
+  this.timeLeftSeconds = 0
+  
+  const dialogRef = this.dialog.open(QuizTimeExpired);
+  
+  dialogRef.afterClosed().subscribe(() => {
+    const categoryName = this.route.snapshot.paramMap.get('categoryName') || '';
+    const quizId = this.route.snapshot.paramMap.get('quizId') || '';
+    
+    this.router.navigate(['/quiz/play', categoryName, quizId]);
+  });
+}
 
   onCheckboxChange(questionIndex: number, answerIndex: number, event: Event) {
     if (this.timeLeftSeconds <= 0) return;

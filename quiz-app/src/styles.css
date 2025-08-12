@@ -5,8 +5,10 @@
 @import './styles/responsive.css';
 @import './styles/layout.css';
 
+
 html, body {
   margin: 0;
+ 
 }
 .page-wrapper {
   display: flex;

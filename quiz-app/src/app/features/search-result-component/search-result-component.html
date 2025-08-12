@@ -1,0 +1,21 @@
+<div class="search-results">
+  @if(isLoading) {
+    <app-loading></app-loading>
+  } @else {
+    @if(searchResults && searchResults.length > 0) {
+      <ul class="results-list">
+        @for(result of searchResults; track result.id) {
+          <li class="quiz-item" (click)="openQuiz(result.category, result.id)">
+            <img class="quiz-img" src="test-show-banner.avif" alt="Quiz Image" />
+            <div class="quiz-text">
+              <h3>{{ result.title }}</h3>
+              <p>{{ result.description }}</p>
+            </div>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p>There are no results</p>
+    }
+  }
+</div>

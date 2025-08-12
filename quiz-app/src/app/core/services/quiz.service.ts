@@ -21,6 +21,8 @@ import {
   docData,
   updateDoc,
   orderBy,
+  startAt,
+  endAt,
 } from '@angular/fire/firestore';
 import { deleteDoc, increment } from 'firebase/firestore';
 import { DocumentReference } from 'firebase/firestore/lite';
@@ -209,5 +211,31 @@ hasLikedQuiz(categoryName: string, quizId: string, userId: string): Observable<b
   }
 
 
+
+
+searchAllQuizzes(searchTerm: string): Observable<Quiz[]> {
+  if (!searchTerm.trim()) return of([]);
+
+  const lowerTerm = searchTerm.toLowerCase();
+
+  return this.getCategories().pipe(
+
+    switchMap(categories => {
+      if (!categories.length) return of([]);
+
+      const allTestsObservables  = categories.map(category =>
+        this.getTestByCategory(category.name)
+      );
+
+      return combineLatest(allTestsObservables ).pipe(
+      map(allQUizzesArrays => 
+        allQUizzesArrays.flat().filter(quiz => quiz.title.toLocaleLowerCase().includes(lowerTerm))
+      )
+      );
+    })
+  );
+
+
+}
   
 }

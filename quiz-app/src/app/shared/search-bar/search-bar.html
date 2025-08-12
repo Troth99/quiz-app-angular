@@ -1,0 +1,9 @@
+<div class="search-wrapper">
+  <input
+    type="text"
+    placeholder="Search..."
+    #searchInput
+    (keyup.enter)="onSearch(searchInput)"
+  />
+  <button class="search-btn" (click)="onSearch(searchInput)">🔍</button>
+</div>
