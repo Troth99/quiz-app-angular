@@ -1,6 +1,5 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { AuthService, ToastService, User, UserService } from '../../core';
-import { Timestamp } from '@angular/fire/firestore';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -64,9 +63,6 @@ export class Profile implements OnInit, OnDestroy {
     this.showMoreOptions = false;
   }
 
-  disableAccount() {
-    this.showMoreOptions = false;
-  }
 
   changePassword() {
     this.router.navigate(['profile/change-password']);

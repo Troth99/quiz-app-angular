@@ -1,5 +1,10 @@
 # 🎯 QuizApp – Angular + Firebase
 
+## 🌍 The QuizApp is deployed At
+
+👉 [https://quiz-app-3471b.web.app/](https://quiz-app-3471b.web.app/)
+
+
 **QuizApp** is a modern single-page application (SPA) for creating, solving, and tracking quizzes. Built with **Angular** and fully integrated with **Firebase**, it includes user authentication, real-time database, and live hosting.
 
 ---
@@ -86,6 +91,3 @@ Open your browser at [http://localhost:4200](http://localhost:4200)
 
 ---
 
-## 🌍 Live Demo
-
-👉 [https://quiz-app-3471b.web.app/](https://quiz-app-3471b.web.app/)

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { passwordsMatchValidator } from '../../../shared';
+import { noWhiteSpaceValidator } from '../../../shared/validators/noWhiteSpace';
 
 
 @Injectable({ providedIn: 'root' })
@@ -10,7 +11,7 @@ export class RegisterFormService {
   createForm(): FormGroup {
     return this.fb.group(
       {
-        displayName: ['', Validators.required],
+        displayName: ['', [Validators.required, noWhiteSpaceValidator.noWhiteSpace()]],
         email: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', Validators.required],
@@ -29,4 +30,6 @@ export class RegisterFormService {
       confirmPassword: form.get('confirmPassword')!,
     };
   }
+
+  
 }
