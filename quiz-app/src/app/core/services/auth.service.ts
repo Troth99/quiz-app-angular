@@ -56,25 +56,36 @@ export class AuthService {
 
   constructor() {
     const currentSavedUser = localStorage.getItem('currentLoggedUser');
+
     if (currentSavedUser) {
       const parsedUser = JSON.parse(currentSavedUser);
-      this.currentUserUid.set(parsedUser.uid);
-      this._isLoggedIn.set(true);
+
+      const now = Date.now();
+      const threeDaysLogout = 3 * 24 * 60 * 60 * 1000;
+      if (
+        parsedUser.lastActive &&
+        now - parsedUser.lastActive > threeDaysLogout
+      ) {
+        this.logout();
+      } else {
+        this.currentUserUid.set(parsedUser.uid);
+        this._isLoggedIn.set(true);
+      }
     }
   }
-/**
- * Observable stream of the current Firebase auth user (or null if logged out).
- */
-authState(): Observable<User | null> {
-  return runInInjectionContext(this.injector, () => {
-    return new Observable<User | null>((subscriber) => {
-      const unsubscribe = onAuthStateChanged(this.auth, (user) => {
-        subscriber.next(user);
+  /**
+   * Observable stream of the current Firebase auth user (or null if logged out).
+   */
+  authState(): Observable<User | null> {
+    return runInInjectionContext(this.injector, () => {
+      return new Observable<User | null>((subscriber) => {
+        const unsubscribe = onAuthStateChanged(this.auth, (user) => {
+          subscriber.next(user);
+        });
+        return { unsubscribe };
       });
-      return { unsubscribe };
     });
-  });
-}
+  }
 
   register(
     email: string,
@@ -83,7 +94,6 @@ authState(): Observable<User | null> {
   ): Observable<UserCredential> {
     this.loading.set(true);
 
-  
     return runInInjectionContext(this.injector, () =>
       from(createUserWithEmailAndPassword(this.auth, email, password)).pipe(
         switchMap((userCredential) => {
@@ -131,6 +141,8 @@ authState(): Observable<User | null> {
               displayName: user.displayName,
               photoUrl: user.photoURL,
               lastLogin: new Date().toISOString(),
+              lastActive: Date.now(),
+
             })
           );
         }),
@@ -152,6 +164,7 @@ authState(): Observable<User | null> {
           displayName: cred.user.displayName || null,
           photoUrl: cred.user.photoURL || null,
           lastLogin: new Date().toISOString(),
+          lastActive: Date.now(),
         };
 
         localStorage.setItem('currentLoggedUser', JSON.stringify(user));
@@ -218,22 +231,22 @@ authState(): Observable<User | null> {
     );
   }
 
- async deleteUser(password: string) {
-  const user = this.auth.currentUser;
-  if (!user || !user.email) throw new Error('No user logged in');
+  async deleteUser(password: string) {
+    const user = this.auth.currentUser;
+    if (!user || !user.email) throw new Error('No user logged in');
 
-  const credential = EmailAuthProvider.credential(user.email, password);
+    const credential = EmailAuthProvider.credential(user.email, password);
 
+    await runInInjectionContext(this.injector, () =>
+      reauthenticateWithCredential(user, credential)
+    );
 
-  await runInInjectionContext(this.injector, () => reauthenticateWithCredential(user, credential));
-
-
-  await runInInjectionContext(this.injector, async () => {
-    const userDocRef = doc(this.firestore, 'users', user.uid);
-    await deleteDoc(userDocRef);
-    await user.delete();
-  });
-}
+    await runInInjectionContext(this.injector, async () => {
+      const userDocRef = doc(this.firestore, 'users', user.uid);
+      await deleteDoc(userDocRef);
+      await user.delete();
+    });
+  }
 
   get uid(): string | null {
     return this.currentUserUid();

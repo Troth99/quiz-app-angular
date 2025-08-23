@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 
 
 
@@ -14,5 +14,19 @@ import { RouterOutlet } from '@angular/router';
 export class App{
   protected title = 'quiz-app';
 
+
+  constructor(private router: Router){
+    this.router.events.subscribe(event => {
+      if(event instanceof NavigationEnd) {
+        const stored = localStorage.getItem('currentLoggedUser');
+
+        if(stored){
+          const parsedUser = JSON.parse(stored);
+          parsedUser.lastActive = Date.now();
+          localStorage.setItem('currentLoggedUser', JSON.stringify(parsedUser))
+        }
+      }
+    })
+  }
 
 }
