@@ -4,11 +4,10 @@ form {
   padding: 30px 25px;
   background: #e8f0fe;
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
+  box-shadow: 0 8px 24px rgb(0 0 0/0.1);
   color: #0d3b66;
   box-sizing: border-box;
 }
-
 h2 {
   text-align: center;
   margin-bottom: 28px;
@@ -17,20 +16,17 @@ h2 {
   color: #084298;
   letter-spacing: 0.04em;
 }
-
 .form-group {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 20px;
 }
-
 .form-group label {
   flex: 0 0 80px;
   font-weight: 600;
   font-size: 1rem;
 }
-
 .form-group input[list],
 .form-group input[formControlName="title"],
 .form-group input[formControlName="description"],
@@ -41,55 +37,46 @@ div[formArrayName="answers"] input[type="text"] {
   font-size: 1rem;
   border: 2px solid #a7c0f4;
   border-radius: 10px;
-  background-color: #f7fbff;
-  transition: all 0.25s ease-in-out;
+  background: #f7fbff;
+  transition: 0.25s;
   box-sizing: border-box;
   margin-bottom: 16px;
 }
-
-.form-group input[list]:focus,
-.form-group input[formControlName="title"]:focus,
-.form-group input[formControlName="description"]:focus,
-div[formArrayName="questions"] input[formControlName="text"]:focus,
-div[formArrayName="answers"] input[type="text"]:focus {
+.form-group input:focus,
+div[formArrayName="questions"] input:focus,
+div[formArrayName="answers"] input:focus {
   border-color: #2c7be5;
-  background-color: #e3f0ff;
+  background: #e3f0ff;
   outline: none;
   box-shadow: 0 0 8px #2c7be5aa;
 }
-
 div[formArrayName="questions"] > div {
-  background: white;
+  background: #fff;
   padding: 20px 25px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgb(0 0 0 / 0.08);
+  box-shadow: 0 4px 12px rgb(0 0 0/0.08);
   margin-bottom: 30px;
-  transition: box-shadow 0.3s ease;
+  transition: 0.3s;
 }
-
 div[formArrayName="questions"] > div:hover {
-  box-shadow: 0 6px 20px rgb(0 0 0 / 0.15);
+  box-shadow: 0 6px 20px rgb(0 0 0/0.15);
 }
-
 div[formArrayName="questions"] h3 {
-  margin: 0 0 12px 0;
+  margin: 0 0 12px;
   color: #084298;
   font-weight: 700;
 }
-
 div[formArrayName="answers"] {
   margin-left: 25px;
   margin-top: 10px;
 }
-
 div[formArrayName="answers"] > div {
-  margin-bottom: 12px;
-  position: relative;
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-bottom: 12px;
+  position: relative;
 }
-
 div[formArrayName="answers"] label {
   display: flex;
   align-items: center;
@@ -98,54 +85,44 @@ div[formArrayName="answers"] label {
   user-select: none;
   white-space: nowrap;
 }
-
 div[formArrayName="answers"] input[type="checkbox"] {
+  cursor: pointer;
   transform: scale(1.25);
   margin-right: 6px;
-  cursor: pointer;
 }
-
 button.remove-answer {
-  background: #cc0000cc;
-  color: white;
+  background: #c00c;
+  color: #fff;
   border: none;
   font-weight: 700;
   font-size: 1.2rem;
   cursor: pointer;
   padding: 4px 10px;
   border-radius: 6px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: 0.3s;
   user-select: none;
 }
-
 button.remove-answer:hover {
-  background-color: #ff4444cc;
+  background: #f44;
   transform: scale(1.1);
 }
-
-.answer-buttons {
-  margin-left: 25px;
-}
-
 button[type="button"]:not(.remove-answer) {
-  background-color: #1a73e8;
-  color: white;
+  background: #1a73e8;
+  color: #fff;
   border: none;
   padding: 10px 18px;
   border-radius: 12px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: 0.3s;
   margin-top: 8px;
 }
-
 button[type="button"]:not(.remove-answer):hover {
-  background-color: #155bb5;
+  background: #155bb5;
 }
-
 button[type="submit"] {
-  background-color: #0b59d9;
-  color: white;
+  background: #0b59d9;
+  color: #fff;
   border: none;
   width: 100%;
   padding: 16px 0;
@@ -154,116 +131,154 @@ button[type="submit"] {
   border-radius: 14px;
   cursor: pointer;
   margin-top: 30px;
-  transition: background-color 0.3s ease;
+  transition: 0.3s;
 }
-
 button[type="submit"]:disabled {
-  background-color: #aac7fc;
+  background: #aac7fc;
   cursor: not-allowed;
 }
-
 .quiz-saved-message {
-  background-color: #e6ffe6;
+  background: #e6ffe6;
   border: 1px solid #4caf50;
   padding: 20px;
   border-radius: 6px;
   max-width: 400px;
   margin: 20px auto;
   text-align: center;
-  font-family: Arial, sans-serif;
   color: #2e7d32;
 }
-
 .quiz-saved-message h2 {
   margin-bottom: 15px;
+}
+.quiz-saved-message button {
+  margin: 10px 8px 0;
+  padding: 8px 16px;
+  background: #4caf50;
+  border: none;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+.quiz-saved-message button:hover {
+  background: #388e3c;
 }
 .no-access {
   padding: 2rem;
   margin: 2rem auto;
   max-width: 600px;
   border: 2px solid #e74c3c;
-  background-color: #fdecea;
+  background: #fdecea;
   color: #c0392b;
   border-radius: 8px;
   text-align: center;
 }
-
 .no-access h2 {
   margin-bottom: 1rem;
   font-size: 1.8rem;
-  color: #c0392b;
 }
-
 .no-access p {
   margin-bottom: 1.5rem;
   font-size: 1.1rem;
 }
-
 .no-access button {
   padding: 0.5rem 1rem;
-  background-color: #c0392b;
-  color: white;
+  background: #c0392b;
+  color: #fff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.2s ease;
+  font-weight: 700;
+  transition: 0.2s;
 }
-
 .no-access button:hover {
-  background-color: #a93226;
+  background: #a93226;
 }
-
-.quiz-saved-message button {
-  margin: 10px 8px 0 8px;
-  padding: 8px 16px;
-  background-color: #4caf50;
-  border: none;
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.3s ease;
-}
-
-.quiz-saved-message button:hover {
-  background-color: #388e3c;
-}
-
 @media (max-width: 640px) {
   form {
     padding: 20px 15px;
     margin: 20px;
   }
-
   h2 {
     font-size: 1.6rem;
   }
-
   .form-group {
     align-items: flex-start;
     gap: 0;
   }
-
   .form-group label {
     margin-bottom: 6px;
   }
-
   div[formArrayName="questions"] > div {
     padding: 15px 20px;
   }
-
   button[type="button"]:not(.remove-answer) {
     padding: 8px 14px;
     font-size: 0.9rem;
   }
-
   button[type="submit"] {
     font-size: 1.1rem;
     padding: 14px 0;
   }
-
   div[formArrayName="answers"] {
     margin-left: 15px;
+  }
+  button.remove-answer {
+    position: absolute;
+    right: 2px;
+    top: 90%;
+    font-size: 0.7rem;
+    padding: 1px 5px;
+  }
+}
+@media (max-width: 360px) {
+  div[formArrayName="answers"] > div {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  div[formArrayName="answers"] label {
+    order: 1;
+    width: 100%;
+  }
+  div[formArrayName="answers"] input[type="checkbox"] {
+    margin-top: 4px;
+    transform: scale(1);
+  }
+  button.remove-answer {
+    order: 2;
+    align-self: flex-end;
+    position: relative;
+    top: 0;
+    right: 0;
+    padding: 3px 6px;
+    font-size: 0.8rem;
+  }
+}
+@media (max-width: 275px) {
+  div[formArrayName="answers"] > div {
+    align-items: stretch;
+    gap: 2px;
+  }
+  div[formArrayName="answers"] input[type="text"] {
+    width: 100%;
+    font-size: 0.8rem;
+    padding: 6px 8px;
+  }
+  div[formArrayName="answers"] label {
+    font-size: 0.75rem;
+    white-space: normal;
+  }
+  div[formArrayName="answers"] input[type="checkbox"] {
+    transform: scale(1);
+    margin-right: 4px;
+  }
+  button.remove-answer {
+    position: absolute;
+    right: 2px;
+    top: 120%;
+    font-size: 0.7rem;
+    padding: 1px 5px;
   }
 }

@@ -20,7 +20,7 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../core';
+import { AuthService, ToastService } from '../../../core';
 
 @Component({
   selector: 'app-change-password',
@@ -35,6 +35,7 @@ export class changePassword {
   private auth = inject(Auth);
   private route = inject(Router);
   private authService = inject(AuthService);
+  private toast = inject(ToastService)
 
   user: User | null = null;
 
@@ -102,7 +103,7 @@ export class changePassword {
   async onSubmit() {
     this.submitted = true;
     this.error = null;
-    this.success = null;
+  
 
     if (this.changePasswordForm.invalid) return;
 
@@ -135,7 +136,14 @@ export class changePassword {
         await updatePassword(user, newPassword);
       });
 
-      this.success = 'Password updated successfully.';
+      this.toast.show('Passowrd has been change successfully. You will be logged out.', 'Close', {duration: 5000});
+      
+      setTimeout(async () => {
+        await this.authService.logout()
+        this.route.navigate(['/auth/login'])
+      }, 3000)
+     
+      
       this.changePasswordForm.reset();
       this.submitted = false;
     } catch (err) {
