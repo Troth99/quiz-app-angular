@@ -3,4 +3,6 @@ export interface QuizStats {
     quizzesTaken: number;
     timeSpent: number;
     totalScore: number;
+    streakDays: number;
+    uniqueCategories: number;
 }

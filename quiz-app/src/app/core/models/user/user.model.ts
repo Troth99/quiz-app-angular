@@ -1,6 +1,7 @@
 import { Timestamp } from "firebase/firestore";
 import { QuizStats } from "../quizzes/quiz-stats.model";
 import { RecentQuiz } from "../quizzes/recentQuizes.model";
+import { UserAchievement } from "../achievements/achievement.model";
 
 export interface User {
     displayName: string;
@@ -11,5 +12,6 @@ export interface User {
     quizStats: QuizStats;
     recentQuizzes?: RecentQuiz[]
     createdQuizzies? : string[]
-    lastDisplayNameChange? : Timestamp | Date   
+    lastDisplayNameChange? : Timestamp | Date 
+    achievements?: UserAchievement[];
 }

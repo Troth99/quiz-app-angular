@@ -117,6 +117,8 @@ export class AuthService {
                   quizzesTaken: '0',
                   timeSpent: '0',
                   totalScore: '0',
+                  streakDays: 0,
+                  uniqueCategories: 0,
                 },
                 lastDisplayNameChange: null,
                 recentQuizzes: [],
@@ -142,7 +144,6 @@ export class AuthService {
               photoUrl: user.photoURL,
               lastLogin: new Date().toISOString(),
               lastActive: Date.now(),
-
             })
           );
         }),

@@ -19,6 +19,8 @@ import { Observable, from, map, of, switchMap } from 'rxjs';
 import { User } from '../models';
 import { Auth } from '@angular/fire/auth';
 import { RecentQuiz } from '../models/quizzes/recentQuizes.model';
+import { StreakService } from './streak.service';
+import { AchievementService } from './achievement.service';
 
 @Injectable({
   providedIn: 'root',
@@ -34,7 +36,9 @@ export class UserService {
   constructor(
     private firestore: Firestore,
     private injector: Injector,
-    private auth: Auth
+    private auth: Auth,
+    private streakService: StreakService,
+    private achievementService: AchievementService
   ) {}
 
   getUser(uid: string): Observable<User> {
@@ -154,6 +158,18 @@ updateQuizStats(
             recentQuizzes,
           })
         );
+        const recentForStreak = recentQuizzes.map(q => ({
+          date: q.date instanceof Timestamp ? q.date.toDate(): q.date
+        }))
+
+        await this.streakService.updateStreak(recentForStreak);
+        
+        const userId = this.getCurrentUserId()
+
+        if(!userId) return;
+
+        await this.achievementService.checkAndUnlockAchievements(userId)
+        
       } else {
        
         await runInInjectionContext(this.injector, () =>
@@ -180,4 +196,10 @@ isEmailTaken(email: string): Observable<boolean> {
   return from(getDocs(q)).pipe(map(snapshot => !snapshot.empty));
 }
 
+async unlockAchievement(userId: string, achievementId: string) {
+  const userRef = doc(this.firestore, 'users', userId);
+  await updateDoc(userRef, {
+    achievements: arrayUnion({ id: achievementId, unlockedAt: new Date().toISOString() })
+  });
+}
 }

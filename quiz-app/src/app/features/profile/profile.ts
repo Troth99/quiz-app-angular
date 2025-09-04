@@ -42,6 +42,8 @@ export class Profile implements OnInit, OnDestroy {
    
 
       this.user.set(rawData);
+
+    
     });
 
     const routeSub = this.route.queryParamMap.subscribe((params) => {

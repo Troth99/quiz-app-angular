@@ -19,6 +19,7 @@ import { ConfirmDialog } from '../../../shared/confirm-dialog/confirm-dialog';
 import { UserService } from '../../../core';
 import { MatButtonModule } from '@angular/material/button';
 import { QuizTimeExpired } from '../quiz-time-expired/quiz-time-expired';
+import { StreakService } from '../../../core/services/streak.service';
 
 
 @Component({
@@ -37,6 +38,7 @@ export class QuizResolver implements OnInit, OnDestroy {
   private router = inject(Router);
   private dialog = inject(MatDialog);
   private userService = inject(UserService);
+  private streakService = inject(StreakService)
 
   result?: { correctCount: number; wrongQuestions: number[] };
 
@@ -159,6 +161,8 @@ onTimeExpired() {
       .subscribe({
         error: (err) => console.error('Error updating stats', err),
       });
+
+    
   }
   get questionsWithIndex() {
     return (
