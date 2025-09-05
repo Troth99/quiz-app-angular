@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 import { catchError, Observable, of } from 'rxjs';
 import { Quiz } from '../../../core/models';
 import { Loading } from '../../../shared';
-import { QuizTimerService } from '../../../core/services/quizTimerService..serive';
+import { QuizTimerService } from '../../../core/services/quizTimerService.service';
 import { QuizStateService } from '../../../core/services/quizState.service';
 import { QuizEvaluatorService } from '../../../core/services/quizEvaluatir.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';

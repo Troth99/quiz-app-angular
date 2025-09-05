@@ -20,9 +20,11 @@
   "strictInjectionParameters": true,
   "strictInputAccessModifiers": true,
   "typeCheckHostBindings": true,
+  "strictNullInputTypes": false,
   "strictTemplates": false,
   "fullTemplateTypeCheck": false,
-  "disableDeprecationWarnings": true
+  "disableDeprecationWarnings": true,
+ "inlineTemplateTypeCheck": true
 },
   "files": [],
   "references": [

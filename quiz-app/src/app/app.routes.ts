@@ -93,7 +93,15 @@ export const routes: Routes = [
           import('./features/search-result-component/search-result-component').then(
             (c) => c.SearchResultComponent
           ),
-          canActivate: [QuizActiveGuard]
+          canActivate: [QuizActiveGuard, ]
+      },
+      {
+        path: 'achievements',
+        loadComponent: () => 
+          import('./features/achievements/achievements').then(
+            (c) => c.Achievements
+          ),
+          canActivate: [QuizActiveGuard, GuestGuard]
       },
 
 

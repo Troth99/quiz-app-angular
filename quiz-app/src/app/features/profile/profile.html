@@ -9,17 +9,15 @@
       hidden
     />
 
-    <div
-      class="avatar-wrapper"
-      (click)="fileInput.click()"
+   <div class="avatar-container">
+    <img
+      [src]="user()?.photoUrl || 'default-profile.jpg'"
+      alt="User Avatar"
+      class="avatar"
       style="cursor: pointer"
-    >
-      <img
-        [src]="user()?.photoUrl || 'default-profile.jpg'"
-        alt="User Avatar"
-        class="avatar"
-      />
-    </div>
+      (click)="fileInput.click()"
+    />
+  </div>
   </div>
 
   <div class="details">

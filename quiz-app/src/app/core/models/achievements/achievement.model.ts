@@ -19,3 +19,7 @@ export interface UserAchievement {
     id: string;
     unlockedAt: string;
 }
+
+export interface AchievementUi extends Achievement {
+    unlockedAt? : string
+}

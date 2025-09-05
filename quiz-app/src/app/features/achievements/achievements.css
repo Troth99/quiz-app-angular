@@ -1,0 +1,106 @@
+.achievements-container {
+  max-width: 800px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+}
+.filter-bar {
+  margin-bottom: 15px;
+  text-align: right;
+}
+
+
+.filter-select {
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+.achievements-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.achievement-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+  transition: background-color 0.2s;
+}
+
+
+.achievement-item.locked {
+  opacity: 0.5;
+}
+
+.achievement-item:hover {
+  background-color: #f1f1f1;
+}
+
+.achievement-icon {
+  width: 60px;
+  height: 60px;
+  margin-right: 15px;
+}
+
+.achievement-content {
+  flex: 1;
+}
+
+.achievement-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.achievement-description {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.achievement-date {
+  display: inline-block;
+  font-size: 12px;
+  color: #888;
+}
+
+@media (max-width: 480px) {
+  .achievement-item {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .achievement-icon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 8px;
+    margin-right: 0;
+  }
+
+  .achievement-title {
+    font-size: 16px;
+  }
+
+  .achievement-description {
+    font-size: 13px;
+  }
+
+  .achievement-date {
+    font-size: 11px;
+  }
+
+  .filter-bar {
+    text-align: left;
+  }
+
+  .filter-select {
+    width: 100%;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+}

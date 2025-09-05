@@ -1,0 +1,35 @@
+@if (loading) {
+<div class="loading-overlay">
+  <app-loading></app-loading>
+</div>
+} @else {
+<div class="achievements-container">
+  <div class="filter-bar">
+    <select [(ngModel)]="filter" class="filter-select">
+      <option value="all">All</option>
+      <option value="completed">Unlocked</option>
+      <option value="uncompleted">Locked</option>
+    </select>
+  </div>
+
+  <ul class="achievements-list">
+    @for(ach of achievements | achievementFilter: filter; track ach.id) {
+    <li class="achievement-item" [class.locked]="!ach.unlockedAt">
+       <img [src]="ach.icon" alt="{{ ach.name }}" class="achievement-icon" />
+
+
+      <div class="achievement-content">
+        <h3 class="achievement-title">{{ ach.name }}</h3>
+        <p class="achievement-description">{{ ach.description }}</p>
+
+        @if(ach.unlockedAt){ 
+          <span class="achievement-date">
+            Unlocked at: {{ach.unlockedAt | unlockedDate  }}
+          </span>
+        }
+      </div>
+    </li>
+    }
+  </ul>
+</div>
+}

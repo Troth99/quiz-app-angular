@@ -20,7 +20,7 @@
   <ul class="nav-right">
     @if(isLoggedIn()){
     <li><a routerLink="/quiz/create">CREATE QUIZ</a></li>
-    <li><a routerLink="/results">ACHIEVEMENTS</a></li>
+    <li><a routerLink="/achievements">ACHIEVEMENTS</a></li>
     <li><a routerLink="/profile">PROFILE</a></li>
     } @if(!isLoggedIn()){
     <li><a routerLink="/auth/login">LOGIN</a></li>
@@ -37,7 +37,7 @@
 
     @if(isLoggedIn()){
     <li><a routerLink="/quiz/create">CREATE QUIZ</a></li>
-    <li><a routerLink="/results">ACHIEVEMENTS</a></li>
+    <li><a routerLink="/achievements">ACHIEVEMENTS</a></li>
     <li><a routerLink="/profile">PROFILE</a></li>
     } @if(!isLoggedIn()){
     <li><a routerLink="/auth/login">LOGIN</a></li>
