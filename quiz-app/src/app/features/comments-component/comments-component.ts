@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Observable, Subscription, switchMap, take } from 'rxjs';
+import { catchError, map, Observable, of, shareReplay, Subscription, switchMap, take } from 'rxjs';
 
 import { QuizService } from '../../core/services/quiz.service';
 import { Comment } from '../../core/models';
@@ -23,6 +23,8 @@ export class CommentsComponent implements OnInit, OnDestroy{
 @Input() currentUrl: string = ''
 
 private subscription = new Subscription();
+
+userNameCache: { [userId: string]: Observable<string> } = {};
 
 
 comments$!: Observable<Comment[]>
@@ -55,6 +57,17 @@ deleteComent(commentId: string) {
       error: (err) => console.error('Failed to delete comment', err)
     });
   this.subscription.add(sub);
+}
+
+getUserName(userId: string): Observable<string>{
+  if(!this.userNameCache[userId]){
+    this.userNameCache[userId] = this.userService.getUser(userId).pipe(
+      map(user => user.displayName || 'No name'),
+      catchError(() => of('Deleted user')),
+      shareReplay(1)
+    )
+  }
+  return this.userNameCache[userId]
 }
 
 submitComment() {

@@ -34,7 +34,7 @@
       <div class="comment-content">
         <div class="comment-text">{{ comment.text }}</div>
         <div class="comment-meta">
-          <small>{{ comment.userName || 'No username' }} • {{ comment.createdAt | firestoreDate | date: 'short' }}</small>
+          <small>{{ getUserName(comment.userId) | async }} • {{ comment.createdAt | firestoreDate | date: 'short' }}</small>
 
           <button
             *ngIf="canDelete(comment)"
