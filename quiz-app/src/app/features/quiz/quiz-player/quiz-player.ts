@@ -145,6 +145,7 @@ export class QuizPlayer implements OnInit, OnDestroy {
       'report-bug',
     ]);
   }
+  
 
   startQuiz(quiz: Quiz) {
     if (!this.isLoggedIn()) {
