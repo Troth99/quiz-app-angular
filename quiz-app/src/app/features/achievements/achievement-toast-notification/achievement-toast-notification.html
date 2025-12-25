@@ -1,8 +1,6 @@
 <div class="achievement-toast">
   <div class="icon">
-    <img src="assets/icons/trophy.svg" alt="Achievement" />
-  </div>
-  <div class="content">
+<img [src]="achievementIcon" alt="{{ achievementName }}" class="achievement-icon" />  <div class="content">
     <div class="title">Congratulations!</div>
     <div class="description">
    You have unlocked new achievement: <span class="achievement-name">{{ achievementName }}</span>

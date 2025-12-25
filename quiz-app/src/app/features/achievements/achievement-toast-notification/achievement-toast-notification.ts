@@ -8,7 +8,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class AchievementToastNotification {
 @Input() achievementName: string = "";
+@Input() achievementIcon: string = '';
 @Output() closed = new EventEmitter<void>()
+
 
 
 closeToast() {
