@@ -1,0 +1,57 @@
+.achievement-toast {
+  position: fixed;
+  right: 2rem;
+  bottom: 2rem;
+  min-width: 300px;
+  max-width: 350px;
+  background: #222;
+  color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  z-index: 1000;
+  animation: fadeIn 0.5s;
+}
+
+.icon {
+  margin-right: 1rem;
+}
+.icon img {
+  width: 40px;
+  height: 40px;
+}
+
+.content {
+  flex: 1;
+}
+.title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+.description {
+  font-size: 1rem;
+}
+.achievement-name {
+  color: #ffd700;
+  font-weight: bold;
+}
+.close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-left: 1rem;
+  transition: color 0.2s;
+}
+.close-btn:hover {
+  color: #ffd700;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
