@@ -4,4 +4,13 @@
     <router-outlet></router-outlet>
   </main>
   <app-quiz-footer-component></app-quiz-footer-component>
+
+  @if(toastVisible){
+    <app-achievement-toast-notification
+    [achievementName]="unlockedAchievementName"
+    (closed)="toastVisible = false"
+    >
+    </app-achievement-toast-notification>
+
+  }
 </div>

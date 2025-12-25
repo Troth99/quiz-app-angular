@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-achievement-toast-notification',
@@ -7,5 +7,11 @@ import { Component } from '@angular/core';
   styleUrl: './achievement-toast-notification.css'
 })
 export class AchievementToastNotification {
+@Input() achievementName: string = "";
+@Output() closed = new EventEmitter<void>()
 
+
+closeToast() {
+  this.closed.emit()
+}
 }
