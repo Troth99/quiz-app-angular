@@ -13,10 +13,9 @@ import {
   getDoc,
   updateDoc,
 } from '@angular/fire/firestore';
-import { firstValueFrom, Observable } from 'rxjs';
+import {  Observable } from 'rxjs';
 import { Achievement, User, UserAchievement } from '../models';
-import { UserService } from './user.service';
-import { environment } from '../../../enviroments/enviroment';
+
 
 @Injectable({
   providedIn: 'root',
@@ -63,32 +62,26 @@ export class AchievementService {
   ];
 
   async checkAndUnlockAchievements(userId: string) {
-    const userRef = doc(this.firestore, 'users', userId);
-    const docSnap = await getDoc(userRef);
-    const user = docSnap.data() as User;
-    if (!user) return;
+    return runInInjectionContext(this.injector, async () => {
+      const userRef = doc(this.firestore, 'users', userId);
+      const docSnap = await getDoc(userRef);
+      const user = docSnap.data() as User;
+      if (!user) return;
 
-    let unlocked = false;
-    for (const achievement of this.achievementsConditions) {
-      const alreadyUnlocked = user.achievements?.some(
-        (ua: UserAchievement) => ua.id === achievement.id
-      );
-      if (!alreadyUnlocked && achievement.condition(user)) {
-        await updateDoc(userRef, {
-          achievements: arrayUnion({
-            id: achievement.id,
-            unlockedAt: new Date().toISOString(),
-          }),
-        });
-        unlocked = true;
+      for (const achievement of this.achievementsConditions) {
+        const alreadyUnlocked = user.achievements?.some(
+          (ua: UserAchievement) => ua.id === achievement.id
+        );
+        if (!alreadyUnlocked && achievement.condition(user)) {
+          await updateDoc(userRef, {
+            achievements: arrayUnion({
+              id: achievement.id,
+              unlockedAt: new Date().toISOString(),
+            }),
+          });
+        }
       }
-    }
-
-    if (unlocked) {
-      const updatedSnap = await getDoc(userRef);
-      return updatedSnap.data() as User;
-    }
-    return user;
+    });
   }
 
 
