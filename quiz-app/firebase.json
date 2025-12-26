@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "quiz-app-3471b",
     "public": "dist/quiz-app/browser",
     "ignore": [
       "firebase.json",
