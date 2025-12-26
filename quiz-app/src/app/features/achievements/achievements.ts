@@ -1,5 +1,4 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { AchievementToastService } from '../../core/services/achievement-toast.service';
 import { AchievementService } from '../../core/services/achievement.service';
 import { combineLatest, Subscription } from 'rxjs';
 import { AchievementUi } from '../../core/models';
@@ -7,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { AchievementFilterPipe } from '../../core/pipes/achievementFilterPipe';
 import { AuthService, UserService } from '../../core';
 import { Loading } from '../../shared';
+import { FirestoreDatePipe } from '../../core/pipes/convertFirebaseTimetampToDate.pipe';
 import { UnlockedDatePipe } from '../../core/pipes/unlockedDate.pipe';
 
 @Component({
@@ -17,7 +17,6 @@ import { UnlockedDatePipe } from '../../core/pipes/unlockedDate.pipe';
   standalone: true
 })
 export class Achievements implements OnInit, OnDestroy {
-  private toastService = inject(AchievementToastService);
 
   private achievementService = inject(AchievementService);
   private userService = inject(UserService);
@@ -42,13 +41,14 @@ export class Achievements implements OnInit, OnDestroy {
         const achievementsList = allAchievements || [];
         const userAchievements = userData.achievements || [];
 
-        const prevAchievements = this.achievements.map(a => a.id);
         this.achievements = achievementsList.map(a => {
+
           let iconUrl = a.icon || '';
           if (iconUrl.includes('imgur.com') && !iconUrl.includes('i.imgur.com')) {
             const id = iconUrl.split('/').pop();
             iconUrl = `https://i.imgur.com/${id}.png`;
           }
+
           return {
             ...a,
             icon: iconUrl,
@@ -60,12 +60,7 @@ export class Achievements implements OnInit, OnDestroy {
           return 0;
         });
 
-        this.achievements.forEach(a => {
-          if (a.unlockedAt && !prevAchievements.includes(a.id)) {
-            this.toastService.show(a.name || a.id, a.icon);
-          }
-        });
-
+  
         this.loading = false;
       });
 

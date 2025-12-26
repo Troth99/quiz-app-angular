@@ -1,10 +1,12 @@
 <div class="achievement-toast">
   <div class="icon">
-<img [src]="achievementIcon" alt="{{ achievementName }}" class="achievement-icon" />  <div class="content">
+    <img [src]="achievementIcon" alt="{{ achievementName }}" class="achievement-icon" />
+  </div>
+  <div class="content">
     <div class="title">Congratulations!</div>
     <div class="description">
-   You have unlocked new achievement: <span class="achievement-name">{{ achievementName }}</span>
+      You have unlocked new achievement: <span class="achievement-name">{{ achievementName }}</span>
     </div>
   </div>
-<button class="close-btn" (click)="closeToast()">&times;</button> 
+  <button class="close-btn" (click)="closeToast()">&times;</button>
 </div>

@@ -68,6 +68,7 @@ export class AchievementService {
     const user = docSnap.data() as User;
     if (!user) return;
 
+    let unlocked = false;
     for (const achievement of this.achievementsConditions) {
       const alreadyUnlocked = user.achievements?.some(
         (ua: UserAchievement) => ua.id === achievement.id
@@ -79,8 +80,15 @@ export class AchievementService {
             unlockedAt: new Date().toISOString(),
           }),
         });
+        unlocked = true;
       }
     }
+
+    if (unlocked) {
+      const updatedSnap = await getDoc(userRef);
+      return updatedSnap.data() as User;
+    }
+    return user;
   }
 
 
