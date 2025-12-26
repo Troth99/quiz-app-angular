@@ -33,6 +33,7 @@ export class MainLayout implements OnInit {
 
     this.authService.authState().subscribe(user => {
       if (!user) return;
+      
       const userId = user.uid;
       this.achievementService.getAllAchievements().subscribe((allAchievements: Achievement[]) => {
         this.userService.getUser(userId).subscribe((userData: User) => {
@@ -43,7 +44,15 @@ export class MainLayout implements OnInit {
           userAchievements.forEach(ua => {
             if (!this.unlockedIds.has(ua.id)) {
               const achievement = allAchievements.find((a: Achievement) => a.id === ua.id);
-              this.showAchievementToast(achievement?.name || ua.id, achievement?.icon || '');
+              let icon = achievement?.icon || '';
+              if (icon && icon.includes('imgur.com') && !icon.includes('i.imgur.com')) {
+                const id = icon.split('/').pop();
+                icon = `https://i.imgur.com/${id}.png`;
+              }
+              if (!icon) {
+                icon = 'assets/default-achievement-icon.png';
+              }
+              this.showAchievementToast(achievement?.name || ua.id, icon);
               this.unlockedIds.add(ua.id);
             }
           });
