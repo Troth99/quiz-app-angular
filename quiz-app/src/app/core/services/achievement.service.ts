@@ -13,9 +13,8 @@ import {
   getDoc,
   updateDoc,
 } from '@angular/fire/firestore';
-import {  Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Achievement, User, UserAchievement } from '../models';
-
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +28,9 @@ export class AchievementService {
     return runInInjectionContext(this.injector, () => {
       const firestore = inject(Firestore);
       const achievementCol = collection(firestore, 'achievements');
-      return collectionData(achievementCol, { idField: 'id' }) as Observable<Achievement[]>;
+      return collectionData(achievementCol, { idField: 'id' }) as Observable<
+        Achievement[]
+      >;
     });
   }
 
@@ -73,16 +74,16 @@ export class AchievementService {
           (ua: UserAchievement) => ua.id === achievement.id
         );
         if (!alreadyUnlocked && achievement.condition(user)) {
-          await updateDoc(userRef, {
-            achievements: arrayUnion({
-              id: achievement.id,
-              unlockedAt: new Date().toISOString(),
-            }),
+          return runInInjectionContext(this.injector, async () => {
+            await updateDoc(userRef, {
+              achievements: arrayUnion({
+                id: achievement.id,
+                unlockedAt: new Date().toISOString(),
+              }),
+            });
           });
         }
       }
     });
   }
-
-
 }
